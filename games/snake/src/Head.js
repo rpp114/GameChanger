@@ -18,9 +18,10 @@ function Head($el) {
 
 }
 
-socket.on('change variable', function(e) {
+socket.on('changeVariable', function(e) {
+
   that.SPEED = e;
-  // console.log("speed changed to: ", e);
+  console.log("speed changed to: ", e);
 })
 
 Head.prototype.move = function() {
