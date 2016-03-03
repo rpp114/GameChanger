@@ -1,0 +1,25 @@
+{
+  "name": "gamechanger",
+  "version": "0.0.1",
+  "description": "changing games dynamically",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rpp114/GameChanger.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rpp114/GameChanger/issues"
+  },
+  "homepage": "https://github.com/rpp114/GameChanger#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "nodemon": "^1.9.1",
+    "socket.io": "^1.4.5"
+  }
+}
