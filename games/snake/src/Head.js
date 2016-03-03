@@ -3,26 +3,33 @@
 var socket = io();
 
 var that;
+socket.on('changeVariable', function(e) {
+
+  that.SPEED = e;
+  console.log("speed changed to: ", e);
+})
 function Head($el) {
   this.node = $('<div id="head"></div>');
   this.currentDirection = 'right';
-  this.SPEED = 500;
+  that = this;
+  this.SPEED = localStorage.getItem('speed') || 250;
+
   $el.append(this.node);
   this.x = 0;
   this.y = 0;
   this.next = null;
   this.tail = this;
   this.render()
-  that = this;
+
   setTimeout(this.move.bind(this), this.SPEED);
 
 }
-
-socket.on('changeVariable', function(e) {
-
-  that.SPEED = e;
-  console.log("speed changed to: ", e);
-})
+//
+// socket.on('changeVariable', function(e) {
+//
+//   that.SPEED = e;
+//   console.log("speed changed to: ", e);
+// })
 
 Head.prototype.move = function() {
   console.log('speed: ', this.SPEED);
@@ -55,7 +62,9 @@ Head.prototype.checkBody = function() {
 }
 
 Head.prototype.die = function() {
+  localStorage.setItem('speed', this.SPEED);
   location.reload();
+
 }
 
 Head.prototype.checkBorder = function() {
