@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Game Controller</title>
+  </head>
+  <body>
+
+    <h1>hello controller</h1>
+
+    <input type="range" id="variable1" min="100 "max="500" step="10"  value="250" />
+    <script src='/socket.io/socket.io.js'></script>
+    <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script>
+    var socket = io();
+
+    $('#variable1').on('change', function(e){
+      var value = e.target.value;
+      socket.emit('changeVariable', value )
+      console.log('emitted: ', value);
+    })
+    </script>
+
+  </body>
+</html>
