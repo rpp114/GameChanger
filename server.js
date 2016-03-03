@@ -7,16 +7,19 @@ var express = require('express'),
 
 
 app.get('/', function(req, res) {
-    res.send('<h1>Hello World</h1>')
+    res.send('<h1>Hello World</h1>');
 });
 
 io.on('connection', function(socket) {
     console.log('user connected');
     socket.on('changeVariable', function(val) {
         console.log('heard: ', val);
-        io.emit('changeVariable', val)
+        io.emit('changeVariable', val);
         console.log('emitted: ', val);
     });
+    socket.on('imready', function(val) {
+      io.emit('imready', val);
+    })
 });
 
 
