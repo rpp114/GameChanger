@@ -8,12 +8,17 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     UserCtrl = require('./authenticate/userStuff'),
     mongoose = require('mongoose'),
+    qs = require('qs');
     mongoURI = 'mongodb://localhost/GameUsers';
 
+var q;
 mongoose.connect(mongoURI);
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-
+app.get('/*', function(req,res,next){
+  q = '/' + req.query.id;
+  next();
+});
 app.get('/login', function(req, res) {
   res.sendFile(path.join(__dirname, '/loginsignuphtml/login.html'));
 });
@@ -24,7 +29,9 @@ app.get('/signup', function(req, res) {
 
 app.post('/signup', UserCtrl.createUser);
 app.post('/login', UserCtrl.verify);
-var nsp = io.of('/hi')
+
+io.on('connection', function(socket2) {
+var nsp = io.of(q);
 nsp.on('connection', function(socket) {
     console.log('user connected');
     socket.on('changeVariable', function(val) {
@@ -36,16 +43,17 @@ nsp.on('connection', function(socket) {
       nsp.emit('imready', val);
     });
 });
-
+});
+app.get('/controller', function(req, res) {
+    res.sendFile(path.join(__dirname, '/controller/controller.html'));
+    console.log(q);
+});
 
 app.get('/snake', function(req, res) {
     res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
 
 });
-app.get('/controller', function(req, res) {
-    res.sendFile(path.join(__dirname, '/controller/controller.html'));
 
-});
 
 app.get('*.js', function(req, res) {
     console.log(path.join(__dirname, req.url));
