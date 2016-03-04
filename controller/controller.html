@@ -12,9 +12,9 @@
     <script src='/socket.io/socket.io.js'></script>
     <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script>
-    var socket = io();
-      
-      $('#variable1').on('change', function(e){
+    var socket = io('/hi');
+
+      $('#variable1').on('input', function(e){
         var value = e.target.value;
         socket.emit('changeVariable', value )
         console.log('emitted: ', value);
