@@ -12,6 +12,19 @@
 </head>
 <body>
     <div id="board"></div>
+    <script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+  MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+    var observer = new MutationObserver(function(mutations, observer) {
+      var mutation = [mutations[0].target.attributes.id.value, mutations[0].target.style.cssText]
+      socket.emit('attrChange', mutation);
+      console.log('emitted mutations');
+    });
+    observer.observe($('#board').get(0), {
+      attributes: true
+    })
+</script>
 </body>
 
 <script src="games/snake/src/main.js"></script>

@@ -17,6 +17,11 @@ io.on('connection', function(socket) {
         io.emit('changeVariable', val)
         console.log('emitted: ', val);
     });
+    socket.on('attrChange', mutation => {
+        console.log('heard: ', mutation);
+        io.emit('attrChange', mutation)
+        console.log('emitted: ', mutation);
+    });
 });
 
 
