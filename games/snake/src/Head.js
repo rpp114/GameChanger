@@ -1,6 +1,6 @@
 // var variables = require('./')
 
-var socket = io();
+var socket = io('/hi');
 
 var that;
 socket.on('changeVariable', function(e) {
