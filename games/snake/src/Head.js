@@ -42,11 +42,11 @@ Head.prototype.move = function() {
   this.moveHead(direction);
   if (this.checkBorder()) {
     this.checkBody();
-
+    console.log(this.apple.x, this.x, this.apple.y, this.y);
     this.checkApple();
     this.render();
 
-    setTimeout(this.move.bind(this), this.SPEED);
+    setTimeout(this.move.bind(this), this.SPEED/10);
   } else {
     this.die()
   }
@@ -69,7 +69,7 @@ Head.prototype.die = function() {
 }
 
 Head.prototype.checkBorder = function() {
-  if (this.x > 13 || this.x < 0 || this.y > 13 || this.y < 0) {
+  if (this.x > 130 || this.x < 0 || this.y > 130 || this.y < 0) {
     return false
   } else {
     return true
@@ -78,13 +78,14 @@ Head.prototype.checkBorder = function() {
 }
 
 Head.prototype.addBody = function() {
-  var bodyPart = new Body($('#board'), this.x, this.y);
+  var bodyPart = new Body($('#board'), this.x+50, this.y+50);
   this.tail.next = bodyPart;
   this.tail = this.tail.next;
 }
 
 Head.prototype.checkApple = function() {
-  if (this.apple.x === this.x && this.apple.y === this.y) {
+  if ((this.apple.x >= this.x-25 && this.apple.y >= this.y-25) || (this.apple.x <= this.x+25 && this.apple.y <= this.y+25)) {
+
     this.apple.eat();
     this.apple = new Apple($('#board'));
     this.addBody();
@@ -107,8 +108,8 @@ Head.prototype.moveBody = function(x, y) {
 
 Head.prototype.render = function() {
   this.node.offset({
-    top: (50 * this.y) + 9,
-    left: (50 * this.x) + 9
+    top: (5 * this.y) + 9,
+    left: (5 * this.x) + 9
   })
 }
 
