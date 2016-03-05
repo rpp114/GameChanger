@@ -1,8 +1,31 @@
+<<<<<<< HEAD
 function Head($el, size) {
   this.node = $('<div id="head"></div>');
   this.node.css({'height': size, 'width': size})
   this.currentDirection = 'right';
   this.SPEED = 100;
+=======
+// var variables = require('./')
+var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+// var socket = io(qs);
+var socket = io();
+var that;
+socket.on('changeVariable', function(e) {
+
+  console.log("speed changed to: ", e);
+  that.SPEED = e;
+});
+socket.on('obj', function(e) {
+  console.log("obj", e);
+});
+
+
+function Head($el, size) {
+  this.node = $('<div id="head"></div>');
+  that = this
+  this.node.css({'height': size, 'width': size})
+  this.currentDirection = 'right';
+  this.SPEED = 500;
   $el.append(this.node);
   this.x = 0;
   this.y = 0;
@@ -92,8 +115,13 @@ Head.prototype.moveBody = function(x, y) {
 
 Head.prototype.render = function() {
   this.node.offset({
+<<<<<<< HEAD
     top: (this.size * this.y) + head.elPosY,
     left: (this.size * this.x) + head.elPosX
+=======
+    top: (this.size * this.y) + 9,
+    left: (this.size * this.x) + 9
+>>>>>>> c32d44dc8ff3e0049e478ebebc8da14977743314
   })
 }
 
