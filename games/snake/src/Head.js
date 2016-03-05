@@ -26,6 +26,9 @@ function Head($el, size) {
   this.tail = this;
   this.size = size;
   this.elGrid = $el.height()/size;
+  var elPos = $el.position()
+  this.elPosX = elPos.left
+  this.elPosY = elPos.top
   this.render()
 
   setTimeout(this.move.bind(this), this.SPEED);
@@ -62,11 +65,12 @@ Head.prototype.checkBody = function() {
 }
 
 Head.prototype.die = function() {
-  location.reload();
+  $('#board').empty();
+  this.startGame()
 }
 
 Head.prototype.checkBorder = function() {
-  if (this.x > this.elGrid-1 || this.x < 0 || this.y > this.elGrid-1 || this.y < 0) {
+  if (this.x > this.elGrid || this.x < 0 || this.y > this.elGrid || this.y < 0) {
     return false
   } else {
     return true
@@ -83,7 +87,7 @@ Head.prototype.addBody = function() {
 Head.prototype.checkApple = function() {
   if (this.apple.x === this.x && this.apple.y === this.y) {
     this.apple.eat();
-    this.apple = new Apple($('#board'), this.size);
+    this.apple = new Apple($('#board'), this.size, head.controller);
     this.addBody();
   }
 }
@@ -104,15 +108,14 @@ Head.prototype.moveBody = function(x, y) {
 
 Head.prototype.render = function() {
   this.node.offset({
-    top: (this.size * this.y) + 9,
-    left: (this.size * this.x) + 9
+    top: (this.size * this.y) + head.elPosY,
+    left: (this.size * this.x) + head.elPosX
   })
 }
 
 
 Head.prototype.moveHead = function(direction) {
 
-  console.log(this.x, this.y);
   if (direction === 'right') {
     this.x++;
   }
