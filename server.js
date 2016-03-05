@@ -33,6 +33,7 @@ app.post('/signup', UserCtrl.createUser);
 app.post('/login', UserCtrl.verify);
 
 io.on('connection', function(socket2) {
+  q = '/hi';
   var nsp = io.of(q);
   nsp.on('connection', function(socket) {
     console.log('user connected');
@@ -45,6 +46,23 @@ io.on('connection', function(socket2) {
 
       nsp.emit('imready', val);
     });
+
+    socket.on('directionChange', direction => {
+        nsp.emit('directionChange', direction);
+        console.log('emitted: ', direction);
+    });
+
+    socket.on('appleGenerate', position => {
+        nsp.emit('appleGenerate', position);
+        console.log('server emitted: ', position);
+    })
+
+    socket.on('startController', start => {
+        nsp.emit('startController', start);
+        console.log('server emitted: ', start);
+    })
+
+
   });
 });
 app.get('/controller', function(req, res) {
@@ -61,7 +79,6 @@ app.get('/snake', function(req, res) {
 
 
 app.get('*.js', function(req, res) {
-  console.log(path.join(__dirname, req.url));
   res.writeHead(200, {
     'content-type': 'text/javascript; charset=UTF-8'
   });
@@ -69,7 +86,6 @@ app.get('*.js', function(req, res) {
 });
 
 app.get('*.css', function(req, res) {
-  console.log(path.join(__dirname, req.url));
   res.writeHead(200, {
     'content-type': 'text/css; charset=UTF-8'
   });
@@ -77,7 +93,6 @@ app.get('*.css', function(req, res) {
 });
 
 app.get('*.jpg', function(req, res) {
-  console.log(path.join(__dirname, req.url));
   res.writeHead(200, {
     'content-type': 'image/jpg'
   });

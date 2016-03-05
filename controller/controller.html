@@ -3,27 +3,40 @@
   <head>
     <meta charset="utf-8">
     <title>Game Controller</title>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src='games/snake/src/Head.js'></script>
+    <script src='games/snake/src/Body.js'></script>
+    <script src='games/snake/src/Apple.js'></script>
+    <link rel="stylesheet" href="controller/css/style.css">
+    <link rel="stylesheet" href="games/snake/css/snake_styles.css">
   </head>
   <body>
+    <div class='module' id='controls'>
 
     <h1>hello controller</h1>
     <p> Give the player this URL!!! <p id='url'></p></p>
     <input type="range" id="variable1" min="100 "max="500" step="10"  value="250" />
-    <script src='/socket.io/socket.io.js'></script>
-    <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script>
-    var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-    var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-    $('#url').text(url);
-    var socket = io(qs);
+  </div>
+  <div class='module' id='screenCast'>
+    <div id='board'></div>
+  </div>
 
-      $('#variable1').on('input', function(e){
-        var value = e.target.value;
 
-        socket.emit('changeVariable', value )
-        console.log('emitted:' + qs);
-      })
-    </script>
 
   </body>
+  <script>
+  var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+  var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+  $('#url').text(url);
+  var socket = io(qs);
+
+  $('#variable1').on('input', function(e){
+    var value = e.target.value;
+
+    socket.emit('changeVariable', value )
+    console.log('emitted:' + qs);
+  })
+  </script>
+  <script src='games/snake/src/main.js'></script>
 </html>

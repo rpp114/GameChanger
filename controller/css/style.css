@@ -1,0 +1,10 @@
+.module {
+  display: inline-block;
+  width: 50%;
+}
+
+.module #screenCast {
+  position: absolute;
+  top: 9;
+  left: 100;
+}
