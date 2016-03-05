@@ -15,14 +15,25 @@
     var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     $('#url').text(url);
-    var socket = io(qs);
-
+    // var socket = io(qs);
+    var socket = io();
       $('#variable1').on('input', function(e){
         var value = e.target.value;
 
         socket.emit('changeVariable', value )
         console.log('emitted:' + qs);
       })
+        var obj = {
+          scale: localStorage.getItem('scale') || 1,
+          sizeScale: localStorage.getItem('sizeScale') || 1,
+          gridSize: localStorage.getItem('gridSize') || 1000,
+          speed: localStorage.getItem('speed') || 250
+        }
+
+        $('body').on('click', function(){
+          console.log(obj)
+          socket.emit('obj', obj);
+        });
     </script>
 
   </body>

@@ -1,10 +1,14 @@
 // head out in global scope for testing purposes
 $(document).ready(function() {
-  var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-  var socket = io(qs);
-  socket.emit('obj', obj);
-  head = new Head($('#board'), 0.50);
-  var apple = new Apple($('#board'), 0.50);
+
+
+  var scale = 0.5;
+  var sizeScale = 0.75;
+  var gridSize = 800;
+  const size = 50;
+  $('#board').css({'height': gridSize * scale, 'width': gridSize * scale});
+  head = new Head($('#board'), size * sizeScale * scale);
+  var apple = new Apple($('#board'), size * sizeScale * scale);
   head.apple = apple;
 
   $('body').on('keydown', function(e) {
