@@ -1,7 +1,7 @@
 // head out in global scope for testing purposes
 $(document).ready(function() {
-  head = new Head($('#board'));
-  var apple = new Apple($('#board'));
+  head = new Head($('#board'), 0.50);
+  var apple = new Apple($('#board'), 0.50);
   head.apple = apple;
 
   $('body').on('keydown', function(e) {

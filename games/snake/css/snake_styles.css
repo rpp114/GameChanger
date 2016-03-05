@@ -15,13 +15,13 @@
 }
 
 #board {
-  height: 700px;
-  width: 700px;
+  height: 500px;
+  width: 500px;
   border: 1px black solid;
 }
 
 #apple {
   height: 50px;
   width: 50px;
-  position: aboslute;
+  position: absolute;
 }
