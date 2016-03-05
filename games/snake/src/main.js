@@ -36,6 +36,7 @@ $(document).ready(function() {
 if(!controller) {
   startGame();
 } else {
+  console.log('not player');
   socket.on('startController', startGame)
 }
 

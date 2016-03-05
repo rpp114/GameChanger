@@ -17,7 +17,6 @@ function Apple($el, size, controller) {
       this.y = position[1];
     })
   }
-  console.log(this.x, this.y);
 
   $el.append(this.node);
   this.size = size;

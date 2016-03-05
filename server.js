@@ -33,14 +33,13 @@ app.post('/signup', UserCtrl.createUser);
 app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
-io.on('connection', function(socket2) {
+io.on('connection', function(socket) {
 
   q = '/hi';
   // var nsp = io.of(q);
   // nsp.on('connection', function(socket) {
 
-  socket2.join(q);
-  io.on('connection', function(socket) {
+  socket.join(q);
     console.log('user connected');
     socket.on('changeVariable', function(val) {
       console.log('heard: ', val);
@@ -56,22 +55,22 @@ io.on('connection', function(socket2) {
     });
 
     socket.on('directionChange', direction => {
-        nsp.emit('directionChange', direction);
+        io.to(q).emit('directionChange', direction);
         console.log('emitted: ', direction);
     });
 
     socket.on('appleGenerate', position => {
-        nsp.emit('appleGenerate', position);
+        io.to(q).emit('appleGenerate', position);
         console.log('server emitted: ', position);
     })
 
     socket.on('startController', start => {
-        nsp.emit('startController', start);
+        io.to(q).emit('startController', start);
         console.log('server emitted: ', start);
     })
 
 
-  });
+  // });
 });
 app.get('/controller', function(req, res) {
       res.sendFile(path.join(__dirname, '/controller/controller.html'));
