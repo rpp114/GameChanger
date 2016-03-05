@@ -1,8 +1,24 @@
+// var variables = require('./')
+var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+// var socket = io(qs);
+var socket = io();
+var that;
+socket.on('changeVariable', function(e) {
+
+  console.log("speed changed to: ", e);
+  that.SPEED = e;
+});
+socket.on('obj', function(e) {
+  console.log("obj", e);
+});
+
+
 function Head($el, size) {
   this.node = $('<div id="head"></div>');
+  that = this
   this.node.css({'height': size, 'width': size})
   this.currentDirection = 'right';
-  this.SPEED = 100;
+  this.SPEED = 500;
   $el.append(this.node);
   this.x = 0;
   this.y = 0;

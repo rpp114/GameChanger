@@ -31,25 +31,28 @@ app.get('/signup', function(req, res) {
 
 app.post('/signup', UserCtrl.createUser);
 app.post('/login', UserCtrl.verify);
+io.sockets.setMaxListeners(100);
 
 io.on('connection', function(socket2) {
-  var nsp = io.of(q);
-  nsp.on('connection', function(socket) {
+  socket2.join(q);
+  io.on('connection', function(socket) {
     console.log('user connected');
     socket.on('changeVariable', function(val) {
       console.log('heard: ', val);
-      nsp.emit('changeVariable', val);
+      io.to(q).emit('changeVariable', val);
       console.log('emitted: ', val);
     });
     socket.on('imready', function(val) {
-
-      nsp.emit('imready', val);
+      io.to(q).emit('imready', val);
+    });
+    socket.on('obj', function(val) {
+      console.log('hello');
+      io.to(q).emit('obj', val);
     });
   });
 });
 app.get('/controller', function(req, res) {
       res.sendFile(path.join(__dirname, '/controller/controller.html'));
-      console.log(q);
   // res.render('./controller/controller');
 
 });
@@ -61,7 +64,6 @@ app.get('/snake', function(req, res) {
 
 
 app.get('*.js', function(req, res) {
-  console.log(path.join(__dirname, req.url));
   res.writeHead(200, {
     'content-type': 'text/javascript; charset=UTF-8'
   });
@@ -69,7 +71,6 @@ app.get('*.js', function(req, res) {
 });
 
 app.get('*.css', function(req, res) {
-  console.log(path.join(__dirname, req.url));
   res.writeHead(200, {
     'content-type': 'text/css; charset=UTF-8'
   });
@@ -77,7 +78,6 @@ app.get('*.css', function(req, res) {
 });
 
 app.get('*.jpg', function(req, res) {
-  console.log(path.join(__dirname, req.url));
   res.writeHead(200, {
     'content-type': 'image/jpg'
   });
