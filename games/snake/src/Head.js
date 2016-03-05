@@ -87,6 +87,7 @@ Head.prototype.checkApple = function() {
     this.apple.eat();
     this.apple = new Apple($('#board'));
     this.addBody();
+    debugger;
   }
 }
 

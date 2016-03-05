@@ -25,6 +25,7 @@ app.get('/signup', function(req, res) {
 app.post('/signup', UserCtrl.createUser);
 app.post('/login', UserCtrl.verify);
 var nsp = io.of('/hi')
+
 nsp.on('connection', function(socket) {
     console.log('user connected');
     socket.on('changeVariable', function(val) {
@@ -33,10 +34,11 @@ nsp.on('connection', function(socket) {
         console.log('emitted: ', val);
     });
 
-    socket.on('attrChange', mutation => {
+    socket.on('mutation', mutation => {
         console.log('heard: ', mutation);
-        io.emit('attrChange', mutation)
+        nsp.emit('mutation', mutation)
         console.log('emitted: ', mutation);
+      });
 
     socket.on('imready', function(val) {
       nsp.emit('imready', val);
@@ -54,19 +56,16 @@ app.get('/controller', function(req, res) {
 });
 
 app.get('*.js', function(req, res) {
-    console.log(path.join(__dirname, req.url));
     res.writeHead(200, {'content-type':'text/javascript; charset=UTF-8'});
     res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
 app.get('*.css', function(req, res) {
-    console.log(path.join(__dirname, req.url));
     res.writeHead(200, {'content-type': 'text/css; charset=UTF-8'});
     res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
 app.get('*.jpg', function(req, res) {
-    console.log(path.join(__dirname, req.url));
     res.writeHead(200, {'content-type': 'image/jpg'});
     res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });

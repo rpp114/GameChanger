@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>Snake</title>
@@ -10,22 +11,78 @@
   <script src='games/snake/src/Apple.js'></script>
   <link rel="stylesheet" href="games/snake/css/snake_styles.css">
 </head>
+
 <body>
-    <div id="board"></div>
-    <script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io();
-  MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+  <div id="board"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io('/hi');
+    // console.log($('#board').get());
+    MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     var observer = new MutationObserver(function(mutations, observer) {
-      var mutation = [mutations[0].target.attributes.id.value, mutations[0].target.style.cssText]
-      socket.emit('attrChange', mutation);
-      console.log('emitted mutations');
+
+      mutations.forEach(mutation => {
+        var change;
+        console.log(mutation);
+        if (mutation.type === 'childList' && mutation.addedNodes.length) {
+          console.log(mutation.addedNodes[0]);
+          change = {
+            action: 'add',
+            type: mutation.addedNodes[0].localName,
+            parentId: mutation.target.id,
+            parentClass: mutation.target.className,
+            attr: {}
+          };
+
+          var attrs = mutation.addedNodes[0].attributes;
+          for (var attr in attrs) {
+            if (attr === undefined) {break}
+            change.attr[attrs[attr].localName] = attrs[attr].value
+          }
+
+        } else if (mutation.type === 'attributes') {
+          change = {action: 'change',
+            type: mutation.target.localName,
+            id: mutation.target.id,
+            class: mutation.target.className,
+            attr: {}
+          }
+
+          var attrs = mutation.target.attributes;
+          for (var attr in attrs) {
+            if (attr === 'undefined') {break}
+            change.attr[attrs[attr].localName] = attrs[attr].value
+          }
+
+        } else if (mutation.type = 'childList' && mutation.removedNodes.length) {
+          change = {action: 'remove',
+            type: mutation.removedNodes[0].localName,
+            parentId: mutation.target.id,
+            className: mutation.target.className,
+            attr: {}
+          };
+
+          var attrs = mutation.removedNodes[0].attributes;
+          for (var attr in attrs) {
+            if (attr === undefined) {break}
+            change.attr[attrs[attr].localName] = attrs[attr].value
+          }
+        };
+        console.log('change: ', change);
+        socket.emit('mutation', change);
+      });
+      // var mutation = [mutations[0].target.attributes.id.value, mutations[0].target.style.cssText]
+      // socket.emit('attrChange', mutation);
+      // console.log('emitted mutations');
     });
     observer.observe($('#board').get(0), {
-      attributes: true
+      attributes: true,
+      subtree: true,
+      childList: true
     })
-</script>
+  </script>
 </body>
 
 <script src="games/snake/src/main.js"></script>
+
 </html>
