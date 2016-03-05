@@ -1,5 +1,8 @@
 // head out in global scope for testing purposes
 $(document).ready(function() {
+  var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+  var socket = io(qs);
+  socket.emit('obj', obj);
   head = new Head($('#board'), 0.50);
   var apple = new Apple($('#board'), 0.50);
   head.apple = apple;

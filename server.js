@@ -49,7 +49,6 @@ io.on('connection', function(socket2) {
 });
 app.get('/controller', function(req, res) {
       res.sendFile(path.join(__dirname, '/controller/controller.html'));
-      console.log(q);
   // res.render('./controller/controller');
 
 });
@@ -61,7 +60,6 @@ app.get('/snake', function(req, res) {
 
 
 app.get('*.js', function(req, res) {
-  console.log(path.join(__dirname, req.url));
   res.writeHead(200, {
     'content-type': 'text/javascript; charset=UTF-8'
   });
@@ -69,7 +67,6 @@ app.get('*.js', function(req, res) {
 });
 
 app.get('*.css', function(req, res) {
-  console.log(path.join(__dirname, req.url));
   res.writeHead(200, {
     'content-type': 'text/css; charset=UTF-8'
   });
@@ -77,7 +74,6 @@ app.get('*.css', function(req, res) {
 });
 
 app.get('*.jpg', function(req, res) {
-  console.log(path.join(__dirname, req.url));
   res.writeHead(200, {
     'content-type': 'image/jpg'
   });
