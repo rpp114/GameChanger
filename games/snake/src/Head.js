@@ -1,6 +1,7 @@
 // var variables = require('./')
-
-var socket = io();
+var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+console.log(qs)
+var socket = io(qs);
 
 var that;
 socket.on('changeVariable', function(e) {

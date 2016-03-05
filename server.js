@@ -3,30 +3,58 @@ var express = require('express'),
     http = require('http').Server(app),
     io = require('socket.io')(http),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    UserCtrl = require('./authenticate/userStuff'),
+    mongoose = require('mongoose'),
+    qs = require('qs');
+    mongoURI = 'mongodb://localhost/GameUsers';
 
-
-app.get('/', function(req, res) {
-    res.send('<h1>Hello World</h1>');
+var q;
+mongoose.connect(mongoURI);
+app.use(bodyParser.urlencoded());
+app.use(cookieParser());
+app.get('/*', function(req,res,next){
+  q = '/' + req.query.id;
+  next();
+});
+app.get('/login', function(req, res) {
+  res.sendFile(path.join(__dirname, '/loginsignuphtml/login.html'));
 });
 
-io.on('connection', function(socket) {
+app.get('/signup', function(req, res) {
+  res.sendFile(path.join(__dirname, '/loginsignuphtml/signup.html'));
+});
+
+app.post('/signup', UserCtrl.createUser);
+app.post('/login', UserCtrl.verify);
+
+io.on('connection', function(socket2) {
+var nsp = io.of(q);
+nsp.on('connection', function(socket) {
     console.log('user connected');
     socket.on('changeVariable', function(val) {
         console.log('heard: ', val);
-        io.emit('changeVariable', val);
+        nsp.emit('changeVariable', val);
         console.log('emitted: ', val);
     });
     socket.on('imready', function(val) {
-      io.emit('imready', val);
+
+      nsp.emit('imready', val);
     });
 });
-
+});
+app.get('/controller', function(req, res) {
+    res.sendFile(path.join(__dirname, '/controller/controller.html'));
+    console.log(q);
+});
 
 app.get('/snake', function(req, res) {
     res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
 
 });
+
 
 app.get('*.js', function(req, res) {
     console.log(path.join(__dirname, req.url));
