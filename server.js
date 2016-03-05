@@ -42,6 +42,7 @@ io.on('connection', function(socket2) {
       console.log('emitted: ', val);
     });
     socket.on('imready', function(val) {
+
       nsp.emit('imready', val);
     });
   });
@@ -83,6 +84,10 @@ app.get('*.jpg', function(req, res) {
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
+app.get('/controller', function(req, res) {
+    res.sendFile(path.join(__dirname, '/controller/controller.html'));
+
+});
 
 http.listen(3000, function() {
   console.log('listening on port 3000');
