@@ -1,22 +1,22 @@
-function Apple($el, size, controller) {
+function Apple($el, size, player) {
   this.node = $('<img id="apple"></img>');
   this.node.attr('src', 'games/snake/src/assets/apple.jpg');
   this.node.css({
     'height': size,
     'width': size
   });
-  if (!controller) {
+  if (player) {
     this.x = Math.floor(Math.random() * $el.height() / size);
     this.y = Math.floor(Math.random() * $el.height() / size);
     socket.emit('appleGenerate', [this.x, this.y])
-    console.log('emitted apple loc: ', [this.x, this.y]);
-  } else {
-    socket.on('appleGenerate', position => {
-      console.log('controller heard: ', position);
-      this.x = position[0];
-      this.y = position[1];
-    })
   }
+  //    else {
+  //     socket.on('appleGenerate', position => {
+  //       console.log('controller heard: ', position);
+  //       this.x = position[0];
+  //       this.y = position[1];
+  //     })
+  //   }
 
   $el.append(this.node);
   this.size = size;

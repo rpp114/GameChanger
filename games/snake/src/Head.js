@@ -87,7 +87,7 @@ Head.prototype.addBody = function() {
 Head.prototype.checkApple = function() {
   if (this.apple.x === this.x && this.apple.y === this.y) {
     this.apple.eat();
-    this.apple = new Apple($('#board'), this.size, head.controller);
+    this.apple = new Apple($('#board'), this.size, head.player);
     this.addBody();
   }
 }
