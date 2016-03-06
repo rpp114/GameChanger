@@ -16,7 +16,10 @@ socket.on('obj', function(e) {
 function Head($el, size) {
   this.node = $('<div id="head"></div>');
   that = this
-  this.node.css({'height': size, 'width': size})
+  this.node.css({
+    'height': size,
+    'width': size
+  })
   this.currentDirection = 'right';
   this.SPEED = 200;
   $el.append(this.node);
@@ -25,7 +28,7 @@ function Head($el, size) {
   this.next = null;
   this.tail = this;
   this.size = size;
-  this.elGrid = $el.height()/size;
+  this.elGrid = $el.height() / size;
   var elPos = $el.position()
   this.elPosX = elPos.left
   this.elPosY = elPos.top
@@ -70,7 +73,7 @@ Head.prototype.die = function() {
 }
 
 Head.prototype.checkBorder = function() {
-  if (this.x > this.elGrid || this.x < 0 || this.y > this.elGrid || this.y < 0) {
+  if (this.x > this.elGrid - 1 || this.x < 0 || this.y > this.elGrid - 1 || this.y < 0) {
     return false
   } else {
     return true
@@ -87,7 +90,7 @@ Head.prototype.addBody = function() {
 Head.prototype.checkApple = function() {
   if (this.apple.x === this.x && this.apple.y === this.y) {
     this.apple.eat();
-    this.apple = new Apple($('#board'), this.size, head.controller);
+    this.apple = new Apple($('#board'), this.size);
     this.addBody();
   }
 }

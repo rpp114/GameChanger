@@ -43,30 +43,19 @@ io.on('connection', function(socket) {
     console.log('user connected');
     socket.on('changeVariable', function(val) {
       console.log('heard: ', val);
-      io.to(q).emit('changeVariable', val);
+      socket.to(q).broadcast.emit('changeVariable', val);
       console.log('emitted: ', val);
     });
-    socket.on('imready', function(val) {
-      io.to(q).emit('imready', val);
-    });
+
     socket.on('obj', function(val) {
       console.log('hello');
-      io.to(q).emit('obj', val);
+      socket.to(q).broadcast.emit('obj', val);
     });
-
-    socket.on('directionChange', direction => {
-        io.to(q).emit('directionChange', direction);
-        console.log('emitted: ', direction);
-    });
-
-    socket.on('appleGenerate', position => {
-        io.to(q).emit('appleGenerate', position);
-        console.log('server emitted: ', position);
-    })
-
-    socket.on('startController', start => {
-        io.to(q).emit('startController', start);
-        console.log('server emitted: ', start);
+    //captures img from game and emits to controller
+    socket.on('image', url => {
+      // need to figure out how to get controller to join room to listen from emits
+        socket.broadcast.emit('image', url);
+        console.log('server emitted URL');
     })
 
 
