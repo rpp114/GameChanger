@@ -1,10 +1,47 @@
-.module {
+/*.module {
   display: inline-block;
   width: 50%;
+}*/
+
+#screenCast {
+  position: absolute;
+  top: 10px;
+  left: 410px;
+  height: 400px;
+  width:400px;
+  border: 1px solid black;
 }
 
-.module #screenCast {
+#dataDisplay {
   position: absolute;
-  top: 9;
-  left: 100;
+  top: 10px;
+  left: 10px;
+  height: 400px;
+  width:400px;
+  border: 1px solid black;
+}
+
+#controls {
+  position: absolute;
+  top: 410px;
+  left: 10px;
+  height: 400px;
+  width:400px;
+  border: 1px solid black;
+}
+
+#otherBox {
+  position: absolute;
+  top: 410px;
+  left: 410px;
+  height: 400px;
+  width:400px;
+  border: 1px solid black;
+}
+
+#screenShare {
+  border: 1px solid black;
+  height: 300px;
+  width: 300px;
+  margin: auto;
 }

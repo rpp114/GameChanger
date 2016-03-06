@@ -51,20 +51,11 @@ io.on('connection', function(socket) {
       console.log('hello');
       socket.to(q).broadcast.emit('obj', val);
     });
-
-    socket.on('directionChange', direction => {
-        socket.to(q).broadcast.emit('directionChange', direction);
-        console.log('emitted: ', direction);
-    });
-
-    socket.on('appleGenerate', position => {
-        socket.to(q).broadcast.emit('appleGenerate', position);
-        console.log('server emitted: ', position);
-    })
-
-    socket.on('startController', start => {
-        socket.to(q).broadcast.emit('startController', start);
-        console.log('server emitted: ', start);
+    //captures img from game and emits to controller
+    socket.on('image', url => {
+      // need to figure out how to get controller to join room to listen from emits
+        socket.broadcast.emit('image', url);
+        console.log('server emitted URL');
     })
 
 
