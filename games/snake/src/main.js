@@ -42,17 +42,14 @@ $(document).ready(function() {
       head.currentDirection = 'up';
     }
   });
+  
   // draws pic and emits it
   function drawPic() {
     console.log('drawing pic');
     domtoimage.toPng($('#gameBoard').get(0))
       .then(function(dataUrl) {
-        // $('#image').empty();
-        // var img = new Image();
-        // img.src = dataUrl;
         socket.emit('image', dataUrl);
         console.log('sent URL');
-        // $('#image').get(0).appendChild(img);
       })
       .catch(function(error) {
         console.error('oops, something went wrong!', error);
