@@ -18,7 +18,7 @@ function Head($el, size) {
   that = this
   this.node.css({'height': size, 'width': size})
   this.currentDirection = 'right';
-  this.SPEED = 500;
+  this.SPEED = 200;
   $el.append(this.node);
   this.x = 0;
   this.y = 0;

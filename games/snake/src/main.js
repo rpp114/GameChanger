@@ -2,7 +2,7 @@
 $(document).ready(function() {
   var controller = $(location).attr('pathname').slice(1) === 'controller'
   var scale = 1;
-  var sizeScale = .25;
+  var sizeScale = .5;
   var gridSize = 200;
   var gridPositionX = 9;
   var gridPositionY = 9;
