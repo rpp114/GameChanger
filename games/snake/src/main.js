@@ -13,7 +13,9 @@ $(document).ready(function() {
       'width': gridSize * scale,
       'top': gridPositionY,
       'left': gridPositionX
-    })
+    });
+
+    //allows for dynamic scaling and grid size on start of new game
     $('#gameBoard').width(gridSize * scale + 10);
     $('#gameBoard').height(gridSize * scale + 10);
     head = new Head($('#board'), size * sizeScale * scale);
@@ -53,7 +55,7 @@ $(document).ready(function() {
       })
       .catch(function(error) {
         console.error('oops, something went wrong!', error);
-      })
+      });
   }
 
   setInterval(drawPic, 300);
