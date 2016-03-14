@@ -1,7 +1,7 @@
 $(document).ready(function() {
   var scale = 1;
-  var sizeScale = 1.25;
-  var gridSize = 1000;
+  var sizeScale = .25;
+  var gridSize = 500;
   var gridPositionX = 20;
   var gridPositionY = 20;
   const size = 50;
@@ -42,7 +42,7 @@ $(document).ready(function() {
       head.currentDirection = 'up';
     }
   });
-  
+
   // draws pic and emits it
   function drawPic() {
     console.log('drawing pic');
