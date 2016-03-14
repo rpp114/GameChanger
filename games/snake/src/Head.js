@@ -2,24 +2,28 @@
 var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 // var socket = io(qs);
 var socket = io();
-var that;
+var thatHead;
+
+//alows for dynamic changing of speed
 socket.on('changeVariable', function(e) {
 
   console.log("speed changed to: ", e);
-  that.SPEED = e;
+  thatHead.SPEED = e;
 });
+
 socket.on('obj', function(e) {
   console.log("obj", e);
 });
 
-
+//head is defaulted to these settings at first start of game
 function Head($el, size) {
   this.node = $('<div id="head"></div>');
-  that = this
+  thatHead = this;
   this.node.css({
     'height': size,
     'width': size
-  })
+  });
+
   this.currentDirection = 'right';
   this.SPEED = 200;
   $el.append(this.node);
@@ -29,10 +33,10 @@ function Head($el, size) {
   this.tail = this;
   this.size = size;
   this.elGrid = $el.height() / size;
-  var elPos = $el.position()
-  this.elPosX = elPos.left
-  this.elPosY = elPos.top
-  this.render()
+  var elPos = $el.position();
+  this.elPosX = elPos.left;
+  this.elPosY = elPos.top;
+  this.render();
 
   setTimeout(this.move.bind(this), this.SPEED);
 
@@ -43,20 +47,23 @@ Head.prototype.move = function() {
   var position = this.position;
   var x = this.x;
   var y = this.y;
+
   this.moveBody(x, y);
   this.moveHead(direction);
-  if (this.checkBorder()) {
-    this.checkBody();
 
+  if (this.checkBorder()) {
+
+    this.checkBody();
     this.checkApple();
     this.render();
-
     setTimeout(this.move.bind(this), this.SPEED);
-  } else {
-    this.die()
-  }
-}
 
+  } else {
+    this.die();
+  }
+};
+
+//checks to see if snake is hitting itself
 Head.prototype.checkBody = function() {
   var head_x = this.x;
   var head_y = this.y;
@@ -65,27 +72,23 @@ Head.prototype.checkBody = function() {
     if (head_x === node.x && head_y === node.y)
       this.die();
   }
-}
+};
 
 Head.prototype.die = function() {
   $('#board').empty();
-  this.startGame()
-}
+  this.startGame();
+};
 
 Head.prototype.checkBorder = function() {
-  if (this.x > this.elGrid - 1 || this.x < 0 || this.y > this.elGrid - 1 || this.y < 0) {
-    return false
-  } else {
-    return true
-  }
-
-}
+  if (this.x > this.elGrid || this.x < 0 || this.y > this.elGrid || this.y < 0) return false;
+  else return true;
+};
 
 Head.prototype.addBody = function() {
   var bodyPart = new Body($('#board'), this.x, this.y, this.size);
   this.tail.next = bodyPart;
   this.tail = this.tail.next;
-}
+};
 
 Head.prototype.checkApple = function() {
   if (this.apple.x === this.x && this.apple.y === this.y) {
@@ -93,7 +96,7 @@ Head.prototype.checkApple = function() {
     this.apple = new Apple($('#board'), this.size);
     this.addBody();
   }
-}
+};
 
 Head.prototype.moveBody = function(x, y) {
   var temp_x, temp_y;
@@ -104,17 +107,17 @@ Head.prototype.moveBody = function(x, y) {
     node.y = y;
     x = temp_x;
     y = temp_y;
-    node.render()
+    node.render();
   }
-}
+};
 
 
 Head.prototype.render = function() {
   this.node.offset({
     top: (this.size * this.y) + head.elPosY,
     left: (this.size * this.x) + head.elPosX
-  })
-}
+  });
+};
 
 
 Head.prototype.moveHead = function(direction) {
@@ -131,4 +134,4 @@ Head.prototype.moveHead = function(direction) {
   if (direction === 'down') {
     this.y++;
   }
-}
+};
