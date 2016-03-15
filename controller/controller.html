@@ -22,7 +22,6 @@
     <p> Give the player this URL!!!
       <p id='url'></p>
     </p>
-    <input type="range" id="variable1" min="100 " max="500" step="10" value="250" />
   </div>
   <div class='module' id='otherBox'>
     <h1>Space holder for some other stuff</h1>
@@ -37,21 +36,12 @@
     $('#url').text(url);
     // var socket = io(qs);
     var socket = io();
-    $('#variable1').on('input', function(e) {
-      var value = e.target.value;
-
-      socket.emit('changeVariable', value)
-      console.log('emitted:' + qs);
-    })
     var obj = {
       scale: localStorage.getItem('scale') || 1,
       sizeScale: localStorage.getItem('sizeScale') || 1,
       gridSize: localStorage.getItem('gridSize') || 1000,
       speed: localStorage.getItem('speed') || 250
     }
-    // var socket = io();
-    //   $('#variable1').on('input', function(e){
-    //     var value = e.target.value;
 
     var ctrlObj = {
       speed: {
@@ -80,36 +70,21 @@
       }
     }
 
-        for (var key in ctrlObj) {
-          if (ctrlObj[key].type === 'range') $('#controls').append('<input type="range" id="' + key + '" min="' + ctrlObj[key].min + ' "max="' + ctrlObj[key].max + '" step="' + ctrlObj[key].step + '"  value="' + ctrlObj[key].value + '" />');
-          if (ctrlObj[key].type === 'button') $('#controls').append('<button id="' + key + '"></button>');
-        }
+    for (var key in ctrlObj) {
+      if (ctrlObj[key].type === 'range') $('#controls').append('<input type="range" id="' + key + '" min="' + ctrlObj[key].min + ' "max="' + ctrlObj[key].max + '" step="' + ctrlObj[key].step + '"  value="' + ctrlObj[key].value + '" />');
+      if (ctrlObj[key].type === 'button') $('#controls').append('<button id="' + key + '"></button>');
+    }
 
-      //   var $board = $('#board');
-      // for (var i = 0; i < 9; i++) {
-      //   var $box = $('<div class="box">');
-      //   for (var j = 0; j < 9; j++) {
-      //     $box.append('<input type="text" maxlength="1" data-row="' +
-      //                 (Math.floor(i / 3) * 3 + Math.floor(j / 3)) +
-      //                 '" data-column="' + ((i % 3) * 3 + j % 3) + '">');
-      //   }
-      //   $board.append($box);
-      // }
+    // $('body').on('click', function() {
+    //   console.log(obj)
+    //   socket.emit('obj', obj);
+    // });
+    $('#speed').on('input', function(e) {
+      var value = e.target.value;
 
-      //   socket.emit('changeVariable', value )
-      //   console.log('emitted:' + qs);
-      // })
-        var obj = {
-          scale: localStorage.getItem('scale') || 1,
-          sizeScale: localStorage.getItem('sizeScale') || 1,
-          gridSize: localStorage.getItem('gridSize') || 1000,
-          speed: localStorage.getItem('speed') || 250
-        }
-
-    $('body').on('click', function() {
-      console.log(obj)
-      socket.emit('obj', obj);
-    });
+      socket.emit('changeVariable', value)
+      console.log('emitted:' + qs);
+    })
 
     socket.on('image', url => {
       console.log('heard url');
@@ -122,21 +97,6 @@
     })
   </script>
   </body>
-  <!-- <script>
-  var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-  var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-  $('#url').text(url);
-  var socket = io(qs);
->>>>>>> 0a9fd4ff2656df481e67467b82b2207bdb46ff63
-
-</body>
-
-<<<<<<< HEAD
-=======
-    socket.emit('changeVariable', value )
-    console.log('emitted:' + qs);
-  })
-  </script> -->
   <script src='games/snake/src/main.js'></script>
 
 </html>

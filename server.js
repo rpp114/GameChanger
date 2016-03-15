@@ -43,7 +43,7 @@ io.on('connection', function(socket) {
     console.log('user connected');
     socket.on('changeVariable', function(val) {
       console.log('heard: ', val);
-      socket.to(q).broadcast.emit('changeVariable', val);
+      socket.broadcast.emit('changeVariable', val);
       console.log('emitted: ', val);
     });
 

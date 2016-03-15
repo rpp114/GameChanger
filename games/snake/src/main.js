@@ -1,6 +1,6 @@
 $(document).ready(function() {
-  var scale = 1;
-  var sizeScale = 1.25;
+  var scale = 0.5;
+  var sizeScale = 1;
   var gridSize = 1000;
   var gridPositionX = 20;
   var gridPositionY = 20;
@@ -16,8 +16,8 @@ $(document).ready(function() {
     });
 
     //allows for dynamic scaling and grid size on start of new game
-    $('#gameBoard').width(gridSize * scale + 10);
-    $('#gameBoard').height(gridSize * scale + 10);
+    $('#gameBoard').width(gridSize * scale + 40);
+    $('#gameBoard').height(gridSize * scale + 40);
     head = new Head($('#board'), size * sizeScale * scale);
     var apple = new Apple($('#board'), size * sizeScale * scale);
     head.apple = apple;
@@ -27,31 +27,34 @@ $(document).ready(function() {
   startGame();
 
   $('body').on('keydown', function(e) {
-    if (e.keyCode === 37) {
+    if (e.keyCode === 37 && head.currentDirection !== 'right') {
       console.log('pressed left');
       head.currentDirection = 'left';
     }
-    if (e.keyCode === 39) {
+    if (e.keyCode === 39 && head.currentDirection !== 'left') {
       console.log('pressed right');
       head.currentDirection = 'right';
     }
-    if (e.keyCode === 40) {
+    if (e.keyCode === 40 && head.currentDirection !== 'up') {
       console.log('pressed down');
       head.currentDirection = 'down';
     }
-    if (e.keyCode === 38) {
+    if (e.keyCode === 38 && head.currentDirection !== 'down') {
       console.log('pressed up');
       head.currentDirection = 'up';
+    }
+    if (e.keyCode === 32) {
+      head.currentDirection = 'still';
     }
   });
 
   // draws pic and emits it
   function drawPic() {
-    console.log('drawing pic');
+    // console.log('drawing pic');
     domtoimage.toPng($('#gameBoard').get(0))
       .then(function(dataUrl) {
         socket.emit('image', dataUrl);
-        console.log('sent URL');
+        // console.log('sent URL');
       })
       .catch(function(error) {
         console.error('oops, something went wrong!', error);
