@@ -1,0 +1,24 @@
+path {
+  stroke: steelblue;
+  stroke-width: 1;
+  fill: none;
+}
+.axis {
+  shape-rendering: crispEdges;
+}
+/*.x_axis line {
+  stroke: lightgrey;
+}*/
+.x_axis .minor {
+  stroke-opacity: .5;
+}
+.x_axis text {
+  display: none;
+}
+/*.x_axis path {
+  display: none;
+}*/
+.y_axis line, .y_axis path {
+  fill: none;
+  stroke: #000;
+}

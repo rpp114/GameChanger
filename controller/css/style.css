@@ -20,6 +20,16 @@
   width:400px;
   border: 1px solid black;
 }
+/*
+#graphOptions {
+  position: absolute;
+  top: 1000px;
+  left: 10px;
+  height: 400px;
+  width:400px;
+  border: 1px solid black;
+}*/
+
 
 #controls {
   position: absolute;

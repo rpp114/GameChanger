@@ -8,11 +8,16 @@
   <script src='/socket.io/socket.io.js'></script>
   <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
   <link rel="stylesheet" href="controller/css/style.css">
+  <link href="controller/css/graph.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-  <div class='module' id='dataDisplay'>
-    <h1>Space Holder for Realtime Data from D3</h1>
+  <div class='module' id='dataDisplay' >
+    <div id="graph">
+
+    </div>
+    <div id='graphOptions'>
+    </div>
   </div>
   <div class='module' id='screenCast'>
   </div>
@@ -112,7 +117,6 @@
     });
 
     socket.on('image', url => {
-      console.log('heard url');
       $('#screenCast').empty();
       var img = new Image();
       img.id = 'screenShare';
@@ -121,22 +125,10 @@
       $('#screenCast').get(0).appendChild(img);
     })
   </script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="controller/graph.js" charset="utf-8"></script>
   </body>
-  <!-- <script>
-  var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-  var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-  $('#url').text(url);
-  var socket = io(qs);
->>>>>>> 0a9fd4ff2656df481e67467b82b2207bdb46ff63
 
-</body>
-
-<<<<<<< HEAD
-=======
-    socket.emit('changeVariable', value )
-    console.log('emitted:' + qs);
-  })
-  </script> -->
   <script src='games/snake/src/main.js'></script>
 
 </html>
