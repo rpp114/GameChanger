@@ -38,8 +38,7 @@ function Head($el, size) {
   this.elPosX = elPos.left;
   this.elPosY = elPos.top;
   this.render();
-
-  setTimeout(this.move.bind(this), this.SPEED);
+  setTimeout(this.move.bind(this), thatHead.SPEED);
 
 }
 
@@ -76,14 +75,13 @@ Head.prototype.checkBody = function() {
   var head_y = this.y;
 
   for (var node = this.next; node; node = node.next) {
-    if (head_x === node.x && head_y === node.y)
-      this.die();
+    if (head_x === node.x && head_y === node.y) this.die();
   }
 };
 
 Head.prototype.die = function() {
   $('#board').empty();
-  delete this.node
+  delete this.node;
   this.startGame();
 };
 
@@ -130,17 +128,12 @@ Head.prototype.render = function() {
 
 
 Head.prototype.moveHead = function(direction) {
+  console.log('x: ' + this.x);
+  console.log('y: ' + this.y);
 
-  if (direction === 'right') {
-    this.x++;
-  }
-  if (direction === 'left') {
-    this.x--;
-  }
-  if (direction === 'up') {
-    this.y--;
-  }
-  if (direction === 'down') {
-    this.y++;
-  }
+  if (direction === 'right') this.x++;
+  if (direction === 'left') this.x--;
+  if (direction === 'up') this.y--;
+  if (direction === 'down') this.y++;
+  if (direction === 'still') return;
 };

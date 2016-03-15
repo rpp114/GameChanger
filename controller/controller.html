@@ -27,7 +27,7 @@
     <p> Give the player this URL!!!
       <p id='url'></p>
     </p>
-    <!-- <input type="range" id="variable1" min="100 " max="500" step="10" value="250" /> -->
+
   </div>
   <div class='module' id='otherBox'>
     <h1>Space holder for some other stuff</h1>
@@ -40,18 +40,8 @@
     // var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     $('#url').text(url);
-    // var socket = io(qs);
-    var socket = io();
-    // var obj = {
-    //   scale: localStorage.getItem('scale') || 1,
-    //   sizeScale: localStorage.getItem('sizeScale') || 1,
-    //   gridSize: localStorage.getItem('gridSize') || 1000,
-    //   speed: localStorage.getItem('speed') || 250
-    // }
-    // var socket = io();
-    //   $('#variable1').on('input', function(e){
-    //     var value = e.target.value;
 
+    var socket = io();
     var ctrlObj = {
       speed: {
         type: 'range',
@@ -65,7 +55,7 @@
         min: 0.25,
         max: 1,
         step: 0.05,
-        value: .5
+        value: 0.5
       },
       gridSize: {
         type: 'range',
@@ -78,6 +68,20 @@
         type: 'button'
       }
     }
+// <<<<<<< HEAD
+//
+//     for (var key in ctrlObj) {
+//       if (ctrlObj[key].type === 'range') {
+//         $('#controls').append('<input type="range" id="' + key + '" min="' + ctrlObj[key].min + ' "max="' + ctrlObj[key].max + '" step="' + ctrlObj[key].step + '"  value="' + ctrlObj[key].value + '" />');
+//         $("'#" + key + "'").on('input', function(e) {
+//           var value = e.target.value;
+//           localStorage.setItem("'" + key + "'", e);
+//           socket.emit("'" + key + "'", value);
+//         })
+//       if (ctrlObj[key].type === 'button') $('#controls').append('<button id="' + key + '"></button>');
+//     }
+//     socket.emit('obj', ctrlObj);
+// =======
     socket.emit('obj', ctrlObj);
         for (var key in ctrlObj) {
           if(ctrlObj[key].value || ctrlObj[key].value === 0)
@@ -86,31 +90,11 @@
           if (ctrlObj[key].type === 'button') $('#controls').append('<br><br><input type="submit" id="' + key + '" value="' + key + '"></input>');
         }
 
-      //   var $board = $('#board');
-      // for (var i = 0; i < 9; i++) {
-      //   var $box = $('<div class="box">');
-      //   for (var j = 0; j < 9; j++) {
-      //     $box.append('<input type="text" maxlength="1" data-row="' +
-      //                 (Math.floor(i / 3) * 3 + Math.floor(j / 3)) +
-      //                 '" data-column="' + ((i % 3) * 3 + j % 3) + '">');
-      //   }
-      //   $board.append($box);
-      // }
-
-      //   socket.emit('changeVariable', value )
-      //   console.log('emitted:' + qs);
-      // })
-        // var obj = {
-        //   scale: localStorage.getItem('scale') || 1,
-        //   sizeScale: localStorage.getItem('sizeScale') || 1,
-        //   gridSize: localStorage.getItem('gridSize') || 1000,
-        //   speed: localStorage.getItem('speed') || 250
-        // }
-
-    // $('body').on('click', function() {
-    //   console.log(obj)
-    //   socket.emit('obj', obj);
-    // });
+    // $('#speed').on('input', function(e) {
+    //   var value = e.target.value;
+    //   localStorage.setItem('speed', e);
+    //   socket.emit('changeVariable', value);
+    // })
 
     $('input').on('input', function(e) {
       // console.log('emitted:' + qs);
@@ -118,6 +102,7 @@
       localStorage.setItem(e.target.id, e.target.value)
       socket.emit('changeVariable', [e.target.id, e.target.value])
     })
+
     socket.on('image', url => {
       $('#screenCast').empty();
       var img = new Image();
@@ -126,11 +111,9 @@
       // img.width = 300;
       $('#screenCast').get(0).appendChild(img);
     })
+
   </script>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="controller/graph.js" charset="utf-8"></script>
-    <!-- <script src='games/snake/src/main.js'></script> -->
   </body>
-
-
 </html>
