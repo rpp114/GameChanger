@@ -29,18 +29,15 @@
       <p id='url'></p>
     </p>
 
-<<<<<<< HEAD
+
     <table id='controllers'>
       <tr width='100%'>
       </tr>
     </table>
 
-=======
+
   </div>
-  <div class='module' id='otherBox'>
-    <h1>Space holder for some other stuff</h1>
->>>>>>> 76554a05bfe3011d460e4735eb3e286167e35bfc
-  </div>
+
 
 
   <script src='/socket.io/socket.io.js'></script>
@@ -49,20 +46,7 @@
     // var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     $('#url').text(url);
-<<<<<<< HEAD
-    // var socket = io(qs);
-    var socket = io();
 
-
-    var obj = {
-        scale: localStorage.getItem('scale') || 1,
-        sizeScale: localStorage.getItem('sizeScale') || 1,
-        gridSize: localStorage.getItem('gridSize') || 1000,
-        speed: localStorage.getItem('speed') || 250
-      }
-
-=======
->>>>>>> 76554a05bfe3011d460e4735eb3e286167e35bfc
 
     var socket = io();
     var ctrlObj = {
@@ -110,7 +94,6 @@
       $(document).ready(function($) {
         $(".dial").knob();
       });
-    }
 
 
 
