@@ -39,7 +39,6 @@ io.on('connection', function(socket) {
   // var nsp = io.of(q);
   // nsp.on('connection', function(socket) {
 
-  socket.join(q);
     console.log('user connected');
     socket.on('changeVariable', function(val) {
       console.log('heard: ', val);
@@ -49,7 +48,7 @@ io.on('connection', function(socket) {
 
     socket.on('obj', function(val) {
       console.log('hello');
-      socket.to(q).broadcast.emit('obj', val);
+      socket.broadcast.emit('obj', val);
     });
     //captures img from game and emits to controller
     socket.on('image', url => {
@@ -57,6 +56,11 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('image', url);
         console.log('server emitted URL');
     });
+
+    socket.on('chartData', data => {
+     // need to figure out how to get controller to join room to listen from emits
+     socket.broadcast.emit('chartData', data);
+   });
 
 
   // });
