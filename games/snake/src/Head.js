@@ -7,8 +7,9 @@ var thatHead;
 //alows for dynamic changing of speed
 socket.on('changeVariable', function(e) {
 
-  console.log("speed changed to: ", e);
-  thatHead.SPEED = e;
+  console.log(e[0], "changed to: ", e[1]);
+  if(e[0] === 'speed')
+    thatHead.SPEED = e[1];
 });
 
 socket.on('obj', function(e) {

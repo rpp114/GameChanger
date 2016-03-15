@@ -1,13 +1,13 @@
 $(document).ready(function() {
-  var scale = 1;
-  var sizeScale = .5;
-  var gridSize = 500;
-  var gridPositionX = 20;
-  var gridPositionY = 20;
-  const size = 50;
 
 
   function startGame() {
+    var scale = localStorage.getItem('scale') || 1;
+    var sizeScale = localStorage.getItem('sizeScale') || .5;
+    var gridSize = localStorage.getItem('gridSize') || 500;
+    var gridPositionX = 20;
+    var gridPositionY = 20;
+    const size = 50;
     $('#board').css({
       'height': gridSize * scale,
       'width': gridSize * scale,
@@ -60,6 +60,6 @@ $(document).ready(function() {
       });
   }
 
-  setInterval(drawPic, 300);
+  // setInterval(drawPic, 300);
 
 });

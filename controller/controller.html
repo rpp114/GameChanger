@@ -42,12 +42,12 @@
     $('#url').text(url);
     // var socket = io(qs);
     var socket = io();
-    var obj = {
-      scale: localStorage.getItem('scale') || 1,
-      sizeScale: localStorage.getItem('sizeScale') || 1,
-      gridSize: localStorage.getItem('gridSize') || 1000,
-      speed: localStorage.getItem('speed') || 250
-    }
+    // var obj = {
+    //   scale: localStorage.getItem('scale') || 1,
+    //   sizeScale: localStorage.getItem('sizeScale') || 1,
+    //   gridSize: localStorage.getItem('gridSize') || 1000,
+    //   speed: localStorage.getItem('speed') || 250
+    // }
     // var socket = io();
     //   $('#variable1').on('input', function(e){
     //     var value = e.target.value;
@@ -65,7 +65,7 @@
         min: 0.25,
         max: 1,
         step: 0.05,
-        value: 1
+        value: .5
       },
       gridSize: {
         type: 'range',
@@ -78,10 +78,12 @@
         type: 'button'
       }
     }
-
+    socket.emit('obj', ctrlObj);
         for (var key in ctrlObj) {
+          if(ctrlObj[key].value || ctrlObj[key].value === 0)
+            localStorage.setItem(ctrlObj[key], ctrlObj[key].value)
           if (ctrlObj[key].type === 'range') $('#controls').append('<p>' + key + '</p><input type="range" id="' + key + '" min="' + ctrlObj[key].min + ' "max="' + ctrlObj[key].max + '" step="' + ctrlObj[key].step + '"  value="' + ctrlObj[key].value + '" />');
-          if (ctrlObj[key].type === 'button') $('#controls').append('<br><br><button id="' + key + '">' + key + '</button>');
+          if (ctrlObj[key].type === 'button') $('#controls').append('<br><br><input type="submit" id="' + key + '" value="' + key + '"></input>');
         }
 
       //   var $board = $('#board');
@@ -98,23 +100,23 @@
       //   socket.emit('changeVariable', value )
       //   console.log('emitted:' + qs);
       // })
-        var obj = {
-          scale: localStorage.getItem('scale') || 1,
-          sizeScale: localStorage.getItem('sizeScale') || 1,
-          gridSize: localStorage.getItem('gridSize') || 1000,
-          speed: localStorage.getItem('speed') || 250
-        }
+        // var obj = {
+        //   scale: localStorage.getItem('scale') || 1,
+        //   sizeScale: localStorage.getItem('sizeScale') || 1,
+        //   gridSize: localStorage.getItem('gridSize') || 1000,
+        //   speed: localStorage.getItem('speed') || 250
+        // }
 
-    $('body').on('click', function() {
-      console.log(obj)
-      socket.emit('obj', obj);
-    });
+    // $('body').on('click', function() {
+    //   console.log(obj)
+    //   socket.emit('obj', obj);
+    // });
 
-    $('#speed').on('input', function(e) {
+    $('input').on('input', function(e) {
       // console.log('emitted:' + qs);
-      var value = e.target.value;
-      localStorage.setItem('speed', e)
-      socket.emit('changeVariable', value)
+      console.log(e.target.value)
+      localStorage.setItem(e.target.id, e.target.value)
+      socket.emit('changeVariable', [e.target.id, e.target.value])
     })
     socket.on('image', url => {
       $('#screenCast').empty();
