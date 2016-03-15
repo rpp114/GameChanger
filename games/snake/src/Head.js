@@ -1,5 +1,5 @@
 // var variables = require('./')
-var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+// var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 // var socket = io(qs);
 var socket = io();
 var thatHead;
@@ -7,9 +7,9 @@ var thatHead;
 //alows for dynamic changing of speed
 socket.on('changeVariable', function(e) {
 
-  console.log("speed changed to: ", e);
-
-  thatHead.SPEED = e;
+  console.log(e[0], "changed to: ", e[1]);
+  if(e[0] === 'speed')
+    thatHead.SPEED = e[1];
 });
 
 socket.on('obj', function(e) {
@@ -26,7 +26,7 @@ function Head($el, size) {
   });
 
   this.currentDirection = 'right';
-  this.SPEED = 200;
+  this.SPEED = localStorage.getItem('speed') || 200;
   $el.append(this.node);
   this.x = 0;
   this.y = 0;
@@ -56,7 +56,13 @@ Head.prototype.move = function() {
     this.checkBody();
     this.checkApple();
     this.render();
-    setTimeout(this.move.bind(this), thatHead.SPEED);
+    var dist = Math.sqrt(Math.pow((this.x - this.apple.x), 2) + Math.pow((this.y - this.apple.y), 2));
+    var chartData = {
+      'Distance': dist,
+      'Moves': this.counter
+    };
+    socket.emit('chartData', chartData);
+    setTimeout(this.move.bind(this), this.SPEED);
 
   } else {
     this.die();
@@ -93,6 +99,7 @@ Head.prototype.addBody = function() {
 Head.prototype.checkApple = function() {
   if (this.apple.x === this.x && this.apple.y === this.y) {
     this.apple.eat();
+    this.counter = 0;
     this.apple = new Apple($('#board'), this.size);
     this.addBody();
   }

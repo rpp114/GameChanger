@@ -1,13 +1,12 @@
 $(document).ready(function() {
-  var scale = 0.5;
-  var sizeScale = 1;
-  var gridSize = 1000;
-  var gridPositionX = 20;
-  var gridPositionY = 20;
-  const size = 50;
-
 
   function startGame() {
+    var scale = localStorage.getItem('scale') || 1;
+    var sizeScale = localStorage.getItem('sizeScale') || 0.5;
+    var gridSize = localStorage.getItem('gridSize') || 500;
+    var gridPositionX = 20;
+    var gridPositionY = 20;
+    const size = 50;
     $('#board').css({
       'height': gridSize * scale,
       'width': gridSize * scale,
@@ -22,6 +21,7 @@ $(document).ready(function() {
     var apple = new Apple($('#board'), size * sizeScale * scale);
     head.apple = apple;
     head.startGame = startGame;
+    head.counter = 0;
   }
 
   startGame();
@@ -61,6 +61,6 @@ $(document).ready(function() {
       });
   }
 
-  setInterval(drawPic, 300);
+  // setInterval(drawPic, 300);
 
 });

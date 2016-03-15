@@ -8,11 +8,16 @@
   <script src='/socket.io/socket.io.js'></script>
   <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
   <link rel="stylesheet" href="controller/css/style.css">
+  <link href="controller/css/graph.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-  <div class='module' id='dataDisplay'>
-    <h1>Space Holder for Realtime Data from D3</h1>
+  <div class='module' id='dataDisplay' >
+    <div id="graph">
+
+    </div>
+    <div id='graphOptions'>
+    </div>
   </div>
   <div class='module' id='screenCast'>
   </div>
@@ -22,6 +27,7 @@
     <p> Give the player this URL!!!
       <p id='url'></p>
     </p>
+
   </div>
   <div class='module' id='otherBox'>
     <h1>Space holder for some other stuff</h1>
@@ -34,19 +40,12 @@
     // var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     $('#url').text(url);
-    // var socket = io(qs);
-    var socket = io();
-    // var obj = {
-    //   scale: localStorage.getItem('scale') || 1,
-    //   sizeScale: localStorage.getItem('sizeScale') || 1,
-    //   gridSize: localStorage.getItem('gridSize') || 1000,
-    //   speed: localStorage.getItem('speed') || 250
-    // }
 
+    var socket = io();
     var ctrlObj = {
       speed: {
         type: 'range',
-        min: 0,
+        min: 50,
         max: 500,
         step: 10,
         value: 250
@@ -56,7 +55,7 @@
         min: 0.25,
         max: 1,
         step: 0.05,
-        value: 1
+        value: 0.5
       },
       gridSize: {
         type: 'range',
@@ -69,29 +68,42 @@
         type: 'button'
       }
     }
-
-    for (var key in ctrlObj) {
-      if (ctrlObj[key].type === 'range') {
-        $('#controls').append('<input type="range" id="' + key + '" min="' + ctrlObj[key].min + ' "max="' + ctrlObj[key].max + '" step="' + ctrlObj[key].step + '"  value="' + ctrlObj[key].value + '" />');
-        $("'#" + key + "'").on('input', function(e) {
-          var value = e.target.value;
-          localStorage.setItem("'" + key + "'", e);
-          socket.emit("'" + key + "'", value);
-        })
-      if (ctrlObj[key].type === 'button') $('#controls').append('<button id="' + key + '"></button>');
-    }
+// <<<<<<< HEAD
+//
+//     for (var key in ctrlObj) {
+//       if (ctrlObj[key].type === 'range') {
+//         $('#controls').append('<input type="range" id="' + key + '" min="' + ctrlObj[key].min + ' "max="' + ctrlObj[key].max + '" step="' + ctrlObj[key].step + '"  value="' + ctrlObj[key].value + '" />');
+//         $("'#" + key + "'").on('input', function(e) {
+//           var value = e.target.value;
+//           localStorage.setItem("'" + key + "'", e);
+//           socket.emit("'" + key + "'", value);
+//         })
+//       if (ctrlObj[key].type === 'button') $('#controls').append('<button id="' + key + '"></button>');
+//     }
+//     socket.emit('obj', ctrlObj);
+// =======
     socket.emit('obj', ctrlObj);
+        for (var key in ctrlObj) {
+          if(ctrlObj[key].value || ctrlObj[key].value === 0)
+            localStorage.setItem(ctrlObj[key], ctrlObj[key].value)
+          if (ctrlObj[key].type === 'range') $('#controls').append('<p>' + key + '</p><input type="range" id="' + key + '" min="' + ctrlObj[key].min + ' "max="' + ctrlObj[key].max + '" step="' + ctrlObj[key].step + '"  value="' + ctrlObj[key].value + '" />');
+          if (ctrlObj[key].type === 'button') $('#controls').append('<br><br><input type="submit" id="' + key + '" value="' + key + '"></input>');
+        }
 
-    $('#speed').on('input', function(e) {
-      var value = e.target.value;
-      localStorage.setItem('speed', e);
-      socket.emit('changeVariable', value);
+    // $('#speed').on('input', function(e) {
+    //   var value = e.target.value;
+    //   localStorage.setItem('speed', e);
+    //   socket.emit('changeVariable', value);
+    // })
+
+    $('input').on('input', function(e) {
+      // console.log('emitted:' + qs);
+      console.log(e.target.value)
+      localStorage.setItem(e.target.id, e.target.value)
+      socket.emit('changeVariable', [e.target.id, e.target.value])
     })
 
-
-
     socket.on('image', url => {
-      console.log('heard url');
       $('#screenCast').empty();
       var img = new Image();
       img.id = 'screenShare';
@@ -99,9 +111,9 @@
       // img.width = 300;
       $('#screenCast').get(0).appendChild(img);
     })
-  </script>
-  </body>
-  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  <script src="controller/graph.js" charset="utf-8"></script>
 
+  </script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="controller/graph.js" charset="utf-8"></script>
+  </body>
 </html>

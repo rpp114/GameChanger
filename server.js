@@ -34,8 +34,14 @@ app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
 io.on('connection', function(socket) {
+  var ctrlObj;
+  socket.on('obj', function(val) {
+    console.log('hello');
+    ctrlObj = val;
+    // socket.broadcast.emit('obj', val);
+  });
 
-  q = '/hi';
+  // q = '/hi';
   // var nsp = io.of(q);
   // nsp.on('connection', function(socket) {
 
@@ -46,23 +52,17 @@ io.on('connection', function(socket) {
       console.log('emitted: ', val);
     });
 
-    socket.on('obj', function(val) {
-      console.log('hello');
-      socket.broadcast.emit('obj', val);
-    });
     //captures img from game and emits to controller
     socket.on('image', url => {
       // need to figure out how to get controller to join room to listen from emits
-        socket.broadcast.emit('image', url);
-        console.log('server emitted URL');
+      socket.broadcast.emit('image', url);
+      // console.log('server emitted URL');
     });
 
     socket.on('chartData', data => {
      // need to figure out how to get controller to join room to listen from emits
      socket.broadcast.emit('chartData', data);
    });
-
-
   // });
 });
 app.get('/controller', function(req, res) {
