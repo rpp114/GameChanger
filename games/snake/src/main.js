@@ -4,14 +4,10 @@ $(document).ready(function() {
     var scale = localStorage.getItem('scale') || 1;
     var sizeScale = localStorage.getItem('sizeScale') || 0.5;
     var gridSize = localStorage.getItem('gridSize') || 500;
-    var gridPositionX = 20;
-    var gridPositionY = 20;
     const size = 50;
     $('#board').css({
       'height': gridSize * scale,
-      'width': gridSize * scale,
-      'top': gridPositionY,
-      'left': gridPositionX
+      'width': gridSize * scale
     });
 
     //allows for dynamic scaling and grid size on start of new game

@@ -92,12 +92,13 @@
 
 
       $(document).ready(function($) {
-        $(".dial").knob();
+        $(".dial").knob(
+        );
       });
 
 
 
-    $('input').on('input', function(e) {
+    $('input').on('propertychange change click keyup input paste', function(e) {
       // console.log('emitted:' + qs);
       console.log(e.target.value)
       localStorage.setItem(e.target.id, e.target.value)
