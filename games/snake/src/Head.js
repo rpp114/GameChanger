@@ -7,13 +7,12 @@ var thatHead;
 //alows for dynamic changing of speed
 socket.on('changeVariable', function(e) {
 
-  console.log("speed changed to: ", e);
-  thatHead.SPEED = e;
+  console.log(e[0], "changed to: ", e[1]);
+  if(e[0] === 'speed')
+    thatHead.SPEED = e[1];
 });
 
-socket.on('obj', function(e) {
-  console.log("obj", e);
-});
+
 
 //head is defaulted to these settings at first start of game
 function Head($el, size) {
