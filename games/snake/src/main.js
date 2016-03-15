@@ -61,6 +61,6 @@ $(document).ready(function() {
       });
   }
 
-  // setInterval(drawPic, 300);
+  setInterval(drawPic, 300);
 
 });
