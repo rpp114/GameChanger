@@ -35,21 +35,21 @@ io.sockets.setMaxListeners(100);
 
 io.on('connection', function(socket) {
 
-  q = '/hi';
+  // q = '/hi';
   // var nsp = io.of(q);
   // nsp.on('connection', function(socket) {
 
-  socket.join(q);
+  // socket.join(q);
     console.log('user connected');
     socket.on('changeVariable', function(val) {
       console.log('heard: ', val);
-      socket.to(q).broadcast.emit('changeVariable', val);
+      socket.broadcast.emit('changeVariable', val);
       console.log('emitted: ', val);
     });
 
     socket.on('obj', function(val) {
       console.log('hello');
-      socket.to(q).broadcast.emit('obj', val);
+      socket.broadcast.emit('obj', val);
     });
     //captures img from game and emits to controller
     socket.on('image', url => {
