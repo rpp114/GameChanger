@@ -56,6 +56,12 @@ Head.prototype.move = function() {
     this.checkBody();
     this.checkApple();
     this.render();
+    var dist = Math.sqrt(Math.pow((this.x - this.apple.x), 2) + Math.pow((this.y - this.apple.y), 2));
+    var chartData = {
+      'Distance': dist,
+      'Moves': this.counter
+    };
+    socket.emit('chartData', chartData);
     setTimeout(this.move.bind(this), this.SPEED);
 
   } else {
@@ -76,6 +82,7 @@ Head.prototype.checkBody = function() {
 
 Head.prototype.die = function() {
   $('#board').empty();
+  delete this.node
   this.startGame();
 };
 
@@ -93,6 +100,7 @@ Head.prototype.addBody = function() {
 Head.prototype.checkApple = function() {
   if (this.apple.x === this.x && this.apple.y === this.y) {
     this.apple.eat();
+    this.counter = 0;
     this.apple = new Apple($('#board'), this.size);
     this.addBody();
   }

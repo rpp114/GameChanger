@@ -1,6 +1,6 @@
 $(document).ready(function() {
   var scale = 1;
-  var sizeScale = .25;
+  var sizeScale = .5;
   var gridSize = 500;
   var gridPositionX = 20;
   var gridPositionY = 20;
@@ -22,11 +22,13 @@ $(document).ready(function() {
     var apple = new Apple($('#board'), size * sizeScale * scale);
     head.apple = apple;
     head.startGame = startGame;
+    head.counter = 0;
   }
 
   startGame();
 
   $('body').on('keydown', function(e) {
+    head.counter++;
     if (e.keyCode === 37) {
       console.log('pressed left');
       head.currentDirection = 'left';
