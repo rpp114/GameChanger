@@ -12,9 +12,7 @@ socket.on('changeVariable', function(e) {
     thatHead.SPEED = e[1];
 });
 
-socket.on('obj', function(e) {
-  console.log("obj", e);
-});
+
 
 //head is defaulted to these settings at first start of game
 function Head($el, size) {

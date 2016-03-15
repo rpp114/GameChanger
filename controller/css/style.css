@@ -2,7 +2,12 @@
   display: inline-block;
   width: 50%;
 }*/
-
+#player, #url {
+  display:inline-block;
+}
+#controllers {
+  width: 800px
+}
 #screenCast {
   position: absolute;
   top: 10px;
@@ -36,18 +41,18 @@
   top: 410px;
   left: 10px;
   height: 400px;
-  width:400px;
+  width:800px;
   border: 1px solid black;
 }
 
-#otherBox {
+/*#otherBox {
   position: absolute;
   top: 410px;
   left: 410px;
   height: 400px;
   width:400px;
   border: 1px solid black;
-}
+}*/
 
 #screenShare {
   border: 1px solid black;

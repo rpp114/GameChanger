@@ -79,6 +79,10 @@ app.get('/snake', function(req, res) {
 
 });
 
+app.get('/marble', function(req, res) {
+  res.sendFile(path.join(__dirname, '/games/marble/index.html'));
+
+});
 
 app.get('*.js', function(req, res) {
   res.writeHead(200, {
