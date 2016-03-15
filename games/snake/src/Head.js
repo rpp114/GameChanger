@@ -1,5 +1,5 @@
 // var variables = require('./')
-var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+// var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 // var socket = io(qs);
 var socket = io();
 var thatHead;
@@ -25,7 +25,7 @@ function Head($el, size) {
   });
 
   this.currentDirection = 'right';
-  this.SPEED = 200;
+  this.SPEED = localStorage.getItem('speed') || 200;
   $el.append(this.node);
   this.x = 0;
   this.y = 0;
