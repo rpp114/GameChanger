@@ -29,11 +29,17 @@
       <p id='url'></p>
     </p>
 
+<<<<<<< HEAD
     <table id='controllers'>
       <tr width='100%'>
       </tr>
     </table>
 
+=======
+  </div>
+  <div class='module' id='otherBox'>
+    <h1>Space holder for some other stuff</h1>
+>>>>>>> 76554a05bfe3011d460e4735eb3e286167e35bfc
   </div>
 
 
@@ -43,6 +49,7 @@
     // var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     $('#url').text(url);
+<<<<<<< HEAD
     // var socket = io(qs);
     var socket = io();
 
@@ -54,7 +61,10 @@
         speed: localStorage.getItem('speed') || 250
       }
 
+=======
+>>>>>>> 76554a05bfe3011d460e4735eb3e286167e35bfc
 
+    var socket = io();
     var ctrlObj = {
       speed: {
         type: 'range',
@@ -68,7 +78,7 @@
         min: 0.25,
         max: 1,
         step: 0.05,
-        value: .5
+        value: 0.5
       },
       gridSize: {
         type: 'range',
@@ -81,6 +91,7 @@
         type: 'button'
       }
     }
+
 
     socket.emit('obj', ctrlObj);
 
@@ -102,6 +113,7 @@
     }
 
 
+
     $('input').on('input', function(e) {
       // console.log('emitted:' + qs);
       console.log(e.target.value)
@@ -110,6 +122,7 @@
     })
 
     socket.on('image', url => {
+
           $('#screenCast').empty();
           var img = new Image();
           img.id = 'screenShare';
@@ -122,7 +135,6 @@
   <script src="controller/src/graph.js" charset="utf-8"></script>
   <script src='controller/src/jquery.knob.js' charset="utf-8"></script>
 </body>
-
 
 
 </html>
