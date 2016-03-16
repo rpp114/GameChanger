@@ -12,12 +12,13 @@
   width: 50px;
   position: absolute;
   background-color: blue;
+  z-index: -2;
 }
 
 #gameBoard {
   postion: absolute;
   top: 10;
-  left 10;
+  left: 10;
   padding: 10;
 }
 
@@ -30,4 +31,5 @@
   height: 50px;
   width: 50px;
   position: absolute;
+  z-index: -1;
 }

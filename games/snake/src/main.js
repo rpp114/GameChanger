@@ -6,13 +6,13 @@ $(document).ready(function() {
     var gridSize = localStorage.getItem('gridSize') || 500;
     const size = 50;
     $('#board').css({
-      'height': gridSize * scale,
-      'width': gridSize * scale
+      'height': gridSize - 1 + (sizeScale * size) - (gridSize % (sizeScale * size)),
+      'width': gridSize - 1 + (sizeScale * size) - (gridSize % (sizeScale * size))
     });
 
     //allows for dynamic scaling and grid size on start of new game
-    $('#gameBoard').width(gridSize * scale + 40);
-    $('#gameBoard').height(gridSize * scale + 40);
+    $('#gameBoard').width(gridSize * scale + 20);
+    $('#gameBoard').height(gridSize * scale + 20);
     head = new Head($('#board'), size * sizeScale * scale);
     var apple = new Apple($('#board'), size * sizeScale * scale);
     head.apple = apple;

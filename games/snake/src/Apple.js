@@ -5,15 +5,29 @@ function Apple($el, size) {
     'height': size,
     'width': size
   });
+  this.getRandomCoords = function() {
 
+    this.x = Math.floor(Math.random() * $el.height() / size);
+    this.y = Math.floor(Math.random() * $el.height() / size);
+    for (var node = head; node; node = node.next) {
+      if ((this.x === node.x && this.y === node.y) || (this.x === head.x && this.y === head.y)){
+        console.log('works');
+        return this.getRandomCoords();
+      }
+
+    }
+  }
+  this.getRandomCoords();
   //gives apple random spawn coordinates
-  this.x = Math.floor(Math.random() * $el.height() / size);
-  this.y = Math.floor(Math.random() * $el.height() / size);
 
   //spawns apple
   $el.append(this.node);
   this.size = size;
   this.render();
+}
+
+function getRandomCoords() {
+
 }
 
 Apple.prototype.render = Head.prototype.render;
