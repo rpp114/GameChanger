@@ -126,8 +126,6 @@ Head.prototype.render = function() {
 
 
 Head.prototype.moveHead = function(direction) {
-  console.log('x: ' + this.x);
-  console.log('y: ' + this.y);
 
   if (direction === 'right') this.x++;
   if (direction === 'left') this.x--;
