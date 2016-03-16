@@ -87,6 +87,7 @@ function init() {
 
   update();
 }
+
 function drawPic() {
   // console.log('drawing pic');
   domtoimage.toPng($('#gameBoard').get(0))

@@ -4,12 +4,13 @@
 var socket = io();
 var thatHead;
 
-//alows for dynamic changing of speed
+//alows for dynamic changing of SPEED
 socket.on('changeVariable', function(e) {
-
+  localStorage.setItem(e[0], e[1]);
   console.log(e[0], "changed to: ", e[1]);
-  if(e[0] === 'speed')
-    thatHead.SPEED = e[1];
+  // if(e[0] === 'SPEED') thatHead.SPEED = e[1];
+  thatHead[e[0]] = e[1];
+
 });
 
 
@@ -22,9 +23,11 @@ function Head($el, size) {
     'height': size,
     'width': size
   });
-
+  this.sizeScale = localStorage.getItem('sizeScale');
+  this.gridSize = localStorage.getItem('sizeScale');
+  this.scale = localStorage.getItem('scale');
   this.currentDirection = 'right';
-  this.SPEED = localStorage.getItem('speed') || 200;
+  this.SPEED = localStorage.getItem('SPEED') || 200;
   $el.append(this.node);
   this.x = 0;
   this.y = 0;
@@ -45,7 +48,10 @@ Head.prototype.move = function() {
   var position = this.position;
   var x = this.x;
   var y = this.y;
-
+  this.sizeScale = localStorage.getItem('sizeScale');
+  this.gridSize = localStorage.getItem('sizeScale');
+  this.scale = localStorage.getItem('scale');
+  
   this.moveBody(x, y);
   this.moveHead(direction);
 
