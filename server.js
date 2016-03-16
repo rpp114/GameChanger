@@ -6,14 +6,14 @@ var express = require('express'),
   path = require('path'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
-  UserCtrl = require('./authenticate/userStuff'),
-  mongoose = require('mongoose'),
-  qs = require('qs'),
-  mongoURI = 'mongodb://localhost/GameUsers';
+  qs = require('qs');
+  // mongoURI = 'mongodb://localhost/GameUsers';
+  // UserCtrl = require('./authenticate/userStuff'),
+  // mongoose = require('mongoose'),
 
 var q;
 
-mongoose.connect(mongoURI);
+// mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
@@ -29,8 +29,8 @@ app.get('/signup', function(req, res) {
   res.sendFile(path.join(__dirname, '/loginsignuphtml/signup.html'));
 });
 
-app.post('/signup', UserCtrl.createUser);
-app.post('/login', UserCtrl.verify);
+// app.post('/signup', UserCtrl.createUser);
+// app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
 io.on('connection', function(socket) {
@@ -64,11 +64,6 @@ io.on('connection', function(socket) {
      socket.broadcast.emit('chartData', data);
    });
   // });
-});
-app.get('/controller', function(req, res) {
-      res.sendFile(path.join(__dirname, '/controller/controller.html'));
-  // res.render('./controller/controller');
-
 });
 
 app.get('/snake', function(req, res) {
