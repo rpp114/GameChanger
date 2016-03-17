@@ -34,11 +34,9 @@ app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
 io.on('connection', function(socket) {
-  var ctrlObj;
   socket.on('obj', function(val) {
-    console.log('hello');
-    ctrlObj = val;
-    // socket.broadcast.emit('obj', val);
+    // console.log('hello');
+    socket.broadcast.emit('obj', val);
   });
 
   // q = '/hi';
@@ -47,9 +45,9 @@ io.on('connection', function(socket) {
 
     console.log('user connected');
     socket.on('changeVariable', function(val) {
-      console.log('heard: ', val);
+      // console.log('heard: ', val);
       socket.broadcast.emit('changeVariable', val);
-      console.log('emitted: ', val);
+      // console.log('emitted: ', val);
     });
 
     //captures img from game and emits to controller
