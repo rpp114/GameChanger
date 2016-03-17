@@ -14,4 +14,6 @@ Body.prototype.render = function() {
     top: (head.size * this.y) + head.elPosY,
     left: (head.size * this.x) + head.elPosX
   });
+  console.log('head.size', head.size, 'this.x', this.x, 'this.y', this.y, 'this.node', this.node.position());
+  console.log('head.x', head.x, 'head.y', head.y);
 };

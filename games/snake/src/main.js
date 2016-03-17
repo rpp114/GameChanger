@@ -1,5 +1,39 @@
 $(document).ready(function() {
-
+  var socket = io();
+  var ctrlObj = {
+    speed: {
+      type: 'range',
+      min: 50,
+      max: 500,
+      step: 10,
+      value: 250
+    },
+    scale: {
+      type: 'range',
+      min: .5,
+      max: 2,
+      step: .1,
+      value: .8
+    },
+    snakeSize: {
+      type: 'range',
+      min: 0.2,
+      max: 1,
+      step: 0.05,
+      value: 0.5
+    },
+    gridSize: {
+      type: 'range',
+      min: 100,
+      max: 1000,
+      step: 100,
+      value: 500
+    },
+    addApple: {
+      type: 'button'
+    }
+  }
+  socket.emit('obj', ctrlObj);
   function startGame() {
     console.log(localStorage.getItem('scale'), localStorage.getItem('snakeSize'))
     var scale = localStorage.getItem('scale') || 1;
@@ -51,22 +85,25 @@ $(document).ready(function() {
   // }
 
   $('body').on('keydown', function(e) {
-    head.counter++;
     if(e.keyCode != 32){
 
-      if (e.keyCode === 37 && head.currentDirection !== 'right') {
+      if (e.keyCode === 37 && head.currentDirection !== 'right' && head.currentDirection !== 'left') {
+        head.counter++;
         console.log('pressed left');
         head.currentDirection = 'left';
       }
-      if (e.keyCode === 39 && head.currentDirection !== 'left') {
+      if (e.keyCode === 39 && head.currentDirection !== 'left' && head.currentDirection !== 'right') {
+        head.counter++;
         console.log('pressed right');
         head.currentDirection = 'right';
       }
-      if (e.keyCode === 40 && head.currentDirection !== 'up') {
+      if (e.keyCode === 40 && head.currentDirection !== 'up' && head.currentDirection !== 'down') {
+        head.counter++;
         console.log('pressed down');
         head.currentDirection = 'down';
       }
-      if (e.keyCode === 38  && head.currentDirection !== 'down') {
+      if (e.keyCode === 38  && head.currentDirection !== 'down' && head.currentDirection !== 'up') {
+        head.counter++;
         console.log('pressed up');
         head.currentDirection = 'up';
         // head.moveHead('up')
