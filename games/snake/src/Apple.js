@@ -35,8 +35,8 @@ Apple.prototype.render = function() {
     top: (head.size * this.y) + head.elPosY,
     left: (head.size * this.x) + head.elPosX
   });
-  console.log('apple render', this.node.position())
-  console.log(this.size)
+  // console.log('apple render', this.node.position())
+  // console.log(this.size)
 };
 Apple.prototype.eat = function() {
   this.node.remove();
