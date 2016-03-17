@@ -56,34 +56,34 @@ function init() {
   }
   renderHole(holeSize);
 
-  $(window).on('keydown', function(e) {
-    if (e.keyCode === 37) {
-      console.log('pressed left');
-      ball.velocity.x -= 10
-    }
-    if (e.keyCode === 39) {
-      console.log('pressed right');
-      ball.velocity.x += 10
-    }
-    if (e.keyCode === 40) {
-      console.log('pressed down');
-      ball.velocity.y += 10
-    }
-    if (e.keyCode === 38) {
-      console.log('pressed up');
-      ball.velocity.y -= 10
-    }
-  });
+  // $(window).on('keydown', function(e) {
+  //   if (e.keyCode === 37) {
+  //     console.log('pressed left');
+  //     ball.velocity.x -= 10
+  //   }
+  //   if (e.keyCode === 39) {
+  //     console.log('pressed right');
+  //     ball.velocity.x += 10
+  //   }
+  //   if (e.keyCode === 40) {
+  //     console.log('pressed down');
+  //     ball.velocity.y += 10
+  //   }
+  //   if (e.keyCode === 38) {
+  //     console.log('pressed up');
+  //     ball.velocity.y -= 10
+  //   }
+  // });
 
-  // if (window.DeviceOrientationEvent) {
-  //
-  // window.addEventListener("deviceorientation", function(event)
-  // {
-  // 	ball.velocity.y = Math.round(event.beta);
-  // 	ball.velocity.x = Math.round(event.gamma);
-  //     }
-  //                            )
-  // };
+  if (window.DeviceOrientationEvent) {
+
+  window.addEventListener("deviceorientation", function(event)
+  {
+  	ball.velocity.y = Math.round(event.beta);
+  	ball.velocity.x = Math.round(event.gamma);
+      }
+                             )
+  };
 
   update();
 }

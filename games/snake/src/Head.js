@@ -7,24 +7,57 @@ var thatHead;
 //alows for dynamic changing of SPEED
 socket.on('changeVariable', function(e) {
   localStorage.setItem(e[0], e[1]);
-  console.log(e[0], "changed to: ", e[1]);
   // if(e[0] === 'SPEED') thatHead.SPEED = e[1];
-  thatHead[e[0]] = e[1];
+  thatHead.currentGame()
 
+  thatHead[e[0]] = e[1];
 });
 
 
 
 //head is defaulted to these settings at first start of game
 function Head($el, size) {
+  this.currentGame = function () {
+    var scale = localStorage.getItem('scale') || 1;
+    var snakeSize = localStorage.getItem('snakeSize') || 0.5;
+    var gridSize = localStorage.getItem('gridSize') || 500;
+    var sizeOfConstant = 50;
+    $('#board').css({
+      'height': (gridSize - 1 + (snakeSize * sizeOfConstant) - (gridSize % (snakeSize * sizeOfConstant))) * scale,
+      'width': (gridSize - 1 + (snakeSize * sizeOfConstant) - (gridSize % (snakeSize * sizeOfConstant))) * scale
+    });
+
+    //allows for dynamic scaling and grid size on start of new game
+    $('#gameBoard').width(gridSize * scale + 20);
+    $('#gameBoard').height(gridSize * scale + 20);
+    this.size = (sizeOfConstant * snakeSize * scale);
+    this.apple.node.css({
+      'height': this.size,
+      'width': this.size
+    });
+    $('.body').css({
+      'height': this.size,
+      'width': this.size
+    })
+    // var apple = new Apple($('#board'), size * snakeSize * scale);
+    this.elGrid = $el.height() / this.size;
+    this.node.css({
+      'height': this.size,
+      'width': this.size
+    });
+    for(var node = this; node; node = node.next) {
+      node.render();
+      // console.log('node: ', node, node.node.position());
+    }
+    this.apple.render();
+    // this.apple = apple;
+    // this.counter = 0;
+  }
   this.node = $('<div id="head"></div>');
   thatHead = this;
-  this.node.css({
-    'height': size,
-    'width': size
-  });
-  this.sizeScale = localStorage.getItem('sizeScale');
-  this.gridSize = localStorage.getItem('sizeScale');
+
+  this.snakeSize = localStorage.getItem('snakeSize');
+  this.gridSize = localStorage.getItem('gridSize');
   this.scale = localStorage.getItem('scale');
   this.currentDirection = 'right';
   this.SPEED = localStorage.getItem('SPEED') || 200;
@@ -33,26 +66,24 @@ function Head($el, size) {
   this.y = 0;
   this.next = null;
   this.tail = this;
-  this.size = size;
-  this.elGrid = $el.height() / size;
+  // this.size = size;
+  this.elGrid = $el.height() / this.size;
   var elPos = $el.position();
   this.elPosX = elPos.left;
   this.elPosY = elPos.top;
+  this.isPaused = false;
   this.render();
-  setTimeout(this.move.bind(this), thatHead.SPEED);
+  setTimeout(this.move.bind(this), 500 - thatHead.SPEED);
 
 }
 
 Head.prototype.move = function() {
+  if(!this.isPaused){
   var direction = this.currentDirection;
   var position = this.position;
-  var x = this.x;
-  var y = this.y;
-  this.sizeScale = localStorage.getItem('sizeScale');
-  this.gridSize = localStorage.getItem('sizeScale');
-  this.scale = localStorage.getItem('scale');
-  
-  this.moveBody(x, y);
+  this.currentGame();
+
+  this.moveBody(this.x, this.y);
   this.moveHead(direction);
 
   if (this.checkBorder()) {
@@ -66,11 +97,12 @@ Head.prototype.move = function() {
       'Moves': this.counter
     };
     socket.emit('chartData', chartData);
-    setTimeout(this.move.bind(this), this.SPEED);
 
+    setTimeout(this.move.bind(this), 500 - this.SPEED);
   } else {
     this.die();
   }
+}
 };
 
 //checks to see if snake is hitting itself
@@ -110,24 +142,30 @@ Head.prototype.checkApple = function() {
 };
 
 Head.prototype.moveBody = function(x, y) {
-  var temp_x, temp_y;
-  for (var node = this.next; node; node = node.next) {
+  for (var node = this; node; node = node.next) {
+    var temp_x, temp_y;
     temp_x = node.x;
     temp_y = node.y;
     node.x = x;
     node.y = y;
     x = temp_x;
     y = temp_y;
-    node.render();
+    node.node.css({
+      top: ((node.size) * node.y) + head.elPosY,
+      left: ((node.size) * node.x) + head.elPosX
+    });
+    // node.render();
   }
 };
 
 
 Head.prototype.render = function() {
+  // console.log(this.size)
   this.node.offset({
     top: (this.size * this.y) + head.elPosY,
     left: (this.size * this.x) + head.elPosX
   });
+  // console.log('node: ', this.node, 'y: ', this.y, 'x: ', this.x, 'position', this.node.position())
 };
 
 
@@ -137,5 +175,5 @@ Head.prototype.moveHead = function(direction) {
   if (direction === 'left') this.x--;
   if (direction === 'up') this.y--;
   if (direction === 'down') this.y++;
-  if (direction === 'still') return;
+  // if (direction === 'still') {this.isPaused = !this.isPaused; setTimeout(this.move.bind(this), 500 - this.SPEED);}
 };
