@@ -30,6 +30,8 @@ function init() {
 
   w = window.innerWidth;
   h = window.innerHeight;
+  $('#board').height(h);
+  $('#board').width(w);
 
   console.log('w: ', w);
   console.log('h: ', h);
@@ -55,42 +57,44 @@ function init() {
 
   }
   renderHole(holeSize);
+  //
+  // $(window).on('keydown', function(e) {
+  //   if (e.keyCode === 37) {
+  //     console.log('pressed left');
+  //     ball.velocity.x -= 10
+  //   }
+  //   if (e.keyCode === 39) {
+  //     console.log('pressed right');
+  //     ball.velocity.x += 10
+  //   }
+  //   if (e.keyCode === 40) {
+  //     console.log('pressed down');
+  //     ball.velocity.y += 10
+  //   }
+  //   if (e.keyCode === 38) {
+  //     console.log('pressed up');
+  //     ball.velocity.y -= 10
+  //   }
+  // });
 
-  $(window).on('keydown', function(e) {
-    if (e.keyCode === 37) {
-      console.log('pressed left');
-      ball.velocity.x -= 10
-    }
-    if (e.keyCode === 39) {
-      console.log('pressed right');
-      ball.velocity.x += 10
-    }
-    if (e.keyCode === 40) {
-      console.log('pressed down');
-      ball.velocity.y += 10
-    }
-    if (e.keyCode === 38) {
-      console.log('pressed up');
-      ball.velocity.y -= 10
-    }
-  });
-  //
-  // if (window.DeviceOrientationEvent) {
-  //
-  // window.addEventListener("deviceorientation", function(event)
-  // {
-  // 	ball.velocity.y = Math.round(event.beta);
-  // 	ball.velocity.x = Math.round(event.gamma);
-  //     }
-  //                            )
-  // };
+  if (window.DeviceOrientationEvent) {
+
+  window.addEventListener("deviceorientation", function(event)
+  {
+  	ball.velocity.y = Math.round(event.beta);
+  	ball.velocity.x = Math.round(event.gamma);
+      }
+                             )
+  };
 
   update();
 }
 
 function drawPic() {
-  // console.log('drawing pic');
-  domtoimage.toPng($('#gameBoard').get(0))
+  var board = $('#gameBoard').get(0)
+  console.log('board height: ', $('#gameBoard'));
+  console.log('drawing pic', board);
+  domtoimage.toPng(board)
   .then(function(dataUrl) {
     console.log('sent URL', dataUrl);
     socket.emit('image', dataUrl);
@@ -100,7 +104,7 @@ function drawPic() {
   });
 }
 
-setInterval(drawPic, 300);
+setInterval(drawPic, 1000);
 
 function update() {
 
@@ -113,7 +117,6 @@ function update() {
     console.log('YOu win!!');
     var holeWidth = $('#hole').width()
     renderHole(holeWidth);
-    debugger;
   }
 
   if (ball.position.x > (w - 100) && ball.velocity.x > 0) {

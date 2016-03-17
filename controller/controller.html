@@ -29,11 +29,13 @@
       <p id='url'></p>
     </p>
 
+<center>
 
     <table id='controllers'>
       <tr width='100%'>
       </tr>
     </table>
+  </center>
 
 
   </div>
@@ -50,7 +52,7 @@
 
     var socket = io();
     var ctrlObj = {
-      SPEED: {
+      speed: {
         type: 'range',
         min: 50,
         max: 500,
@@ -116,7 +118,7 @@
       var img = new Image();
       img.id = 'screenShare';
       img.src = url;
-      img.width = 300;
+      img.height = 300;
       $('#screenCast').get(0).appendChild(img);
     })
   </script>

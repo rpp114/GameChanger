@@ -23,6 +23,7 @@ $(document).ready(function() {
   startGame();
 
   $('body').on('keydown', function(e) {
+    head.counter++
     if (e.keyCode === 37 && head.currentDirection !== 'right') {
       console.log('pressed left');
       head.currentDirection = 'left';
@@ -46,11 +47,12 @@ $(document).ready(function() {
 
   // draws pic and emits it
   function drawPic() {
-    // console.log('drawing pic');
-    domtoimage.toPng($('#gameBoard').get(0))
+    var board = $('#gameBoard').get(0)
+    console.log('drawing pic', board);
+    domtoimage.toPng(board)
       .then(function(dataUrl) {
         socket.emit('image', dataUrl);
-        // console.log('sent URL');
+        console.log('sent URL: ', dataUrl);
       })
       .catch(function(error) {
         console.error('oops, something went wrong!', error);
