@@ -2,6 +2,15 @@
   display: inline-block;
   width: 50%;
 }*/
+h3{
+  margin: 10px auto;
+  text-align: center;
+}
+
+input {
+  text-align: center;
+  margin: auto;
+}
 #player, #url {
   display:inline-block;
 }
@@ -56,7 +65,8 @@
 
 #screenShare {
   border: 1px solid black;
-  height: 300px;
-  width: 300px;
+  max-height: 400px;
+  max-width: 400px;
   margin: auto;
+  padding: auto;
 }
