@@ -2,11 +2,33 @@
   display: inline-block;
   width: 50%;
 }*/
-#player, #url {
+h3{
+  margin: 10px auto;
+  text-align: center;
+}
+
+input {
+  text-align: center;
+  margin: auto;
+}
+h1 {
+  margin-bottom: 0px;
+}
+#player, #url, #button {
   display:inline-block;
+  margin-top: 0px;
 }
 #controllers {
-  width: 800px
+  width: 800px;
+}
+#player, #instructions {
+  text-indent: 5px;
+}
+#url {
+  text-indent: 20px;
+}
+#button {
+  margin-left: 20px;
 }
 #screenCast {
   position: absolute;
@@ -14,7 +36,7 @@
   left: 410px;
   height: 400px;
   width:400px;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
 }
 
 #dataDisplay {
@@ -56,7 +78,8 @@
 
 #screenShare {
   border: 1px solid black;
-  height: 300px;
-  width: 300px;
+  max-height: 400px;
+  max-width: 400px;
   margin: auto;
+  padding: auto;
 }

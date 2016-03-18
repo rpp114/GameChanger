@@ -6,14 +6,14 @@ var express = require('express'),
   path = require('path'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
-  UserCtrl = require('./authenticate/userStuff'),
-  mongoose = require('mongoose'),
-  qs = require('qs'),
-  mongoURI = 'mongodb://localhost/GameUsers';
+  qs = require('qs');
+  // mongoURI = 'mongodb://localhost/GameUsers';
+  // UserCtrl = require('./authenticate/userStuff'),
+  // mongoose = require('mongoose'),
 
 var q;
 
-mongoose.connect(mongoURI);
+// mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
@@ -25,12 +25,20 @@ app.get('/login', function(req, res) {
   res.sendFile(path.join(__dirname, '/loginsignuphtml/login.html'));
 });
 
+app.get('/home', function(req, res) {
+  res.sendFile(path.join(__dirname, '/home.html'));
+});
+
+app.get('/welcome', function(req, res) {
+  res.sendFile(path.join(__dirname, '/welcome.html'));
+});
+
 app.get('/signup', function(req, res) {
   res.sendFile(path.join(__dirname, '/loginsignuphtml/signup.html'));
 });
 
-app.post('/signup', UserCtrl.createUser);
-app.post('/login', UserCtrl.verify);
+// app.post('/signup', UserCtrl.createUser);
+// app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
 // io.on('connection', function(socket) {
@@ -60,6 +68,7 @@ io.sockets.setMaxListeners(100);
 
     socket.on('chartData', data => {
      // need to figure out how to get controller to join room to listen from emits
+<<<<<<< HEAD
      nsp.emit('chartData', data);
    });
   });
@@ -68,6 +77,17 @@ app.get('/controller', function(req, res) {
       res.sendFile(path.join(__dirname, '/controller/controller.html'));
   // res.render('./controller/controller');
 
+=======
+     socket.broadcast.emit('chartData', data);
+     console.log('emitted data: ', data);
+   });
+    socket.on('obj', ctrlObj => {
+     // need to figure out how to get controller to join room to listen from emits
+     socket.broadcast.emit('obj', ctrlObj);
+     console.log('emitted data: ', ctrlObj);
+   });
+  // });
+>>>>>>> cb8aad0dceeb15f6877b89e01e2146d5b26295c5
 });
 
 app.get('/snake', function(req, res) {
@@ -105,7 +125,7 @@ app.get('/controller', function(req, res) {
     res.sendFile(path.join(__dirname, '/controller/controller.html'));
 
 });
-
-http.listen(3000, function() {
-  console.log('listening on port 3000');
+var port = process.env.PORT || 3000
+http.listen(port, function() {
+  console.log('I\'m listening!!');
 });

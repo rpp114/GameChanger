@@ -22,14 +22,15 @@ graph.append("svg:g")
 
 
 var dataObj = {};
-var counter = 0;
 var chartVariable;
+var graphCounter;
 
 socket.on('chartData', data => {
-  if (counter === 0) {
+  if ($('.graphButtons').length === 0) {
+    // $('#graphOptions').empty();
     var keys = Object.keys(data);
     keys.forEach(key => {
-      var button = "<button id=\"" + key + "\" onclick='changeData(\"" + key + "\")'>" + key + "</button>"
+      var button = "<button class='graphButtons' id=\"" + key + "\" onclick='changeData(\"" + key + "\")'>" + key + "</button>"
       $("#graphOptions").append(button);
       dataObj[key] = [];
     })
@@ -50,7 +51,6 @@ socket.on('chartData', data => {
   // console.log('dataObj is: ', dataObj);
   // console.log('distance is: ', data);
   renderChart(chartVariable);
-  counter = 1;
 })
 
 function changeData(key) {
