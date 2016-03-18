@@ -25,7 +25,8 @@ if (!window.requestAnimationFrame) {
 var ball;
 var w;
 var h;
-var socket = io();
+var qs = '/hi';
+var socket = io(qs);
 
 function init() {
   var ctrlObj = {
