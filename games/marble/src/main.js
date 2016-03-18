@@ -15,6 +15,8 @@ if (!window.requestAnimationFrame) {
   })();
 
 }
+var orientataion = 'portrait-primary';
+window.screen.lockOrientation(orientation);
 
 
 
@@ -140,7 +142,7 @@ function drawPic() {
     });
 }
 
-setInterval(drawPic, 1000);
+// setInterval(drawPic, 1000);
 
 
 socket.on('changeVariable', arr => {
