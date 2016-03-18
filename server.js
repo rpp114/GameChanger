@@ -108,6 +108,12 @@ app.get('*.jpg', function(req, res) {
   });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
+app.get('*.png', function(req,res) {
+  res.writeHead(200, {
+    'content-type': 'image/png'
+  });
+  res.end(fs.readFileSync(path.join(__dirname, req.url)));
+});
 
 app.get('/controller', function(req, res) {
     res.sendFile(path.join(__dirname, '/controller/controller.html'));
