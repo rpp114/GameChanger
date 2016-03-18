@@ -193,7 +193,6 @@ function update() {
      ball.position.y = 0;
     // ball.velocity.y = -ball.velocity.y;
   }
-  console.log('distance: ', distance);
   if (ball.counter % 10 === 0) {
     socket.emit('chartData', {
       'Distance': distance
