@@ -174,23 +174,23 @@ function update() {
   }
 
   if (ball.position.x > (w - 100) && ball.velocity.x > 0) {
-    //  ball.position.x = w-100;
-    ball.velocity.x = -ball.velocity.x;
+     ball.position.x = w-100;
+    // ball.velocity.x = -ball.velocity.x;
   }
 
   if (ball.position.x < 0 && ball.velocity.x < 0) {
-    // ball.position.x = 0;
-    ball.velocity.x = -ball.velocity.x;
+    ball.position.x = 0;
+    // ball.velocity.x = -ball.velocity.x;
   }
 
   if (ball.position.y > (h - 100) && ball.velocity.y > 0) {
-    //  ball.position.y = h-100;
-    ball.velocity.y = -ball.velocity.y;
+     ball.position.y = h-100;
+    // ball.velocity.y = -ball.velocity.y;
   }
 
   if (ball.position.y < 0 && ball.velocity.y < 0) {
-    //  ball.position.y = 0;
-    ball.velocity.y = -ball.velocity.y;
+     ball.position.y = 0;
+    // ball.velocity.y = -ball.velocity.y;
   }
   console.log('distance: ', distance);
   if (ball.counter % 10 === 0) {
