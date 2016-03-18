@@ -15,7 +15,7 @@ if (!window.requestAnimationFrame) {
   })();
 
 }
-//attempt to lock the screen
+//attempt to lock the screen  https://developer.mozilla.org/en-US/docs/Web/API/Screen/lockOrientation
 
 // var orientataion = 'portrait-primary';
 // window.screen.lockOrientation(orientation);
@@ -144,8 +144,7 @@ function drawPic() {
     });
 }
 
-drawPic();
-// setInterval(drawPic, 1000);  need t figure out a better way to screen cast
+setTimeout(drawPic, 1000);  //need to figure out a better way to screen cast
 
 
 socket.on('changeVariable', arr => {
