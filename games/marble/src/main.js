@@ -95,36 +95,36 @@ function init() {
 
   }
   renderHole(holeSize);
+  //
+  // $(window).on('keydown', function(e) {
+  //   if (e.keyCode === 37) {
+  //     console.log('pressed left');
+  //     ball.velocity.x -= ball.sensitivity * 10
+  //   }
+  //   if (e.keyCode === 39) {
+  //     console.log('pressed right');
+  //     ball.velocity.x += ball.sensitivity * 10
+  //   }
+  //   if (e.keyCode === 40) {
+  //     console.log('pressed down');
+  //     ball.velocity.y += ball.sensitivity * 10
+  //   }
+  //   if (e.keyCode === 38) {
+  //     console.log('pressed up');
+  //     ball.velocity.y -= ball.sensitivity * 10
+  //   }
+  // });
+  //
+  if (window.DeviceOrientationEvent) {
 
-  $(window).on('keydown', function(e) {
-    if (e.keyCode === 37) {
-      console.log('pressed left');
-      ball.velocity.x -= ball.sensitivity * 10
-    }
-    if (e.keyCode === 39) {
-      console.log('pressed right');
-      ball.velocity.x += ball.sensitivity * 10
-    }
-    if (e.keyCode === 40) {
-      console.log('pressed down');
-      ball.velocity.y += ball.sensitivity * 10
-    }
-    if (e.keyCode === 38) {
-      console.log('pressed up');
-      ball.velocity.y -= ball.sensitivity * 10
-    }
-  });
-  //
-  // if (window.DeviceOrientationEvent) {
-  //
-  // window.addEventListener("deviceorientation", function(event)
-  // {
-  // 	ball.velocity.y = ball.sensitivity * Math.round(event.beta);
-  //
-  // 	ball.velocity.x = ball.sensitivity * Math.round(event.gamma);
-  //     }
-  //                            )
-  // };
+  window.addEventListener("deviceorientation", function(event)
+  {
+  	ball.velocity.y = ball.sensitivity * Math.round(event.beta);
+
+  	ball.velocity.x = ball.sensitivity * Math.round(event.gamma);
+      }
+                             )
+  };
 
   update();
 }
