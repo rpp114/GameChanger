@@ -7,20 +7,20 @@ var thatHead;
 //alows for dynamic changing of speed
 socket.on('changeVariable', function(e) {
   var border = parseInt(localStorage.getItem('gridSize'));
+  //
+  //   if(border < thatHead.node.position().left + (thatHead.size*2) || border < thatHead.node.position().top + (thatHead.size*2) || border < thatHead.apple.node.position().left + (thatHead.size*2) || border < thatHead.apple.node.position().top + (thatHead.size*2) ) {
+  //   thatHead.isPaused = true;
+  //   thatHead.borderSmall = true;
+  //   localStorage.setItem(e[0], e[2]);
+  //   thatHead[e[0]] = e[2];
+  //
+  // } else {
 
-    if(border < thatHead.node.position().left + (thatHead.size*2) || border < thatHead.node.position().top + (thatHead.size*2) || border < thatHead.apple.node.position().left + (thatHead.size*2) || border < thatHead.apple.node.position().top + (thatHead.size*2) ) {
-    thatHead.isPaused = true;
-    thatHead.borderSmall = true;
-    localStorage.setItem(e[0], e[2]);
-    thatHead[e[0]] = e[2];
-
-  } else {
-
-    thatHead.borderSmall = false;
+    // thatHead.borderSmall = false;
     localStorage.setItem(e[0], e[1]);
     thatHead[e[0]] = e[1];
     thatHead.currentGame();
-  }
+  // }
 });
 
 

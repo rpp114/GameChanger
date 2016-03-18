@@ -10,7 +10,7 @@ var express = require('express'),
   // mongoURI = 'mongodb://localhost/GameUsers';
   // UserCtrl = require('./authenticate/userStuff'),
   // mongoose = require('mongoose'),
-
+ 
 var q;
 
 // mongoose.connect(mongoURI);
@@ -68,7 +68,6 @@ io.sockets.setMaxListeners(100);
 
     socket.on('chartData', data => {
      // need to figure out how to get controller to join room to listen from emits
-<<<<<<< HEAD
      nsp.emit('chartData', data);
    });
   });
@@ -76,18 +75,6 @@ io.sockets.setMaxListeners(100);
 app.get('/controller', function(req, res) {
       res.sendFile(path.join(__dirname, '/controller/controller.html'));
   // res.render('./controller/controller');
-
-=======
-     socket.broadcast.emit('chartData', data);
-     console.log('emitted data: ', data);
-   });
-    socket.on('obj', ctrlObj => {
-     // need to figure out how to get controller to join room to listen from emits
-     socket.broadcast.emit('obj', ctrlObj);
-     console.log('emitted data: ', ctrlObj);
-   });
-  // });
->>>>>>> cb8aad0dceeb15f6877b89e01e2146d5b26295c5
 });
 
 app.get('/snake', function(req, res) {
