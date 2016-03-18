@@ -1,5 +1,6 @@
 $(document).ready(function() {
-  var socket = io();
+  // var qs = 'hi';
+  var socket = io('/hi');
   var ctrlObj = {
     gameName: 'snake',
     controllers: {
