@@ -4,13 +4,28 @@
 var socket = io();
 var thatHead;
 
-//alows for dynamic changing of SPEED
+//alows for dynamic changing of speed
 socket.on('changeVariable', function(e) {
-  localStorage.setItem(e[0], e[1]);
-  // if(e[0] === 'SPEED') thatHead.SPEED = e[1];
-  thatHead.currentGame()
-
-  thatHead[e[0]] = e[1];
+  // debugger;
+  var border = parseInt(localStorage.getItem('gridSize'))
+          if(border < thatHead.node.position().left + (thatHead.size*2) || border < thatHead.node.position().top + (thatHead.size*2) || border < thatHead.apple.node.position().left + (thatHead.size*2) || border < thatHead.apple.node.position().top + (thatHead.size*2) ) {
+    // console.log(e[2]);
+    // thatHead.currentGame();
+    thatHead.isPaused = true;
+    thatHead.borderSmall = true;
+    localStorage.setItem(e[0], e[2])
+    thatHead[e[0]] = e[2];
+    // thatHead.currentGame();
+    console.log('hello')
+  }else {
+    // if(e[0] === 'speed') thatHead.speed = e[1];
+    console.log('goodbye')
+    thatHead.borderSmall = false;
+    localStorage.setItem(e[0], e[1]);
+    // console.log(localStorage.getItem(e[0]));
+    thatHead[e[0]] = e[1];
+    thatHead.currentGame();
+  }
 });
 
 
@@ -30,7 +45,9 @@ function Head($el, size) {
     //allows for dynamic scaling and grid size on start of new game
     $('#gameBoard').width(gridSize * scale + 20);
     $('#gameBoard').height(gridSize * scale + 20);
-    this.size = (sizeOfConstant * snakeSize * scale);
+    this.size = sizeOfConstant * snakeSize * scale;
+    // if(id === 'snakeSize')
+    // this.size = (sizeOfConstant * snakeSize * scale);
     this.apple.node.css({
       'height': this.size,
       'width': this.size
@@ -55,12 +72,12 @@ function Head($el, size) {
   }
   this.node = $('<div id="head"></div>');
   thatHead = this;
-
+  this.borderSmall = false;
   this.snakeSize = localStorage.getItem('snakeSize');
   this.gridSize = localStorage.getItem('gridSize');
   this.scale = localStorage.getItem('scale');
   this.currentDirection = 'right';
-  this.SPEED = localStorage.getItem('SPEED') || 200;
+  this.speed = localStorage.getItem('speed') || 200;
   $el.append(this.node);
   this.x = 0;
   this.y = 0;
@@ -73,12 +90,12 @@ function Head($el, size) {
   this.elPosY = elPos.top;
   this.isPaused = false;
   this.render();
-  setTimeout(this.move.bind(this), 500 - thatHead.SPEED);
+  setTimeout(this.move.bind(this), 500 - thatHead.speed);
 
 }
 
 Head.prototype.move = function() {
-  if(!this.isPaused){
+  if(!this.isPaused && !this.borderSmall){
   var direction = this.currentDirection;
   var position = this.position;
   this.currentGame();
@@ -98,7 +115,7 @@ Head.prototype.move = function() {
     };
     socket.emit('chartData', chartData);
 
-    setTimeout(this.move.bind(this), 500 - this.SPEED);
+    setTimeout(this.move.bind(this), 500 - this.speed);
   } else {
     this.die();
   }
@@ -150,12 +167,6 @@ Head.prototype.moveBody = function(x, y) {
     node.y = y;
     x = temp_x;
     y = temp_y;
-    // console.log('top body: ' + ((node.size) * node.y) + head.elPosY, 'left body: ' + ((node.size) * node.x) + head.elPosX);
-    // //must multiply top and left by newsnakesize / old
-    // node.node.css({
-    //   top: ((node.size) * node.y) + head.elPosY,
-    //   left: ((node.size) * node.x) + head.elPosX
-    // });
     node.render();
   }
 };
@@ -177,5 +188,5 @@ Head.prototype.moveHead = function(direction) {
   if (direction === 'left') this.x--;
   if (direction === 'up') this.y--;
   if (direction === 'down') this.y++;
-  // if (direction === 'still') {this.isPaused = !this.isPaused; setTimeout(this.move.bind(this), 500 - this.SPEED);}
+  // if (direction === 'still') {this.isPaused = !this.isPaused; setTimeout(this.move.bind(this), 500 - this.speed);}
 };

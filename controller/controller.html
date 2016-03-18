@@ -29,11 +29,13 @@
       <p id='url'></p>
     </p>
 
+    <center>
 
-    <table id='controllers'>
-      <tr width='100%'>
-      </tr>
-    </table>
+      <table id='controllers'>
+        <tr width='100%'>
+        </tr>
+      </table>
+    </center>
 
 
   </div>
@@ -49,73 +51,60 @@
 
 
     var socket = io();
-    var ctrlObj = {
-      SPEED: {
-        type: 'range',
-        min: 50,
-        max: 500,
-        step: 10,
-        value: 250
-      },
-      scale: {
-        type: 'range',
-        min: .5,
-        max: 2,
-        step: .1,
-        value: .8
-      },
-      snakeSize: {
-        type: 'range',
-        min: 0.2,
-        max: 1,
-        step: 0.05,
-        value: 0.5
-      },
-      gridSize: {
-        type: 'range',
-        min: 100,
-        max: 1000,
-        step: 100,
-        value: 500
-      },
-      addApple: {
-        type: 'button'
+    var ctrlObj = {};
+    var graphCounter = 0;
+
+    function properSpacing(word) {
+      var re = /[A-Z]/g,
+        changeLetter = word.match(re);
+      if (changeLetter) {
+        var wordArr = word.replace(changeLetter, ' ' + changeLetter).split(' ');
+      } else {
+        var wordArr = [word];
       }
+      var first = wordArr[0][0].toUpperCase() + wordArr[0].slice(1);
+      wordArr[0] = first;
+      return wordArr.join(' ')
+
     }
 
-
-    socket.emit('obj', ctrlObj);
-
-    var numOfVars = Object.keys(ctrlObj).length;
-    for (var key in ctrlObj) {
-      if (ctrlObj[key].value || ctrlObj[key].value === 0)
-        localStorage.setItem(ctrlObj[key], ctrlObj[key].value)
-      if (ctrlObj[key].type === 'range') {
-        $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>' + key + '</h3><input type="text" value="' + ctrlObj[key].value + '" class="dial" id="' + key + '" oninput="function(){console.log("hi")}" data-step="' + ctrlObj[key].step +
-          '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max +
-          '" data-width="100" data-thickness="0.4" padding="20px"/></td>');
-      }
-      // if (ctrlObj[key].type === 'button') $('#controls').append('<button id="' + key + '"></button>');
-    }
-
-
-    $(document).ready(function($) {
-      $(".dial").knob({
-        draw: function() {
-          var id = this.$[0].id;
-          var value = this.$[0].value;
-          localStorage.setItem(id, value)
-          socket.emit('changeVariable', [id, value])
+    var currentGame;
+    socket.on('obj', function(val) {
+      if (currentGame !== val.gameName) {
+        $('#graphOptions').empty()
+        $('td').remove();
+        ctrlObj = val.controllers;
+        currentGame = val.gameName;
+        var numOfVars = Object.keys(ctrlObj).length;
+        for (var key in ctrlObj) {
+          if (ctrlObj[key].value || ctrlObj[key].value === 0) {
+            localStorage.setItem(ctrlObj[key], ctrlObj[key].value)
+          }
+          if (ctrlObj[key].type === 'range') {
+            $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>' + properSpacing(key) + '</h3><input type="text" value="' + ctrlObj[key].value + '" class="dial" id="' + key +
+              '" oninput="function(){console.log("hi")}" data-step="' + ctrlObj[
+                key].step + '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max + '" data-width="100" data-thickness="0.4" padding="20px"/></td>');
+          } // if (ctrlObj[key].type==='button' ) $( '#controls').append( '<button id="' + key + '"></button>');
         }
-      });
-    });
-
+        $(document).ready(function($) {
+          $(".dial").knob({
+            draw: function() {
+              var id = this.$[0].id;
+              var old = localStorage.getItem(id);
+              var value = this.$[0].value;
+              localStorage.setItem(id, value);
+              socket.emit('changeVariable', [id, value, old])
+            }
+          });
+        });
+      }
+    })
     socket.on('image', url => {
       $('#screenCast').empty();
       var img = new Image();
       img.id = 'screenShare';
       img.src = url;
-      img.width = 300;
+      img.height = 300;
       $('#screenCast').get(0).appendChild(img);
     })
   </script>
