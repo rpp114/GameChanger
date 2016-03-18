@@ -15,8 +15,10 @@ if (!window.requestAnimationFrame) {
   })();
 
 }
-var orientataion = 'portrait-primary';
-window.screen.lockOrientation(orientation);
+//attempt to lock the screen
+
+// var orientataion = 'portrait-primary';
+// window.screen.lockOrientation(orientation);
 
 
 
@@ -142,7 +144,8 @@ function drawPic() {
     });
 }
 
-// setInterval(drawPic, 1000);
+drawPic();
+// setInterval(drawPic, 1000);  need t figure out a better way to screen cast
 
 
 socket.on('changeVariable', arr => {
