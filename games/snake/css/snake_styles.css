@@ -1,35 +1,30 @@
 #head {
   background: black;
-  height: 50px;
-  width: 50px;
   position: absolute;
   background-color: green;
 }
 
 .body {
   background: black;
-  height: 50px;
-  width: 50px;
   position: absolute;
   background-color: blue;
   z-index: -2;
+  /*border: 1px solid black;*/
 }
 
 #gameBoard {
-  postion: absolute;
+  /*position: absolute;*/
   top: 10;
   left: 10;
   padding: 10;
 }
 
 #board {
-  postion: absolute;
+  /*position: absolute;*/
   border: 1px solid black;
 }
 
 #apple {
-  height: 50px;
-  width: 50px;
   position: absolute;
   z-index: -1;
 }

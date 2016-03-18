@@ -111,6 +111,7 @@ function init() {
   //     ball.velocity.y -= ball.sensitivity * 10
   //   }
   // });
+
   if (window.DeviceOrientationEvent) {
 
   window.addEventListener("deviceorientation", function(event)
@@ -121,6 +122,7 @@ function init() {
       }
                              )
   };
+
   update();
 }
 

@@ -9,4 +9,11 @@ function Body($el, x, y, size) {
   this.render();
 }
 
-Body.prototype.render = Head.prototype.render;
+Body.prototype.render = function() {
+  this.node.offset({
+    top: (head.size * this.y) + head.elPosY,
+    left: (head.size * this.x) + head.elPosX
+  });
+  console.log('head.size', head.size, 'this.x', this.x, 'this.y', this.y, 'this.node', this.node.position());
+  console.log('head.x', head.x, 'head.y', head.y);
+};
