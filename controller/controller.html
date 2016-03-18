@@ -52,6 +52,7 @@
 
     var socket = io();
     var ctrlObj = {};
+    var graphCounter = 0;
 
     function properSpacing(word) {
       var re = /[A-Z]/g,
@@ -66,38 +67,37 @@
       return wordArr.join(' ')
 
     }
+
+    var currentGame;
     socket.on('obj', function(val) {
-      ctrlObj = val;
-      if ($('td').length <= 0) {
+      if (currentGame !== val.gameName) {
+        $('#graphOptions').empty()
+        $('td').remove();
+        ctrlObj = val.controllers;
+        currentGame = val.gameName;
         var numOfVars = Object.keys(ctrlObj).length;
         for (var key in ctrlObj) {
-          if (ctrlObj[key].value || ctrlObj[key].value === 0)
+          if (ctrlObj[key].value || ctrlObj[key].value === 0) {
             localStorage.setItem(ctrlObj[key], ctrlObj[key].value)
+          }
           if (ctrlObj[key].type === 'range') {
             $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>' + properSpacing(key) + '</h3><input type="text" value="' + ctrlObj[key].value + '" class="dial" id="' + key +
               '" oninput="function(){console.log("hi")}" data-step="' + ctrlObj[
-                key].step +
-              '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max +
-              '" data-width="100" data-thickness="0.4" padding="20px"/></td>');
-          }
-          // if (ctrlObj[key].type === 'button') $('#controls').append('<button id="' + key + '"></button>');
+                key].step + '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max + '" data-width="100" data-thickness="0.4" padding="20px"/></td>');
+          } // if (ctrlObj[key].type==='button' ) $( '#controls').append( '<button id="' + key + '"></button>');
         }
-      }
-
-
-      $(document).ready(function($) {
-        $(".dial").knob({
-          draw: function() {
-
-            var id = this.$[0].id;
-            var old = localStorage.getItem(id);
-            var value = this.$[0].value;
-            localStorage.setItem(id, value)
-            socket.emit('changeVariable', [id, value, old])
-          }
+        $(document).ready(function($) {
+          $(".dial").knob({
+            draw: function() {
+              var id = this.$[0].id;
+              var old = localStorage.getItem(id);
+              var value = this.$[0].value;
+              localStorage.setItem(id, value);
+              socket.emit('changeVariable', [id, value, old])
+            }
+          });
         });
-      });
-
+      }
     })
     socket.on('image', url => {
       $('#screenCast').empty();

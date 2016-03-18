@@ -22,14 +22,15 @@ graph.append("svg:g")
 
 
 var dataObj = {};
-var counter = 0;
 var chartVariable;
+var graphCounter;
 
 socket.on('chartData', data => {
-  if (counter === 0) {
+  if ($('.graphButtons').length === 0) {
+    // $('#graphOptions').empty();
     var keys = Object.keys(data);
     keys.forEach(key => {
-      var button = "<button id=\"" + key + "\" onclick='changeData(\"" + key + "\")'>" + key + "</button>"
+      var button = "<button class='graphButtons' id=\"" + key + "\" onclick='changeData(\"" + key + "\")'>" + key + "</button>"
       $("#graphOptions").append(button);
       dataObj[key] = [];
     })
@@ -45,13 +46,11 @@ socket.on('chartData', data => {
       .text(chartVariable)
 
   }
-  console.log('heard: ', data);
   setData(data);
   // console.log('variable is: ', chartVariable);
   // console.log('dataObj is: ', dataObj);
   // console.log('distance is: ', data);
   renderChart(chartVariable);
-  counter = 1;
 })
 
 function changeData(key) {
@@ -62,6 +61,7 @@ function changeData(key) {
 
 function setData(data) {
   var vars = Object.keys(data);
+  console.log('dataObj:',dataObj);
   vars.forEach(key => {
     if (dataObj[key].length >= 21) {
       dataObj[key].shift()
@@ -73,6 +73,7 @@ function setData(data) {
 }
 
 function renderChart(key) {
+  console.log(key);
   var dataArr = dataObj[key];
   var yMax = Math.max(...dataArr) * 1.25 || 1;
   var yAxis = d3.scale.linear().domain([0, yMax ]).range([h, 0]);

@@ -25,6 +25,8 @@ var socket = io();
 
 function init() {
   var ctrlObj = {
+    gameName: 'marble',
+    controllers: {
     ballSize: {
       type: 'range',
       min: 30,
@@ -47,6 +49,7 @@ function init() {
       value: 1
     }
   }
+  }
 
   socket.emit('obj', ctrlObj);
   console.log(ctrlObj);
@@ -56,9 +59,9 @@ function init() {
   ball = $('#ball').get()[0];
   hole = $('#hole').get()[0];
 
-  ball.sensitivity = ctrlObj.sensitivity.value;
-  ball.ballSize = ctrlObj.ballSize.value;
-  ball.holeSize = ctrlObj.holeSize.value;
+  ball.sensitivity = ctrlObj.controllers.sensitivity.value;
+  ball.ballSize = ctrlObj.controllers.ballSize.value;
+  ball.holeSize = ctrlObj.controllers.holeSize.value;
 
   ball.counter = 0;
 
@@ -93,35 +96,35 @@ function init() {
   }
   renderHole(holeSize);
 
-  // $(window).on('keydown', function(e) {
-  //   if (e.keyCode === 37) {
-  //     console.log('pressed left');
-  //     ball.velocity.x -= ball.sensitivity * 10
-  //   }
-  //   if (e.keyCode === 39) {
-  //     console.log('pressed right');
-  //     ball.velocity.x += ball.sensitivity * 10
-  //   }
-  //   if (e.keyCode === 40) {
-  //     console.log('pressed down');
-  //     ball.velocity.y += ball.sensitivity * 10
-  //   }
-  //   if (e.keyCode === 38) {
-  //     console.log('pressed up');
-  //     ball.velocity.y -= ball.sensitivity * 10
-  //   }
-  // });
-
-  if (window.DeviceOrientationEvent) {
-
-  window.addEventListener("deviceorientation", function(event)
-  {
-  	ball.velocity.y = ball.sensitivity * Math.round(event.beta);
-
-  	ball.velocity.x = ball.sensitivity * Math.round(event.gamma);
-      }
-                             )
-  };
+  $(window).on('keydown', function(e) {
+    if (e.keyCode === 37) {
+      console.log('pressed left');
+      ball.velocity.x -= ball.sensitivity * 10
+    }
+    if (e.keyCode === 39) {
+      console.log('pressed right');
+      ball.velocity.x += ball.sensitivity * 10
+    }
+    if (e.keyCode === 40) {
+      console.log('pressed down');
+      ball.velocity.y += ball.sensitivity * 10
+    }
+    if (e.keyCode === 38) {
+      console.log('pressed up');
+      ball.velocity.y -= ball.sensitivity * 10
+    }
+  });
+  //
+  // if (window.DeviceOrientationEvent) {
+  //
+  // window.addEventListener("deviceorientation", function(event)
+  // {
+  // 	ball.velocity.y = ball.sensitivity * Math.round(event.beta);
+  //
+  // 	ball.velocity.x = ball.sensitivity * Math.round(event.gamma);
+  //     }
+  //                            )
+  // };
 
   update();
 }
@@ -140,12 +143,12 @@ function drawPic() {
     });
 }
 
-// setInterval(drawPic, 1000);
+setInterval(drawPic, 1000);
 
 
 socket.on('changeVariable', arr => {
   ball[arr[0]] = arr[1];
-  console.log('heard: ', arr);
+  // console.log('heard: ', arr);
 })
 
 
