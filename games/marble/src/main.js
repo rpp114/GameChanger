@@ -131,11 +131,8 @@ function init() {
 
 function drawPic() {
   var board = $('#gameBoard').get(0)
-  console.log('board height: ', $('#gameBoard'));
-  console.log('drawing pic', board);
   domtoimage.toPng(board)
     .then(function(dataUrl) {
-      console.log('sent URL', dataUrl);
       socket.emit('image', dataUrl);
     })
     .catch(function(error) {

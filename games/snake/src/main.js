@@ -56,7 +56,7 @@ $(document).ready(function() {
     head = new Head($('#board'), sizeOfConstant * snakeSize * scale);
     var apple = new Apple($('#board'), sizeOfConstant * snakeSize * scale);
     head.apple = apple;
-    console.log(head.node.position())
+    // console.log(head.node.position())
     head.node.css({
       'height': this.size,
       'width': this.size
@@ -125,11 +125,11 @@ $(document).ready(function() {
   // draws pic and emits it
   function drawPic() {
     var board = $('#gameBoard').get(0)
-    console.log('drawing pic', board);
+    // console.log('drawing pic', board);
     domtoimage.toPng(board)
       .then(function(dataUrl) {
         socket.emit('image', dataUrl);
-        console.log('sent URL: ', dataUrl);
+        // console.log('sent URL: ', dataUrl);
       })
       .catch(function(error) {
         console.error('oops, something went wrong!', error);

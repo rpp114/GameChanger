@@ -61,7 +61,6 @@ function changeData(key) {
 
 function setData(data) {
   var vars = Object.keys(data);
-  console.log('dataObj:',dataObj);
   vars.forEach(key => {
     if (dataObj[key].length >= 21) {
       dataObj[key].shift()
@@ -73,7 +72,6 @@ function setData(data) {
 }
 
 function renderChart(key) {
-  console.log(key);
   var dataArr = dataObj[key];
   var yMax = Math.max(...dataArr) * 1.25 || 1;
   var yAxis = d3.scale.linear().domain([0, yMax ]).range([h, 0]);
