@@ -107,8 +107,9 @@ Head.prototype.move = function() {
         'Distance': dist,
         'Moves': this.counter
       };
-
+      console.log('chartData: ', chartData);
       socket.emit('chartData', chartData);
+
 
       setTimeout(this.move.bind(this), 500 - this.speed);
     } else {

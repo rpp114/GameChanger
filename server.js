@@ -63,11 +63,12 @@ io.sockets.setMaxListeners(100);
     socket.on('image', url => {
       // need to figure out how to get controller to join room to listen from emits
       nsp.emit('image', url);
-      // console.log('server emitted URL');
+      console.log('server emitted URL');
     });
 
     socket.on('chartData', data => {
      // need to figure out how to get controller to join room to listen from emits
+     console.log(data);
      nsp.emit('chartData', data);
    });
   });
