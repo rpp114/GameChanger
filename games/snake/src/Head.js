@@ -150,11 +150,13 @@ Head.prototype.moveBody = function(x, y) {
     node.y = y;
     x = temp_x;
     y = temp_y;
-    node.node.css({
-      top: ((node.size) * node.y) + head.elPosY,
-      left: ((node.size) * node.x) + head.elPosX
-    });
-    // node.render();
+    // console.log('top body: ' + ((node.size) * node.y) + head.elPosY, 'left body: ' + ((node.size) * node.x) + head.elPosX);
+    // //must multiply top and left by newsnakesize / old
+    // node.node.css({
+    //   top: ((node.size) * node.y) + head.elPosY,
+    //   left: ((node.size) * node.x) + head.elPosX
+    // });
+    node.render();
   }
 };
 

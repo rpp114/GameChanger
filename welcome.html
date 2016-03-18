@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Welcome</title>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+  </head>
+  <body>
+    <h1>Select a game to control.</h1>
+    <form>
+      <select id='gameChoice' name="game">
+        <option value="snake">Snake</option>
+        <option value="marble">Marble</option>
+        <option value="tron">Tron</option>
+        <option value="space">Space Invader</option>
+      </select>
+      <input type="submit">
+   </form>
+   <h2>Game Descriptions</h2>
+     <p><strong>Snake Game: </strong><br>Snake is a game where the player maneuvers a line which grows in length, with the line itself being a primary obstacle.</p>
+     <p><strong>Marble Game: </strong><br>The objective of the marble game is to get the ball into the hole.</p>
+     <p><strong>Tron: </strong><br>Tron</p>
+     <p><strong>Space Invaders: </strong><br>Shoot things.</p>
+  </body>
+  <script>
+    $('form').submit(function(e) {
+      localStorage.setItem('gameChoice', $('#gameChoice').val());
+      window.location = 'http://localhost:3000/controller';
+      e.preventDefault();
+    })
+  </script>
+</html>
