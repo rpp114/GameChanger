@@ -12,10 +12,10 @@ $(document).ready(function() {
       },
       scale: {
         type: 'range',
-        min: .5,
+        min: 0.5,
         max: 2,
-        step: .1,
-        value: .8
+        step: 0.1,
+        value: 0.8
       },
       snakeSize: {
         type: 'range',
@@ -35,15 +35,15 @@ $(document).ready(function() {
         type: 'button'
       }
     }
-  }
+  };
   socket.emit('obj', ctrlObj);
 
   function startGame() {
-    console.log(localStorage.getItem('scale'), localStorage.getItem('snakeSize'))
     var scale = localStorage.getItem('scale') || 1;
     var snakeSize = localStorage.getItem('snakeSize') || 0.5;
     var gridSize = localStorage.getItem('gridSize') || 500;
     const sizeOfConstant = 50;
+
     $('#board').css({
       'height': (gridSize - 1 + (snakeSize * sizeOfConstant) - (gridSize % (snakeSize * sizeOfConstant))) * scale,
       'width': (gridSize - 1 + (snakeSize * sizeOfConstant) - (gridSize % (snakeSize * sizeOfConstant))) * scale
@@ -52,15 +52,17 @@ $(document).ready(function() {
     //allows for dynamic scaling and grid size on start of new game
     $('#gameBoard').width(gridSize * scale + 20);
     $('#gameBoard').height(gridSize * scale + 20);
+
     this.size = (sizeOfConstant * snakeSize * scale);
     head = new Head($('#board'), sizeOfConstant * snakeSize * scale);
     var apple = new Apple($('#board'), sizeOfConstant * snakeSize * scale);
     head.apple = apple;
-    // console.log(head.node.position())
+
     head.node.css({
       'height': this.size,
       'width': this.size
     });
+
     head.startGame = startGame;
     head.counter = 0;
   }
@@ -114,22 +116,16 @@ $(document).ready(function() {
       }
     } else {
       head.isPaused = !head.isPaused;
-      console.log('hi'), head.move();
+      head.move();
     }
-    // if (e.keyCode === 32) {
-    //   head.currentDirection = 'still';
-    //   // head.moveHead('still');
-    // }
   });
 
   // draws pic and emits it
   function drawPic() {
-    var board = $('#gameBoard').get(0)
-    // console.log('drawing pic', board);
+    var board = $('#gameBoard').get(0);
     domtoimage.toPng(board)
       .then(function(dataUrl) {
         socket.emit('image', dataUrl);
-        // console.log('sent URL: ', dataUrl);
       })
       .catch(function(error) {
         console.error('oops, something went wrong!', error);
