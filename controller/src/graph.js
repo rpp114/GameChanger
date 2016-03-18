@@ -45,6 +45,7 @@ socket.on('chartData', data => {
       .text(chartVariable)
 
   }
+  console.log('heard: ', data);
   setData(data);
   // console.log('variable is: ', chartVariable);
   // console.log('dataObj is: ', dataObj);

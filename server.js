@@ -56,13 +56,18 @@ io.on('connection', function(socket) {
     socket.on('image', url => {
       // need to figure out how to get controller to join room to listen from emits
       socket.broadcast.emit('image', url);
-      console.log('server emitted URL');
+      // console.log('server emitted URL');
     });
 
     socket.on('chartData', data => {
      // need to figure out how to get controller to join room to listen from emits
      socket.broadcast.emit('chartData', data);
      console.log('emitted data: ', data);
+   });
+    socket.on('obj', ctrlObj => {
+     // need to figure out how to get controller to join room to listen from emits
+     socket.broadcast.emit('obj', ctrlObj);
+     console.log('emitted data: ', ctrlObj);
    });
   // });
 });
