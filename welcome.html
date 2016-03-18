@@ -24,9 +24,9 @@
   </body>
   <script>
     $('form').submit(function(e) {
-      localStorage.setItem('gameChoice', $('#gameChoice').val());
-      window.location = 'http://localhost:3000/controller';
       e.preventDefault();
+      localStorage.setItem('gameChoice', $('#gameChoice').val());
+      window.location = '/controller'
     })
   </script>
 </html>

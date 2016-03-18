@@ -19,7 +19,7 @@
     </style>
   </head>
   <body>
-    <FORM METHOD="LINK" ACTION="http://localhost:3000/welcome">
+    <FORM  id='goToWelcome' METHOD="LINK">
 <INPUT ID='login' TYPE="submit" VALUE="Login">
 </FORM>
 <img id='logo' src='http://rolministry.com/wp-content/uploads/2016/02/Game-Changer.png' />
@@ -28,4 +28,8 @@
     <p class='description'> Admins will be able to track progress of their clients through graphical data. Admins will be able to adjust difficulty according to the clients performance.</p>
     <p class='description'> Game Changer takes variables in the form of an object to create buttons and knobs. As long as the game is created through JavaScript, you will be able to use Game Changer.</p>
   </body>
+  <script>
+    var goToWelcome = document.getElementById('goToWelcome');
+    goToWelcome.setAttribute('action', '/welcome')
+  </script>
 </html>
