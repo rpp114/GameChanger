@@ -1,7 +1,7 @@
 // var variables = require('./')
-// var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+ var qs = '/hi'; // + window.location.search.slice(window.location.search.indexOf('?') + 4);
 // var socket = io(qs);
-var socket = io();
+var socket = io(qs);
 var thatHead;
 
 //alows for dynamic changing of speed

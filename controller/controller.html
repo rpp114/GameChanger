@@ -43,12 +43,10 @@
   <script src='/socket.io/socket.io.js'></script>
   <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
   <script>
-    // var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+    var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     var url = 'localhost:3000/snake?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
     $('#url').text(url);
-
-
-    var socket = io();
+    var socket = io('/hi');
     var ctrlObj = {};
 
     socket.on('obj', function(val) {
