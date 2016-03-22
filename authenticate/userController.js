@@ -1,23 +1,10 @@
 var userController = {};
 var bcrypt = require('bcryptjs');
 var path = require('path');
-// var sessionController = require('./sessionController');
+var User = require('./userModel');
+var SessionCtrl = require('./sessionController')
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-var userschema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-
-});
-User = mongoose.model('User', userschema);
 
 userController.createUser = function(req, res) {
     User.create(req.body, function(err, data) {
@@ -31,7 +18,7 @@ userController.createUser = function(req, res) {
       data.password = hash;
       res.cookie('SSID', data.id);
       console.log('id: ', data.id)
-      // sessionController.startSession(req, res, data._id);
+      SessionCtrl.startSession(req, res, data._id);
       data.save();
       res.redirect('/controller?id=' + data.id);
     });
@@ -44,7 +31,7 @@ userController.verify = function(req, res) {
     if (doc) {
       if (bcrypt.compareSync(req.body.password, doc.password)) {
         res.cookie('SSID', doc.id);
-        // sessionController.startSession(req, res, doc._id);
+        SessionCtrl.startSession(req, res, doc._id);
         res.redirect('/controller?id=' + doc.id)
         return res.sendFile(path.join(__dirname, '../controller/controller.html'));
       }
@@ -58,4 +45,4 @@ userController.verify = function(req, res) {
 };
 
 
-module.exports = userController;
+module.exports = userController
