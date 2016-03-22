@@ -6,26 +6,25 @@ var express = require('express'),
   path = require('path'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
-  qs = require('qs');
-  // mongoURI = 'mongodb://localhost/GameUsers';
-  // UserCtrl = require('./authenticate/userStuff'),
-  // mongoose = require('mongoose'),
+  qs = require('qs'),
+  mongoURI = 'mongodb://localhost/GameUsers',
+  UserCtrl = require('./authenticate/userStuff'),
+  mongoose = require('mongoose');
 
-var q;
+var q = '';
 
-// mongoose.connect(mongoURI);
+mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.get('/*', function(req, res, next) {
-  q = '/' + req.query.id;
-  next();
-});
-app.get('/login', function(req, res) {
-  res.sendFile(path.join(__dirname, '/loginsignuphtml/login.html'));
-});
+// app.get('/*', function(req, res, next) {
+//   // console.log('get: ', req.query.id)
+//
+//   next();
+// });
 
 app.get('/', function(req, res) {
+  q = '/' + req.query.id;
   res.sendFile(path.join(__dirname, '/home.html'));
 });
 
@@ -33,21 +32,20 @@ app.get('/welcome', function(req, res) {
   res.sendFile(path.join(__dirname, '/welcome.html'));
 });
 
-app.get('/signup', function(req, res) {
-  res.sendFile(path.join(__dirname, '/loginsignuphtml/signup.html'));
-});
 
 // app.post('/signup', UserCtrl.createUser);
-// app.post('/login', UserCtrl.verify);
+app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
-// io.on('connection', function(socket) {
-  q = '/hi';
+io.on('connection', function(socket) {
+  // q = '/hi';
+  // q = '/' + req.query.id;
   var nsp = io.of(q);
   nsp.on('connection', function(socket) {
+    // console.log(q)
 
   socket.on('obj', function(val) {
-    // console.log('hello');
+    console.log('hello');
     nsp.emit('obj', val);
   });
 
@@ -72,9 +70,10 @@ io.sockets.setMaxListeners(100);
      nsp.emit('chartData', data);
    });
   });
-// });
+});
 app.get('/controller', function(req, res) {
-      res.sendFile(path.join(__dirname, '/controller/controller.html'));
+  q = '/' + req.query.id;
+  res.sendFile(path.join(__dirname, '/controller/controller.html'));
   // res.render('./controller/controller');
 });
 
@@ -115,10 +114,6 @@ app.get('*.png', function(req,res) {
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
-app.get('/controller', function(req, res) {
-    res.sendFile(path.join(__dirname, '/controller/controller.html'));
-
-});
 var port = process.env.PORT || 3000
 http.listen(port, function() {
   console.log('I\'m listening!!');
