@@ -75,11 +75,29 @@ function init() {
   h = window.innerHeight;
   $('#board').height(h);
   $('#board').width(w);
+  $('#board').css({
+      "background-color": "#32c9d6"
+  });
 
-  console.log('w: ', w);
-  console.log('h: ', h);
+
   var holeSize = 100 * (1 + 0.5);
+$('#ball').css({
+  "transition": "all",
+  "position": "absolute",
+  "width": "100px",
+  "height": "100px",
+  "border-radius": "50%",
+  "background": "white",
+  "box-shadow": "3px 3px 5px 6px #6E6E6E",
+  "z-index": "1"
+})
+
   $('#hole').css({
+    "transition": "all",
+    "position": "absolute",
+    "border-radius": "50%",
+    "background": "black",
+    "box-shadow": "inset -5px -5px 5px 5px #b7acac",
     "width": holeSize + 'px',
     "height": holeSize + 'px'
   })
@@ -135,17 +153,24 @@ function init() {
 }
 
 function drawPic() {
-  var board = $('#gameBoard').get(0)
-  domtoimage.toPng(board)
-    .then(function(dataUrl) {
-      socket.emit('image', dataUrl);
-    })
-    .catch(function(error) {
-      console.error('oops, something went wrong!', error);
-    });
+  var board = document.getElementById('gameBoard')
+  board.setAttribute("xmlns", "http://www.w3.org/1999/xhtml")
+  var obj = {
+    'h': board.offsetHeight,
+    'w': board.offsetWidth,
+    'html': board.outerHTML.replace(/\n/g,'')
+  }
+  socket.emit('image', obj);
+  //
+  // domtoimage.toPng(board)
+  //   .then(function(dataUrl) {
+  //   })
+  //   .catch(function(error) {
+  //     console.error('oops, something went wrong!', error);
+  //   });
 }
 
-setTimeout(drawPic, 1000);  //need to figure out a better way to screen cast
+setInterval(drawPic, 250);  //need to figure out a better way to screen cast
 
 
 socket.on('changeVariable', arr => {
@@ -193,7 +218,6 @@ function update() {
      ball.position.y = 0;
     // ball.velocity.y = -ball.velocity.y;
   }
-  console.log('distance: ', distance);
   if (ball.counter % 10 === 0) {
     socket.emit('chartData', {
       'Distance': distance

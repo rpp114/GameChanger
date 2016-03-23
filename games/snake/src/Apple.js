@@ -1,10 +1,12 @@
 function Apple($el, size) {
   this.size = size;
-  this.node = $('<img id="apple"></img>');
-  this.node.attr('src', 'games/snake/src/assets/apple.jpg');
+  this.node = $('<div id="apple"></div>');
+  // this.node.attr('src', 'games/snake/src/assets/apple.jpg');
   this.node.css({
     'height': this.size,
-    'width': this.size
+    'width': this.size,
+    'position': 'absolute',
+    'background-color': 'red'
   });
   this.getRandomCoords = function() {
 

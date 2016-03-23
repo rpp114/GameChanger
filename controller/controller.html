@@ -43,7 +43,9 @@
 
     var socket = io(qs);
 
-    var url = 'localhost:3000/' + localStorage.getItem('gameChoice') + '?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+
+    var url = window.location.origin +'/'+ localStorage.getItem('gameChoice') + '?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+
     $('#url').text(url);
     $('#button').click(function(event) {
         var range = document.createRange();
