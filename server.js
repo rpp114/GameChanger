@@ -7,17 +7,7 @@ var express = require('express'),
   path = require('path'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
-<<<<<<< HEAD
   buildPic = require('./buildPic'),
-  qs = require('qs');
-  // mongoURI = 'mongodb://localhost/GameUsers';
-  // UserCtrl = require('./authenticate/userStuff'),
-  // mongoose = require('mongoose'),
-
-var q;
-
-// mongoose.connect(mongoURI);
-=======
   qs = require('qs'),
   mongoURI = 'mongodb://localhost/GameUsers',
   UserCtrl = require('./authenticate/userController'),
@@ -27,7 +17,6 @@ var q = '';
 minty.file(path.join(__filename))
 
 mongoose.connect(mongoURI);
->>>>>>> 8c5fb00ae5b862d3ab90ee47fd28bc56e5341e4d
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
