@@ -1,11 +1,13 @@
 var express = require('express'),
   app = express(),
+  minty = require ('minty'),
   http = require('http').Server(app),
   io = require('socket.io')(http),
   fs = require('fs'),
   path = require('path'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
+<<<<<<< HEAD
   buildPic = require('./buildPic'),
   qs = require('qs');
   // mongoURI = 'mongodb://localhost/GameUsers';
@@ -15,18 +17,28 @@ var express = require('express'),
 var q;
 
 // mongoose.connect(mongoURI);
+=======
+  qs = require('qs'),
+  mongoURI = 'mongodb://localhost/GameUsers',
+  UserCtrl = require('./authenticate/userController'),
+  SessionCtrl = require('./authenticate/sessionController')
+  mongoose = require('mongoose');
+var q = '';
+minty.file(path.join(__filename))
+
+mongoose.connect(mongoURI);
+>>>>>>> 8c5fb00ae5b862d3ab90ee47fd28bc56e5341e4d
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.get('/*', function(req, res, next) {
-  q = '/' + req.query.id;
-  next();
-});
-app.get('/login', function(req, res) {
-  res.sendFile(path.join(__dirname, '/loginsignuphtml/login.html'));
-});
+// app.get('/*', function(req, res, next) {
+//   // console.log('get: ', req.query.id)
+//
+//   next();
+// });
 
 app.get('/', function(req, res) {
+  q = '/' + req.query.id;
   res.sendFile(path.join(__dirname, '/home.html'));
 });
 
@@ -34,23 +46,22 @@ app.get('/welcome', function(req, res) {
   res.sendFile(path.join(__dirname, '/welcome.html'));
 });
 
-app.get('/signup', function(req, res) {
-  res.sendFile(path.join(__dirname, '/loginsignuphtml/signup.html'));
-});
 
 // app.post('/signup', UserCtrl.createUser);
-// app.post('/login', UserCtrl.verify);
+app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
-// io.on('connection', function(socket) {
-  q = '/hi';
+io.on('connection', function(socket) {
+  // q = '/hi';
+  // q = '/' + req.query.id;
   var nsp = io.of(q);
   nsp.on('connection', function(socket) {
+    // console.log(q)
 
-  socket.on('obj', function(val) {
-    // console.log('hello');
-    nsp.emit('obj', val);
-  });
+    socket.on('obj', function(val) {
+      console.log('hello');
+      nsp.emit('obj', val);
+    });
 
 
     console.log('user connected');
@@ -68,14 +79,18 @@ io.sockets.setMaxListeners(100);
     });
 
     socket.on('chartData', data => {
-     // need to figure out how to get controller to join room to listen from emits
-     console.log(data);
-     nsp.emit('chartData', data);
-   });
+      // need to figure out how to get controller to join room to listen from emits
+      console.log(data);
+      nsp.emit('chartData', data);
+    });
   });
-// });
+});
 app.get('/controller', function(req, res) {
-      res.sendFile(path.join(__dirname, '/controller/controller.html'));
+  if(SessionCtrl.isLoggedIn(req,res)){
+    q = '/' + req.query.id;
+    return res.sendFile(path.join(__dirname, '/controller/controller.html'));
+  }
+  return res.send('Please login')
   // res.render('./controller/controller');
 });
 
@@ -109,17 +124,13 @@ app.get('*.jpg', function(req, res) {
   });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
-app.get('*.png', function(req,res) {
+app.get('*.png', function(req, res) {
   res.writeHead(200, {
     'content-type': 'image/png'
   });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
-app.get('/controller', function(req, res) {
-    res.sendFile(path.join(__dirname, '/controller/controller.html'));
-
-});
 var port = process.env.PORT || 3000
 http.listen(port, function() {
   console.log('I\'m listening!!');

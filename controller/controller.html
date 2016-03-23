@@ -39,12 +39,13 @@
   <script src='/socket.io/socket.io.js'></script>
   <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
   <script>
+  var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 
-    var socket = io('/hi');
+    var socket = io(qs);
 
-    // var qs = '/hi' //'/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-    console.log(window.location);
+
     var url = window.location.origin +'/'+ localStorage.getItem('gameChoice') + '?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+
     $('#url').text(url);
     $('#button').click(function(event) {
         var range = document.createRange();

@@ -1,26 +1,12 @@
 var userController = {};
 var bcrypt = require('bcryptjs');
 var path = require('path');
-// var sessionController = require('./sessionController');
+var User = require('./userModel');
+var SessionCtrl = require('./sessionController')
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-var userschema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-
-});
-User = mongoose.model('User', userschema);
 
 userController.createUser = function(req, res) {
-  if(req.body.password === req.body.password2) {
     User.create(req.body, function(err, data) {
       if (err) {
         // throw err
@@ -31,14 +17,11 @@ userController.createUser = function(req, res) {
       var hash = bcrypt.hashSync(data.password, salt);
       data.password = hash;
       res.cookie('SSID', data.id);
-      // sessionController.startSession(req, res, data._id);
+      console.log('id: ', data.id)
+      SessionCtrl.startSession(req, res, data._id);
       data.save();
-
-      return res.sendFile(path.join(__dirname, '../controller/controller.html'));
+      res.redirect('/controller?id=' + data.id);
     });
-  } else {
-    return res.send('Please make sure your password matches');
-  }
 };
 
 userController.verify = function(req, res) {
@@ -48,18 +31,18 @@ userController.verify = function(req, res) {
     if (doc) {
       if (bcrypt.compareSync(req.body.password, doc.password)) {
         res.cookie('SSID', doc.id);
-        // sessionController.startSession(req, res, doc._id);
+        SessionCtrl.startSession(req, res, doc._id);
         res.redirect('/controller?id=' + doc.id)
         return res.sendFile(path.join(__dirname, '../controller/controller.html'));
       }
       // console.log('bye')
       return res.send('error: ', err);
     }
-    return res.send('error: ', err);
+    userController.createUser(req,res);
 
   });
 
 };
 
 
-module.exports = userController;
+module.exports = userController
