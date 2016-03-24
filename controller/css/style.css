@@ -81,12 +81,14 @@ h1 {
   height: 400px;
   width:400px;*/
   /*border: 1px solid black;*/
+  height: 85%;
+  width: 85%;
   padding-top: 0px;
   margin-top: -9%;
-  margin-left: 0px;
-  padding-left: 0px;
-  height: 80%;
-  width: 80%;
+  /*margin-left: 0px;*/
+  /*padding-left: 0px;*/
+  /*height: 80%;*/
+  /*width: 80%;*/
 }
 
 #graphOptions {
@@ -96,13 +98,15 @@ h1 {
   height: 400px;
   width:400px;
   border: 1px solid black;*/
-  margin-top: 10%;
-  margin-left: 30%;
+  margin-top: -50px;
+  /*margin-left: 50%;*/
+  /*position: absolute;*/
 }
 
 #graph {
+  position: relative;
   margin-left: 0px;
-  margin-top: 0px;
+  margin-top: -35px;
   height: 100%;
   width: 100%;
 }
@@ -1197,7 +1201,7 @@ PANELS CONFIGURATIONS
 .white-panel p {
 	margin-top: 5px;
 	font-weight: 700;
-	margin-left: 15px;
+	/*margin-left: 15px;*/
 }
 .white-panel .white-header {
 	background: #f4f4f4;

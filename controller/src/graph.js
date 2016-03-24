@@ -30,7 +30,7 @@ socket.on('chartData', data => {
     // $('#graphOptions').empty();
     var keys = Object.keys(data);
     keys.forEach(key => {
-      var button = "<button class='graphButtons' id=\"" + key + "\" onclick='changeData(\"" + key + "\")'>" + key + "</button>"
+      var button = "<button class='graphButtons btn btn-default' id=\"" + key + "\" onclick='changeData(\"" + key + "\")'>" + key + "</button>"
       $("#graphOptions").append(button);
       dataObj[key] = [];
     })
