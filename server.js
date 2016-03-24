@@ -81,7 +81,7 @@ app.get('/controller', function(req, res) {
   if (SessionCtrl.isLoggedIn(req, res)) {
     q = '/' + req.query.id;
     startSocket(q);
-    return res.sendFile(path.join(__dirname, '/controller/controller.html'));
+    return res.sendFile(path.join(__dirname, '/controller/controller3.html'));
   }
   return res.send('Please login')
 });
