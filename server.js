@@ -13,7 +13,7 @@ var express = require('express'),
   SessionCtrl = require('./authenticate/sessionController'),
 mongoose = require('mongoose');
 var q = '';
-var nameOfGame;
+var nameOfGame = 'snake';
 
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
@@ -108,7 +108,7 @@ app.post('/index', function(req, res) {
   res.send('yes')
 })
 
-app.get('/index', function(req, res) {
+app.get('/game', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/' + nameOfGame + '/index.html'));
 })
 
