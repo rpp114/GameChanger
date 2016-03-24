@@ -25,7 +25,7 @@ if (!window.requestAnimationFrame) {
 var ball;
 var w;
 var h;
-var qs = '/hi';
+var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 var socket = io(qs);
 
 function init() {

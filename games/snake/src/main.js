@@ -1,6 +1,6 @@
 $(document).ready(function() {
-  var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-  var socket = io(qs);
+  // var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+  // var socket = io(qs);
   var ctrlObj = {
     gameName: 'snake',
     controllers: {
@@ -37,6 +37,7 @@ $(document).ready(function() {
       }
     }
   };
+  console.log('emit obj');
   socket.emit('obj', ctrlObj);
 
   function startGame() {
@@ -140,6 +141,6 @@ $(document).ready(function() {
 
   }
 
-  setInterval(drawPic, 300);
+  setInterval(drawPic, 250);
 
 });
