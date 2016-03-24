@@ -35,15 +35,15 @@ socket.on('chartData', data => {
       dataObj[key] = [];
     })
 
-    chartVariable = keys[0];
-    graph.append('text')
-      .attr('id', 'chartTitle')
-      .attr('x', (w/2))
-      .attr('y', 0 -(m[0]/2))
-      .attr('text-anchor', 'middle')
-      .style('font-size', '16px')
-      .style('text-decoration', 'underline')
-      .text(chartVariable)
+    // chartVariable = keys[0];
+    // graph.append('text')
+    //   .attr('id', 'chartTitle')
+    //   .attr('x', (w/2))
+    //   .attr('y', 0 -(m[0]/2))
+    //   .attr('text-anchor', 'middle')
+    //   .style('font-size', '16px')
+    //   .style('text-decoration', 'underline')
+    //   .text(chartVariable)
 
   }
   setData(data);
