@@ -16,6 +16,7 @@ module.exports = function buildPng(imgObj, socketNameSpace) {
 
 
   // spins up new page in existing phantom instance to load SVG and create PNG
+
   phantomInstance.createPage()
   .then(openPage => {
 

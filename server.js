@@ -11,7 +11,7 @@ var express = require('express'),
   mongoURI = 'mongodb://localhost/GameUsers',
   UserCtrl = require('./authenticate/userController'),
   SessionCtrl = require('./authenticate/sessionController')
-  mongoose = require('mongoose');
+mongoose = require('mongoose');
 var q = '';
 
 mongoose.connect(mongoURI);
@@ -38,45 +38,51 @@ app.get('/welcome', function(req, res) {
 app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
-io.on('connection', function(socket) {
-  // q = '/hi';
-  // q = '/' + req.query.id;
-  var nsp = io.of(q);
+var socketClients = {};
+// initializes socket on Get request to Controller page
+function startSocket(nameSpace) {
+
+  var nsp = io.of(nameSpace);
+
   nsp.on('connection', function(socket) {
-    // console.log(q)
-    console.log('user connected');
+    var socketCount = Object.keys(socketClients).length;
+    socketClients[socket.id] = socket;
+    console.log('users connected: ', socketCount);
+
     socket.on('obj', function(val) {
-      console.log('hello');
+      console.log('received Initial Object');
       nsp.emit('obj', val);
     });
 
 
     socket.on('changeVariable', function(val) {
-      // console.log('heard: ', val);
       nsp.emit('changeVariable', val);
-      // console.log('emitted: ', val);
     });
 
     //captures img from game and emits to controller
     socket.on('image', imgObj => {
-      // need to figure out how to get controller to join room to listen from emits
-      // console.log('imgObj: ', imgObj);
       buildPic(imgObj, nsp);
     });
 
     socket.on('chartData', data => {
-      // need to figure out how to get controller to join room to listen from emits
       nsp.emit('chartData', data);
     });
+
+    socket.on('disconnect', () => {
+      console.log('disconnect and remove');
+      delete socketClients[socket.id];
+    })
   });
-});
+}
+
+
 app.get('/controller', function(req, res) {
-  if(SessionCtrl.isLoggedIn(req,res)){
+  if (SessionCtrl.isLoggedIn(req, res)) {
     q = '/' + req.query.id;
+    startSocket(q);
     return res.sendFile(path.join(__dirname, '/controller/controller.html'));
   }
   return res.send('Please login')
-  // res.render('./controller/controller');
 });
 
 app.get('/snake', function(req, res) {
