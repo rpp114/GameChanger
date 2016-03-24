@@ -1,5 +1,6 @@
 npm-debug.log
 node_modules
+app.zip
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
