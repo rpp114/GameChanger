@@ -11,6 +11,7 @@ var express = require('express'),
   mongoURI = 'mongodb://localhost/GameUsers',
   UserCtrl = require('./authenticate/userController'),
   SessionCtrl = require('./authenticate/sessionController'),
+  Session = require('./authenticate/sessionModel'),
 mongoose = require('mongoose');
 var q = '';
 var nameOfGame = 'snake';
@@ -27,7 +28,7 @@ app.use(bodyParser.json());
 // });
 
 app.get('/', function(req, res) {
-  q = '/' + req.query.id;
+  // q = '/' + req.query.id;
   res.sendFile(path.join(__dirname, '/home.html'));
 });
 
@@ -82,6 +83,12 @@ function startSocket(nameSpace) {
   });
 }
 
+app.get('/logout', function(req, res) {
+  Session.remove({cookieId: req.cookies.SSID});
+  res.clearCookie('SSID');
+  return res.redirect('/');
+  // debugger;
+})
 
 app.get('/controller', function(req, res) {
   if (SessionCtrl.isLoggedIn(req, res)) {
