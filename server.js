@@ -1,6 +1,5 @@
 var express = require('express'),
   app = express(),
-  minty = require ('minty'),
   http = require('http').Server(app),
   io = require('socket.io')(http),
   fs = require('fs'),
@@ -14,7 +13,6 @@ var express = require('express'),
   SessionCtrl = require('./authenticate/sessionController')
   mongoose = require('mongoose');
 var q = '';
-minty.file(path.join(__filename))
 
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
@@ -46,14 +44,13 @@ io.on('connection', function(socket) {
   var nsp = io.of(q);
   nsp.on('connection', function(socket) {
     // console.log(q)
-
+    console.log('user connected');
     socket.on('obj', function(val) {
       console.log('hello');
       nsp.emit('obj', val);
     });
 
 
-    console.log('user connected');
     socket.on('changeVariable', function(val) {
       // console.log('heard: ', val);
       nsp.emit('changeVariable', val);
@@ -63,13 +60,12 @@ io.on('connection', function(socket) {
     //captures img from game and emits to controller
     socket.on('image', imgObj => {
       // need to figure out how to get controller to join room to listen from emits
-      console.log('imgObj: ', imgObj);
+      // console.log('imgObj: ', imgObj);
       buildPic(imgObj, nsp);
     });
 
     socket.on('chartData', data => {
       // need to figure out how to get controller to join room to listen from emits
-      console.log(data);
       nsp.emit('chartData', data);
     });
   });

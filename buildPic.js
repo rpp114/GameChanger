@@ -1,44 +1,49 @@
 const phantom = require('phantom');
 
+var phantomInstance;
 
+// starts one phantom instance on server start to prevent starting a new one each time.
+
+phantom.create().then(instance => {
+  phantomInstance = instance;
+})
 
 
 module.exports = function buildPng(imgObj, socketNameSpace) {
   var nsp = socketNameSpace;
-  var sitePage = null;
-  var phantomInstance = null;
+  var svg = buildImg(imgObj);
+  var sitePage;
 
-  phantom.create()
-    .then((instance) => {
-      phantomInstance = instance;
-      return instance.createPage();
-    })
-    .then((page) => {
-      sitePage = page;
-      var svg = buildImg(imgObj);
 
-      page.viewportSize = {
-        width: imgObj.w + 10,
-        height: imgObj.h + 10
-      };
-      return page.open(svg)
+  // spins up new page in existing phantom instance to load SVG and create PNG
+  phantomInstance.createPage()
+  .then(openPage => {
+
+    openPage.viewportSize = {
+      width: imgObj.w + 10,
+      height: imgObj.h + 10
+    };
+    sitePage = openPage;
+
+    return openPage.open(svg);
+
     })
     .then((status) => {
+      // renders the existing svg to png
       return sitePage.renderBase64('PNG');
-      // console.log('PNG Image: ', base64);
 
     })
     .then((png) => {
-       nsp.emit('image', 'data:image/png;base64,' + png);
+      // emits the png URI and closes existing page
+      nsp.emit('image', 'data:image/png;base64,' + png);
       sitePage.close();
-      phantomInstance.exit();
     })
 }
 
 
 
 
-
+// adds appropriate context to image svg info from player.
 var buildImg = function(imgObj) {
   var xml = '<foreignObject x="0" y="0" width="100%" height="100%">' + imgObj.html + '</foreignObject>';
   var foreignObject = '<svg xmlns="http://www.w3.org/2000/svg" width="' + imgObj.w + '" height="' + imgObj.h + '">' + xml + '</svg>';

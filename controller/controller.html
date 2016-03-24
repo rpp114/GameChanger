@@ -19,6 +19,7 @@
     </div>
   </div>
   <div class='module' id='screenCast'>
+    <img id = 'screenShare' height = '300px' />
   </div>
   <div class='module' id='controls'>
 
@@ -106,12 +107,8 @@
       }
     })
     socket.on('image', url => {
-      $('#screenCast').empty();
-      var img = new Image();
-      img.id = 'screenShare';
-      img.src = url;
-      img.height = 300;
-      $('#screenCast').get(0).appendChild(img);
+      console.log('heard: ', url);
+      $('#screenShare').attr('src', url)
     })
   </script>
 
