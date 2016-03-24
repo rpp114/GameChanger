@@ -1,6 +1,5 @@
 var express = require('express'),
   app = express(),
-  // minty = require ('minty'),
   http = require('http').Server(app),
   io = require('socket.io')(http),
   fs = require('fs'),
@@ -12,9 +11,7 @@ var express = require('express'),
   UserCtrl = require('./authenticate/userController'),
   SessionCtrl = require('./authenticate/sessionController')
   mongoose = require('mongoose');
-  var q = '';
-  var client;
-// minty.file(path.join(__filename))
+var q = '';
 
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
@@ -61,10 +58,10 @@ io.on('connection', function(socket) {
     });
 
     //captures img from game and emits to controller
-    socket.on('image', url => {
+    socket.on('image', imgObj => {
       // need to figure out how to get controller to join room to listen from emits
-      nsp.emit('image', url);
-      // console.log('server emitted URL');
+      console.log('imgObj: ', imgObj);
+      buildPic(imgObj, nsp);
     });
 
     socket.on('chartData', data => {
@@ -81,6 +78,12 @@ app.get('/controller', function(req, res) {
     return res.sendFile(path.join(__dirname, '/controller/controller.html'));
   }
   return res.send('Please login')
+  // res.render('./controller/controller');
+});
+
+app.get('/controller3', function(req, res) {
+  q = '/' + req.query.id;
+  res.sendFile(path.join(__dirname, '/controller/controller3.html'));
   // res.render('./controller/controller');
 });
 
@@ -107,6 +110,27 @@ app.get('*.css', function(req, res) {
   });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
+
+// app.get('/controller/font-awesome/fonts/fontawesome-webfont.woff?v=4.1.0', function(req, res) {
+//   res.writeHead(200, {
+//     'content-type': 'text/css; charset=UTF-8'
+//   });
+//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
+// });
+//
+// app.get('/controller/js/gritter/images/ie-spacer.gif', function(req, res) {
+//   res.writeHead(200, {
+//     'content-type': 'text/css; charset=UTF-8'
+//   });
+//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
+// });
+//
+// app.get('/controller/font-awesome/fonts/fontawesome-webfont.ttf?v=4.1.0', function(req, res) {
+//   res.writeHead(200, {
+//     'content-type': 'text/css; charset=UTF-8'
+//   });
+//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
+// });
 
 app.get('*.jpg', function(req, res) {
   res.writeHead(200, {

@@ -47,7 +47,11 @@ $(document).ready(function() {
 
     $('#board').css({
       'height': (gridSize - 1 + (snakeSize * sizeOfConstant) - (gridSize % (snakeSize * sizeOfConstant))) * scale,
-      'width': (gridSize - 1 + (snakeSize * sizeOfConstant) - (gridSize % (snakeSize * sizeOfConstant))) * scale
+      'width': (gridSize - 1 + (snakeSize * sizeOfConstant) - (gridSize % (snakeSize * sizeOfConstant))) * scale,
+      'border': '1px solid black',
+      'position': 'absolute',
+      'top': '10px',
+      'left': '10px'
     });
 
     //allows for dynamic scaling and grid size on start of new game
@@ -61,7 +65,9 @@ $(document).ready(function() {
 
     head.node.css({
       'height': this.size,
-      'width': this.size
+      'width': this.size,
+      'position': 'absolute',
+      'background-color': 'green'
     });
 
     head.startGame = startGame;
@@ -123,14 +129,15 @@ $(document).ready(function() {
 
   // draws pic and emits it
   function drawPic() {
-    var board = $('#gameBoard').get(0);
-    domtoimage.toPng(board)
-      .then(function(dataUrl) {
-        socket.emit('image', dataUrl);
-      })
-      .catch(function(error) {
-        console.error('oops, something went wrong!', error);
-      });
+    var board = document.getElementById('gameBoard')
+    board.setAttribute("xmlns", "http://www.w3.org/1999/xhtml")
+    var obj = {
+      'h': board.offsetHeight,
+      'w': board.offsetWidth,
+      'html': board.outerHTML.replace(/\n/g,'')
+    }
+    socket.emit('image', obj);
+
   }
 
   setInterval(drawPic, 300);

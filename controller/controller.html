@@ -6,7 +6,11 @@
   <script src='/socket.io/socket.io.js'></script>
 
   <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
-
+  <link href="controller/css/bootstrap.css" rel="stylesheet">
+  <!--external css-->
+  <link href="controller/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <!-- <link rel="stylesheet" type="text/css" href="assets/css/zabuto_calendar.css"> -->
+  <link rel="stylesheet" type="text/css" href="controller/js/gritter/css/jquery.gritter.css" />
   <link rel="stylesheet" href="controller/css/style.css">
   <link href="controller/css/graph.css" rel="stylesheet" type="text/css" />
 </head>
@@ -44,7 +48,9 @@
 
     var socket = io(qs);
 
-    var url = 'localhost:3000/' + localStorage.getItem('gameChoice') + '?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+
+    var url = window.location.origin +'/'+ localStorage.getItem('gameChoice') + '?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+
     $('#url').text(url);
     $('#button').click(function(event) {
         var range = document.createRange();
