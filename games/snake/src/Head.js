@@ -108,7 +108,7 @@ Head.prototype.move = function() {
         'Distance': dist,
         'Moves': this.counter
       };
-      console.log('chartData: ', chartData);
+      // console.log('chartData: ', chartData);
       socket.emit('chartData', chartData);
 
 
