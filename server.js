@@ -13,11 +13,13 @@ var express = require('express'),
   SessionCtrl = require('./authenticate/sessionController'),
 mongoose = require('mongoose');
 var q = '';
+var nameOfGame;
 
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 // app.get('/*', function(req, res, next) {
 //   // console.log('get: ', req.query.id)
 //
@@ -69,6 +71,10 @@ function startSocket(nameSpace) {
       nsp.emit('chartData', data);
     });
 
+    socket.on('changeGame', () => {
+      nsp.emit('changeGame')
+    })
+
     socket.on('disconnect', () => {
       console.log('disconnect and remove');
       delete socketClients[socket.id];
@@ -97,8 +103,13 @@ app.get('/snake', function(req, res) {
   client = 'snake'
 });
 
-app.get('/index', function(req, res) {
+app.post('/index', function(req, res) {
+  nameOfGame = req.body.gameName.toLowerCase();
+  res.send('yes')
+})
 
+app.get('/index', function(req, res) {
+  res.sendFile(path.join(__dirname, '/games/' + nameOfGame + '/index.html'));
 })
 
 app.get('/marble', function(req, res) {

@@ -1,6 +1,10 @@
 var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 var socket = io(qs);
 $(document).ready(function() {
+  socket.on('changeGame', () => {
+    console.log('changedGame');
+    location.reload();
+  })
   var ctrlObj = {
     gameName: 'snake',
     controllers: {
@@ -37,7 +41,7 @@ $(document).ready(function() {
       }
     }
   };
-  console.log('emit obj');
+  // console.log('emit obj');
   socket.emit('obj', ctrlObj);
 
   function startGame() {
