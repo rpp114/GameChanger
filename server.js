@@ -1,6 +1,5 @@
 var express = require('express'),
   app = express(),
-  minty = require ('minty'),
   http = require('http').Server(app),
   io = require('socket.io')(http),
   fs = require('fs'),
@@ -13,7 +12,6 @@ var express = require('express'),
   SessionCtrl = require('./authenticate/sessionController')
   mongoose = require('mongoose');
 var q = '';
-minty.file(path.join(__filename))
 
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
