@@ -1,5 +1,6 @@
 var express = require('express'),
   app = express(),
+  minty = require ('minty'),
   http = require('http').Server(app),
   io = require('socket.io')(http),
   fs = require('fs'),
@@ -8,10 +9,11 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   qs = require('qs'),
   mongoURI = 'mongodb://localhost/GameUsers',
-  UserCtrl = require('./authenticate/userStuff'),
+  UserCtrl = require('./authenticate/userController'),
+  SessionCtrl = require('./authenticate/sessionController')
   mongoose = require('mongoose');
-
 var q = '';
+minty.file(path.join(__filename))
 
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
@@ -44,10 +46,10 @@ io.on('connection', function(socket) {
   nsp.on('connection', function(socket) {
     // console.log(q)
 
-  socket.on('obj', function(val) {
-    console.log('hello');
-    nsp.emit('obj', val);
-  });
+    socket.on('obj', function(val) {
+      console.log('hello');
+      nsp.emit('obj', val);
+    });
 
 
     console.log('user connected');
@@ -58,22 +60,25 @@ io.on('connection', function(socket) {
     });
 
     //captures img from game and emits to controller
-    socket.on('image', url => {
+    socket.on('image', imgObj => {
       // need to figure out how to get controller to join room to listen from emits
-      nsp.emit('image', url);
-      console.log('server emitted URL');
+      console.log('imgObj: ', imgObj);
+      buildPic(imgObj, nsp);
     });
 
     socket.on('chartData', data => {
-     // need to figure out how to get controller to join room to listen from emits
-     console.log(data);
-     nsp.emit('chartData', data);
-   });
+      // need to figure out how to get controller to join room to listen from emits
+      console.log(data);
+      nsp.emit('chartData', data);
+    });
   });
 });
 app.get('/controller', function(req, res) {
-  q = '/' + req.query.id;
-  res.sendFile(path.join(__dirname, '/controller/controller.html'));
+  if(SessionCtrl.isLoggedIn(req,res)){
+    q = '/' + req.query.id;
+    return res.sendFile(path.join(__dirname, '/controller/controller.html'));
+  }
+  return res.send('Please login')
   // res.render('./controller/controller');
 });
 
@@ -134,7 +139,7 @@ app.get('*.jpg', function(req, res) {
   });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
-app.get('*.png', function(req,res) {
+app.get('*.png', function(req, res) {
   res.writeHead(200, {
     'content-type': 'image/png'
   });
