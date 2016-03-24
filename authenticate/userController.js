@@ -33,7 +33,6 @@ userController.verify = function(req, res) {
         res.cookie('SSID', doc.id);
         SessionCtrl.startSession(req, res, doc._id);
         return res.redirect('/controller?id=' + doc.id)
-        // return res.sendFile(path.join(__dirname, '../controller/controller.html'));
       }
       // console.log('bye')
       return res.send('error: ', err);
