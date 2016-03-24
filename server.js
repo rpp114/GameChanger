@@ -14,7 +14,7 @@ var express = require('express'),
   Session = require('./authenticate/sessionModel'),
 mongoose = require('mongoose');
 var q = '';
-var nameOfGame;
+var nameOfGame = 'snake';
 
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
@@ -73,13 +73,13 @@ function startSocket(nameSpace) {
     });
 
     socket.on('changeGame', () => {
-      nsp.emit('changeGame')
-    })
+      nsp.emit('changeGame');
+    });
 
     socket.on('disconnect', () => {
       console.log('disconnect and remove');
       delete socketClients[socket.id];
-    })
+    });
   });
 }
 
@@ -94,9 +94,9 @@ app.get('/controller', function(req, res) {
   if (SessionCtrl.isLoggedIn(req, res)) {
     q = '/' + req.query.id;
     startSocket(q);
-    return res.sendFile(path.join(__dirname, '/controller/controller3.html'));
+    return res.sendFile(path.join(__dirname, '/controller/controller.html'));
   }
-  return res.send('Please login')
+  return res.send('Please login');
 });
 
 // app.get('/controller3', function(req, res) {
@@ -107,21 +107,21 @@ app.get('/controller', function(req, res) {
 
 app.get('/snake', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
-  client = 'snake'
+  client = 'snake';
 });
 
 app.post('/index', function(req, res) {
   nameOfGame = req.body.gameName.toLowerCase();
-  res.send('yes')
-})
+  res.send('yes');
+});
 
-app.get('/index', function(req, res) {
+app.get('/game', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/' + nameOfGame + '/index.html'));
-})
+});
 
 app.get('/marble', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/marble/index.html'));
-  client = 'marble'
+  client = 'marble';
 });
 
 app.get('*.js', function(req, res) {
@@ -172,7 +172,7 @@ app.get('*.png', function(req, res) {
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
-var port = process.env.PORT || 3000
+var port = process.env.PORT || 3000;
 http.listen(port, function() {
   console.log('I\'m listening!!');
 });

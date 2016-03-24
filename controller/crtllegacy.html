@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Game Controller</title>
+  <script src='/socket.io/socket.io.js'></script>
+
+  <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <link href="controller/css/bootstrap.css" rel="stylesheet">
+  <!--external css-->
+  <link href="controller/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <!-- <link rel="stylesheet" type="text/css" href="assets/css/zabuto_calendar.css"> -->
+  <link rel="stylesheet" type="text/css" href="controller/js/gritter/css/jquery.gritter.css" />
+  <link rel="stylesheet" href="controller/css/style.css">
+  <link href="controller/css/graph.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class='module' id='dataDisplay'>
+    <div id="graph">
+
+    </div>
+    <div id='graphOptions'>
+    </div>
+  </div>
+  <div class='module' id='screenCast'>
+    <img id = 'screenShare' height = '300px' />
+  </div>
+  <div class='module' id='controls'>
+
+    <h1 id='greeting'>Hello UserName</h1>
+    <p id='instructions'>Copy client URL below; then give it to your client.</p>
+    <p id="player"> <strong>Client URL:</strong></p>
+    <p id='url'></p>
+    <button id='button'>Copy URL</button>
+
+    <center>
+      <table id='controllers'>
+        <tr width='100%'>
+        </tr>
+      </table>
+    </center>
+  </div>
+
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script>
+  var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+
+    var socket = io(qs);
+
+
+    var url = window.location.origin +'/'+ localStorage.getItem('gameChoice') + '?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+
+    $('#url').text(url);
+    $('#button').click(function(event) {
+        var range = document.createRange();
+        var selection = window.getSelection();
+        range.selectNodeContents(document.getElementById('url'));
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand('copy');
+        selection.removeAllRanges();
+      });
+
+    var ctrlObj = {};
+    var graphCounter = 0;
+
+    function properSpacing(word) {
+      var re = /[A-Z]/g,
+        changeLetter = word.match(re);
+      if (changeLetter) {
+        var wordArr = word.replace(changeLetter, ' ' + changeLetter).split(' ');
+      } else {
+        var wordArr = [word];
+      }
+      var first = wordArr[0][0].toUpperCase() + wordArr[0].slice(1);
+      wordArr[0] = first;
+      return wordArr.join(' ')
+
+    }
+
+    var currentGame;
+    socket.on('obj', function(val) {
+      if (currentGame !== val.gameName) {
+        $('#graphOptions').empty()
+        $('td').remove();
+        ctrlObj = val.controllers;
+        currentGame = val.gameName;
+        var numOfVars = Object.keys(ctrlObj).length;
+        for (var key in ctrlObj) {
+          if (ctrlObj[key].value || ctrlObj[key].value === 0) {
+            localStorage.setItem(ctrlObj[key], ctrlObj[key].value)
+          }
+          if (ctrlObj[key].type === 'range') {
+            $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>' + properSpacing(key) + '</h3><input type="text" value="' + ctrlObj[key].value + '" class="dial" id="' + key +
+              '" oninput="function(){console.log("hi")}" data-step="' + ctrlObj[
+                key].step + '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max + '" data-width="100" data-thickness="0.4" padding="20px"/></td>');
+          } // if (ctrlObj[key].type==='button' ) $( '#controls').append( '<button id="' + key + '"></button>');
+        }
+        $(document).ready(function($) {
+          $(".dial").knob({
+            draw: function() {
+              var id = this.$[0].id;
+              var old = localStorage.getItem(id);
+              var value = this.$[0].value;
+              localStorage.setItem(id, value);
+              socket.emit('changeVariable', [id, value, old])
+            }
+          });
+        });
+      }
+    })
+    socket.on('image', url => {
+      console.log('heard: ', url);
+      $('#screenShare').attr('src', url)
+    })
+  </script>
+  <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/excanvas.js'></script> -->
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="controller/src/graph.js" charset="utf-8"></script>
+  <script src='controller/src/jquery.knob.js' charset="utf-8"></script>
+</body>
+
+
+</html>
