@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Game Controller</title>
   <script src='/socket.io/socket.io.js'></script>
+
   <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
   <link href="controller/css/bootstrap.css" rel="stylesheet">
   <!--external css-->
@@ -23,6 +24,7 @@
     </div>
   </div>
   <div class='module' id='screenCast'>
+    <img id = 'screenShare' height = '300px' />
   </div>
   <div class='module' id='controls'>
 
@@ -110,15 +112,11 @@
       }
     })
     socket.on('image', url => {
-      $('#screenCast').empty();
-      var img = new Image();
-      img.id = 'screenShare';
-      img.src = url;
-      img.height = 300;
-      $('#screenCast').get(0).appendChild(img);
+      console.log('heard: ', url);
+      $('#screenShare').attr('src', url)
     })
   </script>
-
+  <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/excanvas.js'></script> -->
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="controller/src/graph.js" charset="utf-8"></script>
   <script src='controller/src/jquery.knob.js' charset="utf-8"></script>

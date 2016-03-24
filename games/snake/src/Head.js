@@ -1,8 +1,8 @@
 // var variables = require('./')
  var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-// var socket = io(qs);
-console.log(qs)
 var socket = io(qs);
+// console.log(qs)
+// var socket = io(qs);
 var thatHead;
 
 //alows for dynamic changing of speed
@@ -171,8 +171,8 @@ Head.prototype.moveBody = function(x, y) {
 
 Head.prototype.render = function() {
   this.node.offset({
-    top: (this.size * this.y) + head.elPosY,
-    left: (this.size * this.x) + head.elPosX
+    top: (this.size * this.y) + this.elPosY,
+    left: (this.size * this.x) + this.elPosX
   });
 };
 

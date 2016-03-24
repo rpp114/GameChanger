@@ -32,8 +32,7 @@ userController.verify = function(req, res) {
       if (bcrypt.compareSync(req.body.password, doc.password)) {
         res.cookie('SSID', doc.id);
         SessionCtrl.startSession(req, res, doc._id);
-        res.redirect('/controller?id=' + doc.id)
-        return res.sendFile(path.join(__dirname, '../controller/controller.html'));
+        return res.redirect('/controller?id=' + doc.id)
       }
       // console.log('bye')
       return res.send('error: ', err);
