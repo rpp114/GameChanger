@@ -81,21 +81,25 @@ app.get('/controller', function(req, res) {
   if (SessionCtrl.isLoggedIn(req, res)) {
     q = '/' + req.query.id;
     startSocket(q);
-    return res.sendFile(path.join(__dirname, '/controller/controller.html'));
+    return res.sendFile(path.join(__dirname, '/controller/controller3.html'));
   }
   return res.send('Please login')
 });
 
-app.get('/controller3', function(req, res) {
-  q = '/' + req.query.id;
-  res.sendFile(path.join(__dirname, '/controller/controller3.html'));
-  // res.render('./controller/controller');
-});
+// app.get('/controller3', function(req, res) {
+//   q = '/' + req.query.id;
+//   res.sendFile(path.join(__dirname, '/controller/controller3.html'));
+//   // res.render('./controller/controller');
+// });
 
 app.get('/snake', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
   client = 'snake'
 });
+
+app.get('/index', function(req, res) {
+
+})
 
 app.get('/marble', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/marble/index.html'));
