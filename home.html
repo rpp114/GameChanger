@@ -22,7 +22,7 @@
       font-size: 20px;
       color: #46BFED;
     }
-  }
+
   #login {
     position: absolute;
     right: 30px;
@@ -94,17 +94,17 @@
     <br>
     <br>
     <center>
-      <form action='/login' method='post'>
+      <form id='form' action='/login' method='post'>
         Enter your UserName
         <br>
-        <input name='username' type='text' placeholder='UserName' maxlength="20" required>
+        <input id='username' name='username' type='text' placeholder='UserName' maxlength="20" required>
         <br>
         <br> Enter your Password
-        <input type="password" name='password' placeholder="Password" required maxlength="20">
+        <input id='password' type="password" name='password' placeholder="Password" required maxlength="20">
         <br>
         <br>
         <br>
-        <input type='submit' value='Log In'>
+        <input id='submit' type='submit' value='Log In'>
       </form>
     </center>
   </div>
@@ -116,13 +116,13 @@
     <p class='description'> Vicissitutor takes variables in the form of an object to create buttons and knobs. As long as the game is created through JavaScript, you will be able to use Vicissitutor.</p>
   </div>
 </body>
-<script>
+<!-- <script>
   $(document).ready(function() {
     $('#dropdown').slideUp();
     $('#login').click(function() {
       $('#dropdown').slideToggle();
     })
   });
-</script>
+</script> -->
 
 </html>

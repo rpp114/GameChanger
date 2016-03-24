@@ -1,6 +1,6 @@
 var express = require('express'),
   app = express(),
-  minty = require ('minty'),
+  // minty = require ('minty'),
   http = require('http').Server(app),
   io = require('socket.io')(http),
   fs = require('fs'),
@@ -12,8 +12,9 @@ var express = require('express'),
   UserCtrl = require('./authenticate/userController'),
   SessionCtrl = require('./authenticate/sessionController')
   mongoose = require('mongoose');
-var q = '';
-minty.file(path.join(__filename))
+  var q = '';
+  var client;
+// minty.file(path.join(__filename))
 
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
@@ -52,7 +53,7 @@ io.on('connection', function(socket) {
     });
 
 
-    console.log('user connected');
+    console.log(client, ' connected');
     socket.on('changeVariable', function(val) {
       // console.log('heard: ', val);
       nsp.emit('changeVariable', val);
@@ -63,12 +64,12 @@ io.on('connection', function(socket) {
     socket.on('image', url => {
       // need to figure out how to get controller to join room to listen from emits
       nsp.emit('image', url);
-      console.log('server emitted URL');
+      // console.log('server emitted URL');
     });
 
     socket.on('chartData', data => {
       // need to figure out how to get controller to join room to listen from emits
-      console.log(data);
+      // console.log(data);
       nsp.emit('chartData', data);
     });
   });
@@ -76,6 +77,7 @@ io.on('connection', function(socket) {
 app.get('/controller', function(req, res) {
   if(SessionCtrl.isLoggedIn(req,res)){
     q = '/' + req.query.id;
+    client = 'controller';
     return res.sendFile(path.join(__dirname, '/controller/controller.html'));
   }
   return res.send('Please login')
@@ -84,12 +86,12 @@ app.get('/controller', function(req, res) {
 
 app.get('/snake', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
-
+  client = 'snake'
 });
 
 app.get('/marble', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/marble/index.html'));
-
+  client = 'marble'
 });
 
 app.get('*.js', function(req, res) {
