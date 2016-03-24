@@ -22,7 +22,7 @@ graph.append("svg:g")
 
 
 var dataObj = {};
-var chartVariable;
+var chartVariable ;
 var graphCounter;
 
 socket.on('chartData', data => {
@@ -35,7 +35,7 @@ socket.on('chartData', data => {
       dataObj[key] = [];
     })
 
-    // chartVariable = keys[0];
+    chartVariable = keys[0];
     // graph.append('text')
     //   .attr('id', 'chartTitle')
     //   .attr('x', (w/2))

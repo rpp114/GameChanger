@@ -28,6 +28,11 @@ var h;
 var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 var socket = io(qs);
 
+socket.on('changeGame', () => {
+  console.log('changedGame');
+  location.reload();
+})
+
 function init() {
   var ctrlObj = {
     gameName: 'marble',
