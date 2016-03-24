@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "casper": "casperjs test ./tests/casperTest.js",
-    "zombie": "mocha --timeout 8000 tests/zombieTests.js"
+    "zombie": "mocha --timeout 8000 tests/zombieTests.js",
     "start": "nodemon server.js"
   },
   "repository": {
