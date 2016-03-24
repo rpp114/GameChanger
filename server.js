@@ -85,6 +85,12 @@ app.get('/controller', function(req, res) {
   return res.send('Please login')
 });
 
+app.get('/controller3', function(req, res) {
+  q = '/' + req.query.id;
+  res.sendFile(path.join(__dirname, '/controller/controller3.html'));
+  // res.render('./controller/controller');
+});
+
 app.get('/snake', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
 
@@ -108,6 +114,27 @@ app.get('*.css', function(req, res) {
   });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
+
+// app.get('/controller/font-awesome/fonts/fontawesome-webfont.woff?v=4.1.0', function(req, res) {
+//   res.writeHead(200, {
+//     'content-type': 'text/css; charset=UTF-8'
+//   });
+//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
+// });
+//
+// app.get('/controller/js/gritter/images/ie-spacer.gif', function(req, res) {
+//   res.writeHead(200, {
+//     'content-type': 'text/css; charset=UTF-8'
+//   });
+//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
+// });
+//
+// app.get('/controller/font-awesome/fonts/fontawesome-webfont.ttf?v=4.1.0', function(req, res) {
+//   res.writeHead(200, {
+//     'content-type': 'text/css; charset=UTF-8'
+//   });
+//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
+// });
 
 app.get('*.jpg', function(req, res) {
   res.writeHead(200, {
