@@ -32,28 +32,28 @@ function init() {
   var ctrlObj = {
     gameName: 'marble',
     controllers: {
-    ballSize: {
-      type: 'range',
-      min: 30,
-      max: 250,
-      step: 10,
-      value: 100
-    },
-    holeSize: {
-      type: 'range',
-      min: 30,
-      max: 500,
-      step: 10,
-      value: 150
-    },
-    sensitivity: {
-      type: 'range',
-      min: 0.05,
-      max: 5,
-      step: 0.10,
-      value: 1
+      ballSize: {
+        type: 'range',
+        min: 30,
+        max: 250,
+        step: 10,
+        value: 100
+      },
+      holeSize: {
+        type: 'range',
+        min: 30,
+        max: 500,
+        step: 10,
+        value: 150
+      },
+      sensitivity: {
+        type: 'range',
+        min: 0.05,
+        max: 5,
+        step: 0.10,
+        value: 1
+      }
     }
-  }
   }
 
   socket.emit('obj', ctrlObj);
@@ -76,21 +76,21 @@ function init() {
   $('#board').height(h);
   $('#board').width(w);
   $('#board').css({
-      "background-color": "#32c9d6"
+    "background-color": "#32c9d6"
   });
 
 
   var holeSize = 100 * (1 + 0.5);
-$('#ball').css({
-  "transition": "all",
-  "position": "absolute",
-  "width": "100px",
-  "height": "100px",
-  "border-radius": "50%",
-  "background": "white",
-  "box-shadow": "3px 3px 5px 6px #6E6E6E",
-  "z-index": "1"
-})
+  $('#ball').css({
+    "transition": "all",
+    "position": "absolute",
+    "width": "100px",
+    "height": "100px",
+    "border-radius": "50%",
+    "background": "white",
+    "box-shadow": "3px 3px 5px 6px #6E6E6E",
+    "z-index": "1"
+  })
 
   $('#hole').css({
     "transition": "all",
@@ -140,13 +140,11 @@ $('#ball').css({
   //
   if (window.DeviceOrientationEvent) {
 
-  window.addEventListener("deviceorientation", function(event)
-  {
-  	ball.velocity.y = ball.sensitivity * Math.round(event.beta);
+    window.addEventListener("deviceorientation", function(event) {
+      ball.velocity.y = ball.sensitivity * Math.round(event.beta);
 
-  	ball.velocity.x = ball.sensitivity * Math.round(event.gamma);
-      }
-                             )
+      ball.velocity.x = ball.sensitivity * Math.round(event.gamma);
+    })
   };
 
   update();
@@ -158,7 +156,7 @@ function drawPic() {
   var obj = {
     'h': board.offsetHeight,
     'w': board.offsetWidth,
-    'html': board.outerHTML.replace(/\n/g,'')
+    'html': board.outerHTML.replace(/\n/g, '')
   }
   socket.emit('image', obj);
   //
@@ -170,7 +168,7 @@ function drawPic() {
   //   });
 }
 
-setInterval(drawPic, 250);  //need to figure out a better way to screen cast
+setInterval(drawPic, 250); //need to figure out a better way to screen cast
 
 
 socket.on('changeVariable', arr => {
@@ -200,7 +198,7 @@ function update() {
   }
 
   if (ball.position.x > (w - 100) && ball.velocity.x > 0) {
-     ball.position.x = w-100;
+    ball.position.x = w - 100;
     // ball.velocity.x = -ball.velocity.x;
   }
 
@@ -210,12 +208,12 @@ function update() {
   }
 
   if (ball.position.y > (h - 100) && ball.velocity.y > 0) {
-     ball.position.y = h-100;
+    ball.position.y = h - 100;
     // ball.velocity.y = -ball.velocity.y;
   }
 
   if (ball.position.y < 0 && ball.velocity.y < 0) {
-     ball.position.y = 0;
+    ball.position.y = 0;
     // ball.velocity.y = -ball.velocity.y;
   }
   if (ball.counter % 10 === 0) {
