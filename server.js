@@ -1,33 +1,19 @@
 var express = require('express'),
   app = express(),
-  minty = require ('minty'),
   http = require('http').Server(app),
   io = require('socket.io')(http),
   fs = require('fs'),
   path = require('path'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
-<<<<<<< HEAD
-  buildPic = require('./buildPic'),
-  qs = require('qs');
-  // mongoURI = 'mongodb://localhost/GameUsers';
-  // UserCtrl = require('./authenticate/userStuff'),
-  // mongoose = require('mongoose'),
-
-var q;
-
-// mongoose.connect(mongoURI);
-=======
   qs = require('qs'),
   mongoURI = 'mongodb://localhost/GameUsers',
   UserCtrl = require('./authenticate/userController'),
   SessionCtrl = require('./authenticate/sessionController')
   mongoose = require('mongoose');
 var q = '';
-minty.file(path.join(__filename))
 
 mongoose.connect(mongoURI);
->>>>>>> 8c5fb00ae5b862d3ab90ee47fd28bc56e5341e4d
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
@@ -94,6 +80,12 @@ app.get('/controller', function(req, res) {
   // res.render('./controller/controller');
 });
 
+app.get('/controller3', function(req, res) {
+  q = '/' + req.query.id;
+  res.sendFile(path.join(__dirname, '/controller/controller3.html'));
+  // res.render('./controller/controller');
+});
+
 app.get('/snake', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
 
@@ -117,6 +109,27 @@ app.get('*.css', function(req, res) {
   });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
+
+// app.get('/controller/font-awesome/fonts/fontawesome-webfont.woff?v=4.1.0', function(req, res) {
+//   res.writeHead(200, {
+//     'content-type': 'text/css; charset=UTF-8'
+//   });
+//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
+// });
+//
+// app.get('/controller/js/gritter/images/ie-spacer.gif', function(req, res) {
+//   res.writeHead(200, {
+//     'content-type': 'text/css; charset=UTF-8'
+//   });
+//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
+// });
+//
+// app.get('/controller/font-awesome/fonts/fontawesome-webfont.ttf?v=4.1.0', function(req, res) {
+//   res.writeHead(200, {
+//     'content-type': 'text/css; charset=UTF-8'
+//   });
+//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
+// });
 
 app.get('*.jpg', function(req, res) {
   res.writeHead(200, {
