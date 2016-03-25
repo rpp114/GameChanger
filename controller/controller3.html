@@ -1,4 +1,4 @@
-8<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -23,6 +23,7 @@
           <a href="index.html" class="logo"><b>VICISSITUTOR</b></a>
           <div class="top-menu">
             <ul class="nav pull-right top-menu">
+
                   <li><a class="logout" href="/">Logout</a></li>
             </ul>
           </div>
@@ -242,6 +243,7 @@
             localStorage.setItem(ctrlObj[key], ctrlObj[key].value)
           }
           if (ctrlObj[key].type === 'range') {
+
             $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>' + properSpacing(key) + '</h3><center><input type="text" value="' + ctrlObj[key].value + '" class="dial" id="' + key +
               '" oninput="function(){console.log("hi")}" data-step="' + ctrlObj[
                 key].step + '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max + '" data-width="100" data-thickness="0.4" padding="20px"/></center></td>');
