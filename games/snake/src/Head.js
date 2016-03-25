@@ -54,6 +54,8 @@ function Head($el, size) {
     });
 
     this.elGrid = $el.height() / this.size;
+    this.node.width = this.size;
+    this.node.height = this.size;
     this.node.css({
       'height': this.size,
       'width': this.size

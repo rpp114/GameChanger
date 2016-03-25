@@ -86,7 +86,7 @@
                 </li>
 
                 <li class="sub-menu">
-                    <a href="javascript:;" >
+                    <a id='copyurl'>
                         <i class="fa fa-copy"></i>
                         <span>Copy Client URL</span>
                     </a>
@@ -163,7 +163,7 @@
         </section>
     </section>
 </section>
-
+  <p id='urltocopy' style='font-size:1px;'></p>
   <script src='/socket.io/socket.io.js'></script>
   <!-- <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script> -->
   <script src="controller/js/jquery.js"></script>
@@ -200,18 +200,28 @@
   var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 
     var socket = io(qs);
+    var url = window.location.origin +'/game?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+    $('#urltocopy').text(url);
 
-    var url = 'localhost:3000/' + localStorage.getItem('gameChoice') + '?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-    $('#url').text(url);
-    $('#button').click(function(event) {
-        var range = document.createRange();
-        var selection = window.getSelection();
-        range.selectNodeContents(document.getElementById('url'));
-        selection.removeAllRanges();
-        selection.addRange(range);
-        document.execCommand('copy');
-        selection.removeAllRanges();
-      });
+    $('#copyurl').click(function() {
+      var range = document.createRange();
+      var selection = window.getSelection();
+      range.selectNodeContents(document.getElementById('urltocopy'));
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand('copy');
+      selection.removeAllRanges()
+    })
+    //
+    // $('#button').click(function(event) {
+    //     var range = document.createRange();
+    //     var selection = window.getSelection();
+    //     range.selectNodeContents(document.getElementById('url'));
+    //     selection.removeAllRanges();
+    //     selection.addRange(range);
+    //     document.execCommand('copy');
+    //     selection.removeAllRanges();
+    //   });
 
     var ctrlObj = {};
     var graphCounter = 0;
