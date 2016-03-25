@@ -65,7 +65,7 @@ function startSocket(nameSpace) {
     //captures img from game and emits to controller
     socket.on('image', imgObj => {
       // console.log(imgObj);
-      buildPic(imgObj, nsp);
+      // buildPic(imgObj, nsp);
     });
 
     socket.on('chartData', data => {
