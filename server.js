@@ -50,10 +50,10 @@ function startSocket(nameSpace) {
   nsp.on('connection', function(socket) {
     var socketCount = Object.keys(socketClients).length;
     socketClients[socket.id] = socket;
-    console.log('users connected: ', socketCount);
+    // console.log('users connected: ', socketCount);
 
     socket.on('obj', function(val) {
-      console.log('received Initial Object');
+      // console.log('received Initial Object');
       nsp.emit('obj', val);
     });
 
@@ -64,7 +64,7 @@ function startSocket(nameSpace) {
 
     //captures img from game and emits to controller
     socket.on('image', imgObj => {
-      console.log(imgObj);
+      // console.log(imgObj);
       buildPic(imgObj, nsp);
     });
 
@@ -78,7 +78,7 @@ function startSocket(nameSpace) {
     });
 
     socket.on('disconnect', () => {
-      console.log('disconnect and remove');
+      // console.log('disconnect and remove');
       delete socketClients[socket.id];
     });
   });
