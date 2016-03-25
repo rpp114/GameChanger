@@ -8,7 +8,7 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   buildPic = require('./buildPic'),
   qs = require('qs'),
-  mongoURI = 'mongodb://localhost/GameUsers',
+  mongoURI = 'mongodb://ip-172-31-43-60.us-west-2.compute.internal',
   UserCtrl = require('./authenticate/userController'),
   SessionCtrl = require('./authenticate/sessionController'),
 mongoose = require('mongoose');
@@ -63,6 +63,7 @@ function startSocket(nameSpace) {
 
     //captures img from game and emits to controller
     socket.on('image', imgObj => {
+      console.log(imgObj);
       buildPic(imgObj, nsp);
     });
 
