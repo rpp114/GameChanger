@@ -106,10 +106,10 @@
                     <h5>Performance</h5>
                   </div>
                 <!-- <span><img src='logo.jpg'style='width:80%; height:80%; margin: 0 auto'/></span> -->
-                  <div class='module' id='dataDisplay'>
-                    <div id="graph"></div>
-                    <div id='graphOptions'></div>
-                  </div>
+
+                    <center><div id="graph"></div></center>
+                    <center><div id='graphOptions'></div></center>
+
 
                 </div>
               </div>
@@ -243,9 +243,10 @@
             localStorage.setItem(ctrlObj[key], ctrlObj[key].value)
           }
           if (ctrlObj[key].type === 'range') {
-            $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>' + properSpacing(key) + '</h3><input type="text" value="' + ctrlObj[key].value + '" class="dial" id="' + key +
+
+            $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>' + properSpacing(key) + '</h3><center><input type="text" value="' + ctrlObj[key].value + '" class="dial" id="' + key +
               '" oninput="function(){console.log("hi")}" data-step="' + ctrlObj[
-                key].step + '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max + '" data-width="100" data-thickness="0.4" padding="20px"/></td>');
+                key].step + '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max + '" data-width="100" data-thickness="0.4" padding="20px"/></center></td>');
           } // if (ctrlObj[key].type==='button' ) $( '#controls').append( '<button id="' + key + '"></button>');
         }
         $(document).ready(function($) {
