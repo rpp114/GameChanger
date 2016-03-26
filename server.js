@@ -99,11 +99,11 @@ app.get('/controller', function(req, res) {
   return res.send('Please login');
 });
 
-// app.get('/controller3', function(req, res) {
-//   q = '/' + req.query.id;
-//   res.sendFile(path.join(__dirname, '/controller/controller3.html'));
-//   // res.render('./controller/controller');
-// });
+app.get('/controller3', function(req, res) {
+  q = '/' + req.query.id;
+  res.sendFile(path.join(__dirname, '/controller/controller3.html'));
+  // res.render('./controller/controller');
+});
 
 app.get('/snake', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
