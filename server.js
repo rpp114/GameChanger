@@ -8,6 +8,7 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   buildPic = require('./buildPic'),
   qs = require('qs'),
+  cors = require('cors'),
   mongoURI = 'mongodb://localhost/GameUsers',
   UserCtrl = require('./authenticate/userController'),
   SessionCtrl = require('./authenticate/sessionController'),
@@ -19,6 +20,7 @@ var nameOfGame = 'snake';
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
 app.use(cookieParser());
+app.use(cors());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 // app.get('/*', function(req, res, next) {
@@ -36,6 +38,9 @@ app.get('/welcome', function(req, res) {
   res.sendFile(path.join(__dirname, '/welcome.html'));
 });
 
+app.get('/phaser', function(req,res) {
+  res.sendFile(path.join(__dirname, '/games/Phaser-Groups/shoot.html'))
+})
 
 // app.post('/signup', UserCtrl.createUser);
 app.post('/login', UserCtrl.verify);
