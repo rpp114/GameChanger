@@ -211,7 +211,7 @@ $(document).ready(function() {
                 }
               } else {
                 head.isPaused = !head.isPaused;
-                head.move();
+                head.move(); 
               }
               if(head.currentDirection !== dirs[swipedir]) {
                 head.counter++;
