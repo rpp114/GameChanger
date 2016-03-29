@@ -14,7 +14,6 @@ module.exports = function buildPng(imgObj, socketNameSpace) {
   var svg = buildImg(imgObj);
   var sitePage;
 
-
   // spins up new page in existing phantom instance to load SVG and create PNG
 
   phantomInstance.createPage()
@@ -46,7 +45,13 @@ module.exports = function buildPng(imgObj, socketNameSpace) {
 
 // adds appropriate context to image svg info from player.
 var buildImg = function(imgObj) {
-  var xml = '<foreignObject x="0" y="0" width="100%" height="100%">' + imgObj.html + '</foreignObject>';
+
+  var re = /<img\s+[^>]*src="([^"]*)"[^>]*>/;
+
+  var len = imgObj.html.match(re).index + imgObj.html.match(re)[0].length
+  var imgData = imgObj.html.slice(0,len) + '</img>' + imgObj.html.slice(len);
+
+  var xml = '<foreignObject x="0" y="0" width="100%" height="100%">' + imgData + '</foreignObject>';
   var foreignObject = '<svg xmlns="http://www.w3.org/2000/svg" width="' + imgObj.w + '" height="' + imgObj.h + '">' + xml + '</svg>';
   return 'data:image/svg+xml;charset=utf-8,' + foreignObject;
 }

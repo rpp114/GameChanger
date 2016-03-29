@@ -8,6 +8,8 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   buildPic = require('./buildPic'),
   qs = require('qs'),
+  mongoURI = 'mongodb://localhost/GameUsers', //ip-172-31-43-60.us-west-2.compute.internal', //localhost/GameUsers'
+  cors = require('cors'),
   mongoURI = 'mongodb://localhost/GameUsers',
   UserCtrl = require('./authenticate/userController'),
   SessionCtrl = require('./authenticate/sessionController'),
@@ -19,6 +21,7 @@ var nameOfGame = 'snake';
 mongoose.connect(mongoURI);
 app.set('view engine', 'ejs');
 app.use(cookieParser());
+app.use(cors());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 // app.get('/*', function(req, res, next) {
@@ -36,6 +39,9 @@ app.get('/welcome', function(req, res) {
   res.sendFile(path.join(__dirname, '/welcome.html'));
 });
 
+app.get('/phaser', function(req,res) {
+  res.sendFile(path.join(__dirname, '/games/Phaser-Groups/shoot.html'))
+})
 
 // app.post('/signup', UserCtrl.createUser);
 app.post('/login', UserCtrl.verify);
@@ -50,10 +56,10 @@ function startSocket(nameSpace) {
   nsp.on('connection', function(socket) {
     var socketCount = Object.keys(socketClients).length;
     socketClients[socket.id] = socket;
-    console.log('users connected: ', socketCount);
+    // console.log('users connected: ', socketCount);
 
     socket.on('obj', function(val) {
-      console.log('received Initial Object');
+      // console.log('received Initial Object');
       nsp.emit('obj', val);
     });
 
@@ -64,7 +70,11 @@ function startSocket(nameSpace) {
 
     //captures img from game and emits to controller
     socket.on('image', imgObj => {
-      buildPic(imgObj, nsp);
+      if(imgObj.h)
+        buildPic(imgObj, nsp);
+      else{
+        nsp.emit('image', imgObj)
+      }
     });
 
     socket.on('chartData', data => {
@@ -77,7 +87,7 @@ function startSocket(nameSpace) {
     });
 
     socket.on('disconnect', () => {
-      console.log('disconnect and remove');
+      // console.log('disconnect and remove');
       delete socketClients[socket.id];
     });
   });

@@ -65,6 +65,12 @@ h1 {
 #button {
   margin-left: 20px;
 }
+
+.selectedButton {
+  background-color: black;
+  color: white;
+}
+
 #screenCast {
   /*position: absolute;*/
   top: 10px;
@@ -98,15 +104,25 @@ h1 {
   height: 400px;
   width:400px;
   border: 1px solid black;*/
-  margin-top: -50px;
+  margin-top: 10px;
   /*margin-left: 50%;*/
   /*position: absolute;*/
 }
 
+.graphButtons {
+  z-index: 2;
+}
+
+#graph>svg {
+  z-index: -1;
+  padding: 0;
+  margin: 0;
+}
+
 #graph {
   position: relative;
-  margin-left: 0px;
-  margin-top: -35px;
+  margin-left: -35px;
+  /*margin-top: -35px;*/
   height: 100%;
   width: 100%;
 }
@@ -207,9 +223,9 @@ h1 {
 /*Theme Buttons*/
 
 .btn-theme {
-  color: #fff;
+  color: #ffffff;
   background-color: #68dff0;
-  border-color: #48bcb4;
+  border-color: rgb(72, 188, 180);
 }
 .btn-theme:hover,
 .btn-theme:focus,
@@ -1196,12 +1212,14 @@ PANELS CONFIGURATIONS
 	text-align: center;
 	background: #ffffff;
 	color: #ccd1d9;
+
 }
 
 .white-panel p {
 	margin-top: 5px;
 	font-weight: 700;
 	/*margin-left: 15px;*/
+  z-index: -2;
 }
 .white-panel .white-header {
 	background: #f4f4f4;
