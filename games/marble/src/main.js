@@ -123,60 +123,61 @@ function init() {
   }
   renderHole(holeSize);
 
-<<<<<<< HEAD
-    window.addEventListener("deviceorientation", function(event) {
-      ball.velocity.y = ball.sensitivity * Math.round(event.beta);
+  window.addEventListener("deviceorientation", function(event) {
+    ball.velocity.y = ball.sensitivity * Math.round(event.beta);
 
-=======
-  $(window).on('keydown', function(e) {
-    if (e.keyCode === 37) {
-      console.log('pressed left');
-      ball.currentDirection = 'left'
-      ball.velocity.x -= ball.sensitivity * 10
-    }
-    if (e.keyCode === 39) {
-      console.log('pressed right');
-      ball.currentDirection = 'right'
-      ball.velocity.x += ball.sensitivity * 10
-    }
-    if (e.keyCode === 40) {
-      console.log('pressed down');
-      ball.currentDirection = 'down'
-      ball.velocity.y += ball.sensitivity * 10
-    }
-    if (e.keyCode === 38) {
-      console.log('pressed up');
-      ball.currentDirection = 'up'
-      ball.velocity.y -= ball.sensitivity * 10
-    }
-  });
 
-  if (window.DeviceOrientationEvent) {
-
-    window.addEventListener("deviceorientation", function(event) {
-      var orientation = 'portrait-primary';
-      // window.screen.lockOrientationUniversal = window.screen.lockOrientation || window.screen.mozLockOrientation || window.screen.msLockOrientation;
-      if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen();
-        } else if (document.documentElement.msRequestFullscreen) {
-          document.documentElement.msRequestFullscreen();
-        } else if (document.documentElement.mozRequestFullScreen) {
-          document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-          document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        }
+    $(window).on('keydown', function(e) {
+      if (e.keyCode === 37) {
+        console.log('pressed left');
+        ball.currentDirection = 'left'
+        ball.velocity.x -= ball.sensitivity * 10
       }
+      if (e.keyCode === 39) {
+        console.log('pressed right');
+        ball.currentDirection = 'right'
+        ball.velocity.x += ball.sensitivity * 10
+      }
+      if (e.keyCode === 40) {
+        console.log('pressed down');
+        ball.currentDirection = 'down'
+        ball.velocity.y += ball.sensitivity * 10
+      }
+      if (e.keyCode === 38) {
+        console.log('pressed up');
+        ball.currentDirection = 'up'
+        ball.velocity.y -= ball.sensitivity * 10
+      }
+    });
 
-      window.screen.orientation.lock(orientation);
-      ball.velocity.y = ball.sensitivity * Math.round(event.beta);
+    if (window.DeviceOrientationEvent) {
 
->>>>>>> b4629fdb142d774f2bd6425fac02bb3c557134cd
-      ball.velocity.x = ball.sensitivity * Math.round(event.gamma);
-    })
-  };
+      window.addEventListener("deviceorientation", function(event) {
+        var orientation = 'portrait-primary';
+        // window.screen.lockOrientationUniversal = window.screen.lockOrientation || window.screen.mozLockOrientation || window.screen.msLockOrientation;
+        if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen();
+          } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+          } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+          }
+        }
 
-  update();
+        window.screen.orientation.lock(orientation);
+        ball.velocity.y = ball.sensitivity * Math.round(event.beta);
+
+        ball.velocity.x = ball.sensitivity * Math.round(event.gamma);
+      })
+    };
+
+    update();
+  })
+  setInterval(drawPic, 250); //need to figure out a better way to screen cast
+
 }
 
 function drawPic() {
@@ -188,16 +189,8 @@ function drawPic() {
     'html': board.outerHTML.replace(/\n/g, '')
   }
   socket.emit('image', obj);
-  //
-  // domtoimage.toPng(board)
-  //   .then(function(dataUrl) {
-  //   })
-  //   .catch(function(error) {
-  //     console.error('oops, something went wrong!', error);
-  //   });
 }
 
-setInterval(drawPic, 250); //need to figure out a better way to screen cast
 
 
 socket.on('changeVariable', arr => {
@@ -228,11 +221,8 @@ function update() {
 
   if (ball.position.x > (w - 100) && ball.velocity.x > 0) {
     ball.position.x = w - 100;
-<<<<<<< HEAD
-    // ball.velocity.x = -ball.velocity.x;
-=======
+
     ball.velocity.x = -ball.velocity.x;
->>>>>>> b4629fdb142d774f2bd6425fac02bb3c557134cd
   }
 
   if (ball.position.x < 0 && ball.velocity.x < 0) {
@@ -241,21 +231,11 @@ function update() {
   }
 
   if (ball.position.y > (h - 100) && ball.velocity.y > 0) {
-    ball.position.y = h - 100;
-<<<<<<< HEAD
-    // ball.velocity.y = -ball.velocity.y;
-=======
     ball.velocity.y = -ball.velocity.y;
->>>>>>> b4629fdb142d774f2bd6425fac02bb3c557134cd
   }
 
   if (ball.position.y < 0 && ball.velocity.y < 0) {
-    ball.position.y = 0;
-<<<<<<< HEAD
-    // ball.velocity.y = -ball.velocity.y;
-=======
     ball.velocity.y = -ball.velocity.y;
->>>>>>> b4629fdb142d774f2bd6425fac02bb3c557134cd
   }
   if (ball.counter % 10 === 0) {
     socket.emit('chartData', {

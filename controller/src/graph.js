@@ -1,61 +1,52 @@
-var m = [50, 50, 50, 50];
+var m = [10, 25, 10, 25];
 var w = 400 - m[1] - m[3];
-var h = 350 - m[0] - m[2];
+var h = 250 - m[0] - m[2];
 
 
-var x = d3.scale.linear().domain([0, 20]).range([0, w]);
+var x = d3.scale.linear().domain([0, 20]).range([0, w - 2 * m[1]]);
 
 
 var graph = d3.select("#graph").append("svg:svg")
-  .attr("width", w + m[1] + m[3])
+  .attr("width", w)
   .attr("height", h + m[0] + m[2])
   .append("svg:g")
   .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
+var xAxis = d3.svg.axis().scale(x).orient('bottom').ticks(5).tickSubdivide(true);
 
 graph.append("svg:g")
   .attr('class', 'x_axis')
-  .attr('transform', "translate(0," + h + ")")
+  .attr('transform', "translate(" + m[1] + "," + (h) + ")")
   .call(xAxis);
 
 
 
 var dataObj = {};
-var chartVariable ;
-var graphCounter;
+var chartVariable;
+var graphButtonsOnPage = false;
+
 
 socket.on('chartData', data => {
-  if ($('.graphButtons').length === 0) {
-    // $('#graphOptions').empty();
+  if (!graphButtonsOnPage) {
     var keys = Object.keys(data);
     keys.forEach(key => {
       var button = "<button class='graphButtons btn btn-default' id=\"" + key + "\" onclick='changeData(\"" + key + "\")'>" + key + "</button>"
       $("#graphOptions").append(button);
       dataObj[key] = [];
+      graphButtonsOnPage = true;
     })
 
-    chartVariable = keys[0];
-    // graph.append('text')
-    //   .attr('id', 'chartTitle')
-    //   .attr('x', (w/2))
-    //   .attr('y', 0 -(m[0]/2))
-    //   .attr('text-anchor', 'middle')
-    //   .style('font-size', '16px')
-    //   .style('text-decoration', 'underline')
-    //   .text(chartVariable)
-
+    changeData(keys[0]);
   }
   setData(data);
-  // console.log('variable is: ', chartVariable);
-  // console.log('dataObj is: ', dataObj);
-  // console.log('distance is: ', data);
   renderChart(chartVariable);
 })
 
 function changeData(key) {
+
   chartVariable = key;
-  // console.log(graph.select('text'));
+  $(".graphButtons").removeClass('selectedButton');
+  $("#" + chartVariable).addClass('selectedButton');
   $('#chartTitle').text(chartVariable);
 }
 
@@ -74,7 +65,7 @@ function setData(data) {
 function renderChart(key) {
   var dataArr = dataObj[key];
   var yMax = Math.max(...dataArr) * 1.25 || 1;
-  var yAxis = d3.scale.linear().domain([0, yMax ]).range([h, 0]);
+  var yAxis = d3.scale.linear().domain([0, yMax]).range([h, 0]);
 
   var line = d3.svg.line()
     .x(function(d, i) {
@@ -91,16 +82,16 @@ function renderChart(key) {
     })
 
 
-  var yAxisLeft = d3.svg.axis().scale(yAxis).ticks(Math.min(Math.floor(yMax),5)).orient('left');
+  var yAxisLeft = d3.svg.axis().scale(yAxis).ticks(Math.min(Math.floor(yMax), 5)).orient('left');
 
   graph.selectAll(".y_axis").remove();
   // console.log('data: ', dataArr);
   graph.append("svg:g")
     .attr("class", "y_axis")
-    .attr("transform", "translate(0, 0)")
+    .attr("transform", "translate(" + m[1] + ", 0)")
     .call(yAxisLeft);
 
   graph.selectAll(".plot").remove();
-  graph.append("svg:path").attr("class", "plot").attr("d", line(dataArr));
+  graph.append("svg:path").attr("class", "plot").attr("transform", "translate(" + m[1] + ", 0)").attr("d", line(dataArr));
 
 }
