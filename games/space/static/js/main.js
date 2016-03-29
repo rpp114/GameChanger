@@ -5,9 +5,9 @@ var GAME_HEIGHT = 700;
 var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 var socket = io(qs);
 var ship;
-var tween1, tween2;
+var tween1, tween2, tween3, tween4, tween5;
 var lasers;
-var aliens;
+var aliens1, aliens2, aliens3, aliens4, aliens5;
 var mouseTouchDown = false;
 
 // Create a Phaser game instance
@@ -57,41 +57,139 @@ function create() {
 	*/
 	lasers.createMultiple(20, 'laser');
 
-	aliens = game.add.group();
-	aliens.enableBody = true;
-	aliens.physicsBodyType = Phaser.Physics.ARCADE;
-	// aliens.createMultiple(20, 'alien');
-	for(var i = 0; i < 8; i ++) {
-		for(var j = 0; j < 5; j++) {
-			if(j % 2 === 0) {
-				var alien = aliens.create(i * 48, j * 50, 'ufo');
-        alien.anchor.setTo(0.5, 0.5);
-        // alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-        // alien.play('fly');
-        alien.body.moves = false;
-				alien.width = 50;
-				alien.height = 50;
-				tween1 = game.add.tween(alien).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-			} else {
-				var alien = aliens.create((i * 48) + 15, (j * 50), 'ufo');
-        alien.anchor.setTo(0.5, 0.5);
-        // alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-        // alien.play('fly');
-        alien.body.moves = false;
-				alien.width = 50;
-				alien.height = 50;
-				tween2 = game.add.tween(alien).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-			}
-		}
+	aliens1 = game.add.group();
+	aliens1.enableBody = true;
+	aliens1.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens1.create(i*48, 50, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
 	}
-	aliens.x = 450;
-	aliens.y = 100;
-	console.log(aliens);
+	aliens1.x = 450;
+	aliens1.y = 100;
+	tween1 = game.add.tween(aliens1).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+	tween1.onLoop.add(function () {aliens1.y += 10;},this);
+	aliens2 = game.add.group();
+	aliens2.enableBody = true;
+	aliens2.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens2.create(i*48, 100, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
+	}
+	aliens2.x = 450;
+	aliens2.y = 100;
+	tween2 = game.add.tween(aliens2).to( { x: 200 }, 1500, Phaser.Easing.Linear.None, true, 0, 2000, true);
+	tween2.onLoop.add(function () {aliens2.y += 10;},this);
+	aliens3 = game.add.group();
+	aliens3.enableBody = true;
+	aliens3.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens3.create(i*48, 150, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
+	}
+	aliens3.x = 450;
+	aliens3.y = 100;
+	tween3 = game.add.tween(aliens3).to( { x: 200 }, 1800, Phaser.Easing.Linear.None, true, 150, 2000, true);
+	tween3.onLoop.add(function () {aliens3.y += 10;},this);
+	aliens4 = game.add.group();
+	aliens4.enableBody = true;
+	aliens4.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens4.create(i*48, 200, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
+	}
+	aliens4.x = 450;
+	aliens4.y = 100;
+	tween4 = game.add.tween(aliens4).to( { x: 200 }, 1300, Phaser.Easing.Linear.None, true, 100, 2000, true);
+	tween4.onLoop.add(function () {aliens4.y += 10;},this);
+	aliens5 = game.add.group();
+	aliens5.enableBody = true;
+	aliens5.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens5.create(i*48, 250, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
+	}
+	aliens5.x = 450;
+	aliens5.y = 100;
+	tween5 = game.add.tween(aliens5).to( { x: 200 }, 1000, Phaser.Easing.Linear.None, true, 50, 2000, true);
+	tween5.onLoop.add(function () {aliens5.y += 10;},this);
+	// aliens.createMultiple(20, 'alien');
+	// for(var i = 0; i < 8; i ++) {
+	// 	for(var j = 0; j < 3; j++) {
+	// 		// if(j % 2 === 0) {
+	// 			var alien = aliens1.create(i * 48, j * 50, 'ufo');
+  //       alien.anchor.setTo(0.5, 0.5);
+  //       // alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+  //       // alien.play('fly');
+  //       alien.body.moves = false;
+	// 			alien.width = 50;
+	// 			alien.height = 50;
+			// } else {
+			// 	var alien = aliens1.create((i * 48), (j * 50) + 50, 'ufo');
+      //   alien.anchor.setTo(0.5, 0.5);
+      //   // alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+      //   // alien.play('fly');
+      //   alien.body.moves = false;
+			// 	alien.width = 50;
+			// 	alien.height = 50;
+			// 	// tween2 = game.add.tween(alien).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+			// }
+	// 	}
+	// }
+	// console.log(aliens);
 	// var tween = game.add.tween(aliens).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
 
     //  When the tween loops it calls descend
-    tween1.onLoop.add(function () {aliens.y -= 10;},this);
-    tween2.onLoop.add(function () {aliens.y += 10;},this);
+    // tween2.onLoop.add(function () {aliens.y += 10;},this);
+	// aliens2 = game.add.group();
+	// aliens2.enableBody = true;
+	// aliens2.physicsBodyType = Phaser.Physics.ARCADE;
+	// // aliens.createMultiple(20, 'alien');
+	// for(var i = 0; i < 8; i ++) {
+	// 	for(var j = 0; j < 3; j++) {
+	// 		if(j % 2 === 0) {
+	// 			var alien = aliens2.create(i * 48, j * 50, 'ufo');
+  //       alien.anchor.setTo(0.5, 0.5);
+  //       // alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+  //       // alien.play('fly');
+  //       alien.body.moves = false;
+	// 			alien.width = 50;
+	// 			alien.height = 50;
+	// 		} else {
+	// 			var alien = aliens2.create((i * 48), (j * 50) + 50, 'ufo');
+  //       alien.anchor.setTo(0.5, 0.5);
+  //       // alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+  //       // alien.play('fly');
+  //       alien.body.moves = false;
+	// 			alien.width = 50;
+	// 			alien.height = 50;
+	// 			// tween2 = game.add.tween(alien).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+	// 		}
+	// 	}
+	// }
+	// aliens2.x = 450;
+	// aliens2.y = 150;
+	// // console.log(aliens);
+	// // var tween = game.add.tween(aliens).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+	// tween2 = game.add.tween(aliens2).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 2000, 1000, true);
+	//
+  //   //  When the tween loops it calls descend
+  //   tween2.onLoop.add(function () {aliens2.y -= 10;},this);
+    // tween2.onLoop.add(function () {aliens.y += 10;},this);
 
 	/*
 		Create a ship using the sprite factory
