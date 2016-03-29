@@ -8,6 +8,7 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   buildPic = require('./buildPic'),
   qs = require('qs'),
+  mongoURI = 'mongodb://localhost/GameUsers', //ip-172-31-43-60.us-west-2.compute.internal', //localhost/GameUsers'
   cors = require('cors'),
   mongoURI = 'mongodb://localhost/GameUsers',
   UserCtrl = require('./authenticate/userController'),
@@ -55,10 +56,10 @@ function startSocket(nameSpace) {
   nsp.on('connection', function(socket) {
     var socketCount = Object.keys(socketClients).length;
     socketClients[socket.id] = socket;
-    console.log('users connected: ', socketCount);
+    // console.log('users connected: ', socketCount);
 
     socket.on('obj', function(val) {
-      console.log('received Initial Object');
+      // console.log('received Initial Object');
       nsp.emit('obj', val);
     });
 
@@ -86,7 +87,7 @@ function startSocket(nameSpace) {
     });
 
     socket.on('disconnect', () => {
-      console.log('disconnect and remove');
+      // console.log('disconnect and remove');
       delete socketClients[socket.id];
     });
   });
