@@ -23,7 +23,7 @@ var game = new Phaser.Game(
 // Preload assets
 function preload() {
 	game.canvas.id = 'canvas';
-	var dir = '/games/Phaser-Groups/static/img/assets/';
+	var dir = '/games/space/static/img/';
 	game.load.image('ship', dir + 'playerShip1_red.png');
 	game.load.image('laser', dir + 'laserBlue02.png');
 	game.load.image('ufo', dir + 'ufo.png', 32, 32);
