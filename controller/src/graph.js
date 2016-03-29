@@ -1,23 +1,24 @@
-var m = [10, 25, 10, 25];
-var w = 400 - m[1] - m[3];
+var m = [10, 30, 10, 10];
+// var width = $('#graph').width()
+// var w = width - m[1] - m[3];
 var h = 250 - m[0] - m[2];
 
 
-var x = d3.scale.linear().domain([0, 20]).range([0, w - 2 * m[1]]);
+// var x = d3.scale.linear().domain([0, 20]).range([0, w - 2 * m[1]]);
 
 
-var graph = d3.select("#graph").append("svg:svg")
-  .attr("width", w)
-  .attr("height", h + m[0] + m[2])
-  .append("svg:g")
-  .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
-
-var xAxis = d3.svg.axis().scale(x).orient('bottom').ticks(5).tickSubdivide(true);
-
-graph.append("svg:g")
-  .attr('class', 'x_axis')
-  .attr('transform', "translate(" + m[1] + "," + (h) + ")")
-  .call(xAxis);
+// var graph = d3.select("#graph").append("svg:svg")
+//   .attr("width", w)
+//   .attr("height", h + m[0] + m[2])
+//   .append("svg:g")
+//   .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+//
+// var xAxis = d3.svg.axis().scale(x).orient('bottom').ticks(5).tickSubdivide(true);
+//
+// graph.append("svg:g")
+//   .attr('class', 'x_axis')
+//   .attr('transform', "translate(" + m[1] + "," + (h) + ")")
+//   .call(xAxis);
 
 
 
@@ -50,6 +51,7 @@ function changeData(key) {
   $('#chartTitle').text(chartVariable);
 }
 
+
 function setData(data) {
   var vars = Object.keys(data);
   vars.forEach(key => {
@@ -62,7 +64,33 @@ function setData(data) {
   })
 }
 
+window.addEventListener('resize', () => {
+  renderChart(chartVariable)
+});
+
 function renderChart(key) {
+  $('#graph').empty()
+  var width = $('#graph').width()
+  var w = width - m[1] - m[3];
+
+  var x = d3.scale.linear().domain([0, 20]).range([0, w - 2 * m[1]]);
+
+  var graph = d3.select("#graph").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h + m[0] + m[2])
+    .append("svg:g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+  var xAxis = d3.svg.axis().scale(x).orient('bottom').ticks(5).tickSubdivide(true);
+
+  graph.append("svg:g")
+    .attr('class', 'x_axis')
+    .attr('transform', "translate(" + m[1] + "," + (h) + ")")
+    .call(xAxis);
+
+
+
+
   var dataArr = dataObj[key];
   var yMax = Math.max(...dataArr) * 1.25 || 1;
   var yAxis = d3.scale.linear().domain([0, yMax]).range([h, 0]);
