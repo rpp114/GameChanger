@@ -73,7 +73,6 @@ function renderChart(key) {
     .attr('transform', "translate(" + m[1] + "," + (h) + ")")
     .call(xAxis);
 
-
   var dataArr = dataObj[key];
   var yMax = Math.max(...dataArr) * 1.25 || 1;
   var yAxis = d3.scale.linear().domain([0, yMax]).range([h, 0]);

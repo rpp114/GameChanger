@@ -52,10 +52,20 @@ var socketClients = {};
 function startSocket(nameSpace) {
 
   var nsp = io.of(nameSpace);
+  nsp.max_connections = 3;
+  nsp.connections = 0;
 
   nsp.on('connection', function(socket) {
-    var socketCount = Object.keys(socketClients).length;
-    socketClients[socket.id] = socket;
+    if( this.connections >= this.max_connections) {
+      nsp.emit('disconnect', 'Sorry Sucka');
+      console.log('Too Many Connections');
+      socket.disconnect()
+    }else {
+      this.connections++;
+      socketClients[socket.id] = socket;
+    }
+    console.log(Object.keys(socketClients));
+    console.log(this.connections);
     // console.log('users connected: ', socketCount);
 
     socket.on('obj', function(val) {
@@ -87,8 +97,11 @@ function startSocket(nameSpace) {
     });
 
     socket.on('disconnect', () => {
-      // console.log('disconnect and remove');
+      console.log('disconnect and remove');
+      this.connections--;
       delete socketClients[socket.id];
+      socket.disconnect();
+      console.log(this.connections);
     });
   });
 }
