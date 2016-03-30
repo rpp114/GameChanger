@@ -43,27 +43,20 @@
             <h4 class="modal-title" id="myModalLabel">Vicissitutor</h4>
           </div>
           <div class="modal-body">
-            <h1>Select a game to control.</h1>
+            <h1>Select a game to control by clicking on the game name.</h1>
             <form>
-              <select id='gameChoice' name="game">
-                <option value="snake">Snake</option>
-                <option value="marble">Marble</option>
-                <option value="tron">Tron</option>
-                <option value="space">Space Invader</option>
-              </select>
               <h2>Game Descriptions</h2>
-              <p><strong>Snake Game: </strong>
+              <p><a href='#' id='snake' data-dismiss='modal'><strong>Snake Game: </strong></a>
                 <br>Snake is a game where the player maneuvers a line which grows in length, with the line itself being a primary obstacle.</p>
-              <p><strong>Marble Game: </strong>
+              <p><a href='#' id='marble' data-dismiss='modal'><strong>Marble Game: </strong></a>
                 <br>The objective of the marble game is to get the ball into the hole.</p>
-              <p><strong>Tron: </strong>
-                <br>Tron</p>
-              <p><strong>Space Invaders: </strong>
-                <br>Shoot things.</p>
+              <p><a href='#' id='shapes' data-dismiss='modal'><strong>Shapes: </strong></a>
+                <br>Shapes</p>
+              <p><a href='#' id='space' data-dismiss='modal'><strong>Space Invaders: </strong></a>
+                <br>Shoot aliens down.</p>
 
               <div class="modal-footer">
-                <button id='change' type="button" class="btn btn-primary" data-dismiss="modal">Change Game</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
               </div>
               <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js">
               $('#change').submit(function(e) {
@@ -298,11 +291,47 @@
       $('#screenCast').get(0).appendChild(img);
     })
 
-    $('#change').click(function() {
+    $('#snake').click(function() {
       $.ajax({
         url: '/index',
         data: JSON.stringify({
-          gameName: $('#gameChoice').val()
+          gameName: 'snake'
+        }),
+        type: 'POST',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: 'json'
+      })
+      socket.emit('changeGame')
+    })
+    $('#marble').click(function() {
+      $.ajax({
+        url: '/index',
+        data: JSON.stringify({
+          gameName: 'marble'
+        }),
+        type: 'POST',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: 'json'
+      })
+      socket.emit('changeGame')
+    })
+    $('#shapes').click(function() {
+      $.ajax({
+        url: '/index',
+        data: JSON.stringify({
+          gameName: 'shapes'
+        }),
+        type: 'POST',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: 'json'
+      })
+      socket.emit('changeGame')
+    })
+    $('#space').click(function() {
+      $.ajax({
+        url: '/index',
+        data: JSON.stringify({
+          gameName: 'space'
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
