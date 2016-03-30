@@ -52,10 +52,20 @@ var socketClients = {};
 function startSocket(nameSpace) {
 
   var nsp = io.of(nameSpace);
+  nsp.max_connections = 3;
+  nsp.connections = 0;
 
   nsp.on('connection', function(socket) {
-    var socketCount = Object.keys(socketClients).length;
-    socketClients[socket.id] = socket;
+    if( this.connections >= this.max_connections) {
+      nsp.emit('disconnect', 'Sorry Sucka');
+      console.log('Too Many Connections');
+      socket.disconnect()
+    }else {
+      this.connections++;
+      socketClients[socket.id] = socket;
+    }
+    console.log(Object.keys(socketClients));
+    console.log(this.connections);
     // console.log('users connected: ', socketCount);
 
     socket.on('obj', function(val) {
@@ -87,8 +97,11 @@ function startSocket(nameSpace) {
     });
 
     socket.on('disconnect', () => {
-      // console.log('disconnect and remove');
+      console.log('disconnect and remove');
+      this.connections--;
       delete socketClients[socket.id];
+      socket.disconnect();
+      console.log(this.connections);
     });
   });
 }
@@ -115,11 +128,6 @@ app.get('/controller3', function(req, res) {
   // res.render('./controller/controller');
 });
 
-app.get('/snake', function(req, res) {
-  res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
-  client = 'snake';
-});
-
 app.post('/index', function(req, res) {
   nameOfGame = req.body.gameName.toLowerCase();
   res.send('yes');
@@ -132,6 +140,15 @@ app.get('/game', function(req, res) {
 app.get('/marble', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/marble/index.html'));
   client = 'marble';
+});
+app.get('/snake', function(req, res) {
+  res.sendFile(path.join(__dirname, '/games/snake/index.html'));
+  client = 'snake';
+});
+
+app.get('/shapes', function(req, res) {
+  res.sendFile(path.join(__dirname, '/games/shapes/index.html'));
+  client = 'shapes';
 });
 
 app.get('*.js', function(req, res) {
@@ -148,26 +165,6 @@ app.get('*.css', function(req, res) {
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
-// app.get('/controller/font-awesome/fonts/fontawesome-webfont.woff?v=4.1.0', function(req, res) {
-//   res.writeHead(200, {
-//     'content-type': 'text/css; charset=UTF-8'
-//   });
-//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
-// });
-//
-// app.get('/controller/js/gritter/images/ie-spacer.gif', function(req, res) {
-//   res.writeHead(200, {
-//     'content-type': 'text/css; charset=UTF-8'
-//   });
-//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
-// });
-//
-// app.get('/controller/font-awesome/fonts/fontawesome-webfont.ttf?v=4.1.0', function(req, res) {
-//   res.writeHead(200, {
-//     'content-type': 'text/css; charset=UTF-8'
-//   });
-//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
-// });
 
 app.get('*.jpg', function(req, res) {
   res.writeHead(200, {

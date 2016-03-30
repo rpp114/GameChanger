@@ -45,6 +45,7 @@
           <div class="modal-body">
             <h1>Select a game to control by clicking on the game name.</h1>
             <form>
+
               <h2>Game Descriptions</h2>
               <p><a href='#' id='snake' data-dismiss='modal'><strong>Snake Game: </strong></a>
                 <br>Snake is a game where the player maneuvers a line which grows in length, with the line itself being a primary obstacle.</p>
@@ -303,6 +304,9 @@
       })
       socket.emit('changeGame')
     })
+<<<<<<< HEAD
+
+=======
     $('#marble').click(function() {
       $.ajax({
         url: '/index',
@@ -339,6 +343,7 @@
       })
       socket.emit('changeGame', $('#gameChoice').val())
     })
+>>>>>>> 86d381d6a7f0fce6c78e3aecb61a3690d89422c0
     $('.logout').click(function() {
       $.get('/logout')
     })

@@ -1,32 +1,12 @@
 var m = [10, 30, 10, 10];
-// var width = $('#graph').width()
-// var w = width - m[1] - m[3];
 var h = 250 - m[0] - m[2];
-
-
-// var x = d3.scale.linear().domain([0, 20]).range([0, w - 2 * m[1]]);
-
-
-// var graph = d3.select("#graph").append("svg:svg")
-//   .attr("width", w)
-//   .attr("height", h + m[0] + m[2])
-//   .append("svg:g")
-//   .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
-//
-// var xAxis = d3.svg.axis().scale(x).orient('bottom').ticks(5).tickSubdivide(true);
-//
-// graph.append("svg:g")
-//   .attr('class', 'x_axis')
-//   .attr('transform', "translate(" + m[1] + "," + (h) + ")")
-//   .call(xAxis);
-
 
 
 var dataObj = {};
 var chartVariable;
 var graphButtonsOnPage = false;
 
-
+//recieves sockeet information from game player.
 socket.on('chartData', data => {
   if (!graphButtonsOnPage) {
     var keys = Object.keys(data);
@@ -43,6 +23,9 @@ socket.on('chartData', data => {
   renderChart(chartVariable);
 })
 
+
+// changes data for chart
+
 function changeData(key) {
 
   chartVariable = key;
@@ -51,7 +34,7 @@ function changeData(key) {
   $('#chartTitle').text(chartVariable);
 }
 
-
+//sets data object and builds data array for chart
 function setData(data) {
   var vars = Object.keys(data);
   vars.forEach(key => {
@@ -67,6 +50,8 @@ function setData(data) {
 window.addEventListener('resize', () => {
   renderChart(chartVariable)
 });
+
+//renders chart
 
 function renderChart(key) {
   $('#graph').empty()
@@ -88,23 +73,16 @@ function renderChart(key) {
     .attr('transform', "translate(" + m[1] + "," + (h) + ")")
     .call(xAxis);
 
-
-
-
   var dataArr = dataObj[key];
   var yMax = Math.max(...dataArr) * 1.25 || 1;
   var yAxis = d3.scale.linear().domain([0, yMax]).range([h, 0]);
 
   var line = d3.svg.line()
     .x(function(d, i) {
-      // verbose logging to show what's actually being done
-      // console.log('Plotting X value for data point: ' + d + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
       // return the X coordinate where we want to plot this datapoint
       return x(i);
     })
     .y(function(d) {
-      // verbose logging to show what's actually being done
-      // console.log('Plotting Y value for data point: ' + d + ' to be at: ' + yAxis(d) + " using our yScale.");
       // return the Y coordinate where we want to plot this datapoint
       return yAxis(d);
     })
@@ -113,7 +91,7 @@ function renderChart(key) {
   var yAxisLeft = d3.svg.axis().scale(yAxis).ticks(Math.min(Math.floor(yMax), 5)).orient('left');
 
   graph.selectAll(".y_axis").remove();
-  // console.log('data: ', dataArr);
+
   graph.append("svg:g")
     .attr("class", "y_axis")
     .attr("transform", "translate(" + m[1] + ", 0)")

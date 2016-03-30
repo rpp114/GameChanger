@@ -41,7 +41,6 @@ $(document).ready(function() {
         }
       }
     };
-    // console.log('emit obj');
     socket.emit('obj', ctrlObj);
 
     function startGame() {
