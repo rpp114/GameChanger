@@ -48,7 +48,8 @@
               <select id='gameChoice' name="game">
                 <option value="snake">Snake</option>
                 <option value="marble">Marble</option>
-                <option value="tron">Tron</option>
+                <option value="shapes">Shapes</option>
+                <option value="shapes">Tron</option>
                 <option value="space">Space Invader</option>
               </select>
               <h2>Game Descriptions</h2>
@@ -56,6 +57,8 @@
                 <br>Snake is a game where the player maneuvers a line which grows in length, with the line itself being a primary obstacle.</p>
               <p><strong>Marble Game: </strong>
                 <br>The objective of the marble game is to get the ball into the hole.</p>
+              <p><strong>Shapes: </strong>
+                <br>Shapes</p>
               <p><strong>Tron: </strong>
                 <br>Tron</p>
               <p><strong>Space Invaders: </strong>
@@ -309,6 +312,7 @@
       })
       socket.emit('changeGame')
     })
+
     $('.logout').click(function() {
       $.get('/logout')
     })

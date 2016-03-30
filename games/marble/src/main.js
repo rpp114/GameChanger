@@ -27,7 +27,6 @@ var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') 
 var socket = io(qs);
 
 socket.on('changeGame', () => {
-  console.log('changedGame');
   location.reload();
 })
 
