@@ -1,8 +1,8 @@
 var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 var socket = io(qs);
 $(document).ready(function() {
-    socket.on('changeGame', () => {
-      console.log('changedGame');
+    socket.on('changeGame', (e) => {
+      localStorage.setItem('gameName', e)
       location.reload();
     })
     var ctrlObj = {
@@ -211,7 +211,7 @@ $(document).ready(function() {
                 }
               } else {
                 head.isPaused = !head.isPaused;
-                head.move(); 
+                head.move();
               }
               if(head.currentDirection !== dirs[swipedir]) {
                 head.counter++;
