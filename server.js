@@ -40,7 +40,7 @@ app.get('/welcome', function(req, res) {
 });
 
 app.get('/phaser', function(req,res) {
-  res.sendFile(path.join(__dirname, '/games/Phaser-Groups/shoot.html'))
+  res.sendFile(path.join(__dirname, '/games/space/shoot.html'))
 })
 
 // app.post('/signup', UserCtrl.createUser);
