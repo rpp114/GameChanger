@@ -61,7 +61,6 @@ function init() {
   }
 
   socket.emit('obj', ctrlObj);
-  console.log(ctrlObj);
 
   $('#board').append('<div id="ball"></div>');
   $('#board').append('<div id="hole"></div>');
@@ -196,7 +195,6 @@ function drawPic() {
 
 socket.on('changeVariable', arr => {
   ball[arr[0]] = arr[1];
-  // console.log('heard: ', arr);
 })
 
 

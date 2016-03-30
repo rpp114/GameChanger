@@ -9,18 +9,16 @@
   position: absolute;
   background-color: blue;
   z-index: -2;
-  /*border: 1px solid black;*/
+
 }
 
 #gameBoard {
-  /*position: absolute;*/
   top: 10;
   left: 10;
   padding: 10;
 }
 
 #board {
-  /*position: absolute;*/
   border: 1px solid black;
 }
 

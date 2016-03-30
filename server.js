@@ -1,56 +1,41 @@
 var express = require('express'),
-  app = express(),
-  http = require('http').Server(app),
-  io = require('socket.io')(http),
-  fs = require('fs'),
-  path = require('path'),
-  cookieParser = require('cookie-parser'),
-  bodyParser = require('body-parser'),
-  buildPic = require('./buildPic'),
-  qs = require('qs'),
-  mongoURI = 'mongodb://localhost/GameUsers', //ip-172-31-43-60.us-west-2.compute.internal', //localhost/GameUsers'
-  cors = require('cors'),
-  mongoURI = 'mongodb://localhost/GameUsers',
-  UserCtrl = require('./authenticate/userController'),
-  SessionCtrl = require('./authenticate/sessionController'),
-  Session = require('./authenticate/sessionModel'),
-mongoose = require('mongoose');
-var q = '';
-var nameOfGame = 'snake';
+    app = express(),
+    http = require('http').Server(app),
+    io = require('socket.io')(http),
+    fs = require('fs'),
+    path = require('path'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    buildPic = require('./buildPic'),
+    qs = require('qs'),
+    mongoURI = 'mongodb://localhost/GameUsers', //ip-172-31-43-60.us-west-2.compute.internal', //localhost/GameUsers'
+    cors = require('cors'),
+    mongoURI = 'mongodb://localhost/GameUsers',
+    UserCtrl = require('./authenticate/userController'),
+    SessionCtrl = require('./authenticate/sessionController'),
+    Session = require('./authenticate/sessionModel'),
+    mongoose = require('mongoose'),
+    nameOfGame = 'snake';
 
 mongoose.connect(mongoURI);
-app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
-// app.get('/*', function(req, res, next) {
-//   // console.log('get: ', req.query.id)
-//
-//   next();
-// });
 
 app.get('/', function(req, res) {
   // q = '/' + req.query.id;
   res.sendFile(path.join(__dirname, '/home.html'));
 });
 
-app.get('/welcome', function(req, res) {
-  res.sendFile(path.join(__dirname, '/welcome.html'));
-});
-
-app.get('/phaser', function(req,res) {
-  res.sendFile(path.join(__dirname, '/games/space/shoot.html'))
-})
-
 // app.post('/signup', UserCtrl.createUser);
 app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
-var socketClients = {};
 // initializes socket on Get request to Controller page
 function startSocket(nameSpace) {
 
+  var socketClients = {};
   var nsp = io.of(nameSpace);
 
   nsp.on('connection', function(socket) {
@@ -97,7 +82,6 @@ app.get('/logout', function(req, res) {
   Session.remove({cookieId: req.cookies.SSID});
   res.clearCookie('SSID');
   return res.redirect('/');
-  // debugger;
 })
 
 app.get('/controller', function(req, res) {
@@ -109,16 +93,6 @@ app.get('/controller', function(req, res) {
   return res.send('Please login');
 });
 
-app.get('/controller3', function(req, res) {
-  q = '/' + req.query.id;
-  res.sendFile(path.join(__dirname, '/controller/controller3.html'));
-  // res.render('./controller/controller');
-});
-
-app.get('/snake', function(req, res) {
-  res.sendFile(path.join(__dirname, '/games/snake/snake.html'));
-  client = 'snake';
-});
 
 app.post('/index', function(req, res) {
   nameOfGame = req.body.gameName.toLowerCase();
@@ -127,11 +101,6 @@ app.post('/index', function(req, res) {
 
 app.get('/game', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/' + nameOfGame + '/index.html'));
-});
-
-app.get('/marble', function(req, res) {
-  res.sendFile(path.join(__dirname, '/games/marble/index.html'));
-  client = 'marble';
 });
 
 app.get('*.js', function(req, res) {
@@ -147,27 +116,6 @@ app.get('*.css', function(req, res) {
   });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
-
-// app.get('/controller/font-awesome/fonts/fontawesome-webfont.woff?v=4.1.0', function(req, res) {
-//   res.writeHead(200, {
-//     'content-type': 'text/css; charset=UTF-8'
-//   });
-//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
-// });
-//
-// app.get('/controller/js/gritter/images/ie-spacer.gif', function(req, res) {
-//   res.writeHead(200, {
-//     'content-type': 'text/css; charset=UTF-8'
-//   });
-//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
-// });
-//
-// app.get('/controller/font-awesome/fonts/fontawesome-webfont.ttf?v=4.1.0', function(req, res) {
-//   res.writeHead(200, {
-//     'content-type': 'text/css; charset=UTF-8'
-//   });
-//   res.end(fs.readFileSync(path.join(__dirname, req.url)));
-// });
 
 app.get('*.jpg', function(req, res) {
   res.writeHead(200, {

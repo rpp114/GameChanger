@@ -41,7 +41,7 @@ $(document).ready(function() {
         }
       }
     };
-    // console.log('emit obj');
+
     socket.emit('obj', ctrlObj);
 
     function startGame() {
@@ -81,34 +81,7 @@ $(document).ready(function() {
 
     startGame();
 
-    // function currentGame() {
-    //   var scale = localStorage.getItem('scale') || 1;
-    //   var snakeSize = localStorage.getItem('snakeSize') || 0.5;
-    //   var gridSize = localStorage.getItem('gridSize') || 500;
-    //   const size = 50;
-    //   $('#board').css({
-    //     'height': (gridSize - 1 + (snakeSize * size) - (gridSize % (snakeSize * size))) * scale,
-    //     'width': (gridSize - 1 + (snakeSize * size) - (gridSize % (snakeSize * size))) * scale
-    //   });
-    //
-    //   //allows for dynamic scaling and grid size on start of new game
-    //   $('#gameBoard').width(gridSize * scale + 20);
-    //   $('#gameBoard').height(gridSize * scale + 20);
-    //   head.size = (size * snakeSize * scale);
-    //   head.apple.size = (size * snakeSize * scale);
-    //   // var apple = new Apple($('#board'), size * snakeSize * scale);
-    //   // head.apple = apple;
-    //   head.currentGame = currentGame;
-    //   // head.counter = 0;
-    // }
-    function detectmob() {
-      if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    // if (!detectmob()) {
+
       $('body').on('keydown', function(e) {
         if (e.keyCode != 32) {
 
@@ -131,41 +104,15 @@ $(document).ready(function() {
             head.counter++;
             console.log('pressed up');
             head.currentDirection = 'up';
-            // head.moveHead('up')
           }
         } else {
           head.isPaused = !head.isPaused;
           head.move();
         }
       });
-    // } else {
+
       window.addEventListener('load', function() {
 
-
-
-          // document.addEventListener('touchstart', function(e) {
-          //   // touchsurface.innerHTML = ''
-          //   var touchobj = e.changedTouches[0]
-          //   dist = 0
-          //   startX = touchobj.pageX
-          //   startY = touchobj.pageY
-          //   startTime = new Date().getTime() // record time when finger first makes contact with surface
-          //   e.preventDefault()
-          // }, false)
-          //
-          // // document.addEventListener('touchmove', function(e) {
-          // //   e.preventDefault() // prevent scrolling when inside DIV
-          // // }, false)
-          //
-          // // document.addEventListener('touchend', function(e) {
-          // //   var touchobj = e.changedTouches[0]
-          // //   dist = touchobj.pageX - startX // get total dist traveled by finger while in contact with surface
-          // //   elapsedTime = new Date().getTime() - startTime // get time elapsed
-          // //     // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
-          // //   // var swiperightBol = (elapsedTime <= allowedTime && dist >= threshold && Math.abs(touchobj.pageY - startY) <= 100)
-          // //   // handleswipe(swiperightBol)
-          // //   e.preventDefault()
-          // // }, false)
 
           function swipedetect(el, callback) {
 
