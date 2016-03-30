@@ -308,7 +308,7 @@
         contentType: 'application/json; charset=UTF-8',
         dataType: 'json'
       })
-      socket.emit('changeGame')
+      socket.emit('changeGame', $('#gameChoice').val())
     })
     $('.logout').click(function() {
       $.get('/logout')
