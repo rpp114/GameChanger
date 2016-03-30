@@ -26,8 +26,9 @@ var h;
 var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 var socket = io(qs);
 
-socket.on('changeGame', () => {
+socket.on('changeGame', (e) => {
   console.log('changedGame');
+  localStorage.setItem('gameName', e)
   location.reload();
 })
 
