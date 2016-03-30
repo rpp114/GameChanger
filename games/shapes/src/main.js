@@ -59,7 +59,6 @@ function buildShape(shape, h, w) {
 
 
 function Shape(shape, h, w, hole) {
-  var colors = ['blue', 'green', 'yellow', 'red', 'white', 'purple'];
   var boardWidth = $('#board').width() - w
   var boardHeight = $('#board').height() - h
   this.xPosition = Math.floor(Math.random() * boardWidth);
