@@ -1,13 +1,55 @@
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 700;
-
 //Game Variables
 var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 var socket = io(qs);
+// localStorage.setItem('alienSize', 1.0);
+var ctrlObj = {
+	gameName:'space',
+	controllers: {
+		alienSize: {
+			type: 'range',
+			min:0.2,
+			max:3.0,
+			step:0.2,
+			value: 1.0
+		},
+		shipSize: {
+			type: 'range',
+			min:0.2,
+			max:3.0,
+			step:0.2,
+			value: 1.0
+		},
+		laserSize: {
+			type: 'range',
+			min: 0.1,
+			max:1.5,
+			step: 0.1,
+			value: 1.0
+		},
+		laserSpeed: {
+			type: 'range',
+			min: 0.1,
+			max:5,
+			step: 0.25,
+			value: 1.0
+		},
+		alienSpeed: {
+			type: 'range',
+			min: 0.1,
+			max:5,
+			step: 0.25,
+			value: 1.0
+		}
+	}
+}
+
+socket.emit('obj', ctrlObj);
 var ship;
-var tween1, tween2;
+var tween1, tween2, tween3, tween4, tween5, tweenAll1, tweenAll2, tweenAll3, tweenAll4, tweenAll5;
 var lasers;
-var aliens;
+var aliens1, aliens2, aliens3, aliens4, aliens5;
 var mouseTouchDown = false;
 
 // Create a Phaser game instance
@@ -18,6 +60,9 @@ var game = new Phaser.Game(
 	'container',
 	{ preload: preload, create: create, update: update, init: init, render: render }
 );
+socket.on('changeVariable', function(e) {
+	localStorage.setItem(e[0], e[1]);
+})
 // game.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
 // Preload assets
@@ -55,44 +100,90 @@ function create() {
 		This way we save on precious resources by not constantly adding & removing new sprites to the stage
 
 	*/
-	lasers.createMultiple(20, 'laser');
-
-	aliens = game.add.group();
-	aliens.enableBody = true;
-	aliens.physicsBodyType = Phaser.Physics.ARCADE;
-	// aliens.createMultiple(20, 'alien');
-	for(var i = 0; i < 8; i ++) {
-		for(var j = 0; j < 5; j++) {
-			if(j % 2 === 0) {
-				var alien = aliens.create(i * 48, j * 50, 'ufo');
-        alien.anchor.setTo(0.5, 0.5);
-        // alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-        // alien.play('fly');
-        alien.body.moves = false;
-				alien.width = 50;
-				alien.height = 50;
-				tween1 = game.add.tween(alien).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-			} else {
-				var alien = aliens.create((i * 48) + 15, (j * 50), 'ufo');
-        alien.anchor.setTo(0.5, 0.5);
-        // alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-        // alien.play('fly');
-        alien.body.moves = false;
-				alien.width = 50;
-				alien.height = 50;
-				tween2 = game.add.tween(alien).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-			}
-		}
+	lasers.createMultiple(40, 'laser');
+	// for(var i = 0; i < 20; i++) {
+	// 	var laser = lasers.create(500, 650, 'laser', null, false)
+	// }
+	aliens1 = game.add.group();
+	aliens1.enableBody = true;
+	aliens1.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens1.create(i*48, 50, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
 	}
-	aliens.x = 450;
-	aliens.y = 100;
-	console.log(aliens);
-	// var tween = game.add.tween(aliens).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-
-    //  When the tween loops it calls descend
-    tween1.onLoop.add(function () {aliens.y -= 10;},this);
-    tween2.onLoop.add(function () {aliens.y += 10;},this);
-
+	aliens1.x = 450;
+	aliens1.y = 100;
+	tween1 = game.add.tween(aliens1).to( { x: 200 }, 2000*localStorage.getItem('alienSpeed'), Phaser.Easing.Linear.None, true, 1, 1000, true);
+	tween1.onLoop.add(function () {aliens1.x += 10;},this);
+	aliens2 = game.add.group();
+	aliens2.enableBody = true;
+	aliens2.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens2.create(i*48, 100, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
+	}
+	aliens2.x = 450;
+	aliens2.y = 100;
+	tween2 = game.add.tween(aliens2).to( { x: 200 }, 1500*localStorage.getItem('alienSpeed'), Phaser.Easing.Linear.None, true, 0, 2000, true);
+	tween2.onLoop.add(function () {aliens2.x += 10;},this);
+	aliens3 = game.add.group();
+	aliens3.enableBody = true;
+	aliens3.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens3.create(i*48, 150, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
+	}
+	aliens3.x = 450;
+	aliens3.y = 100;
+	tween3 = game.add.tween(aliens3).to( { x: 200 }, 1800*localStorage.getItem('alienSpeed'), Phaser.Easing.Linear.None, true, 150, 2000, true);
+	tween3.onLoop.add(function () {aliens3.x += 10;},this);
+	aliens4 = game.add.group();
+	aliens4.enableBody = true;
+	aliens4.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens4.create(i*48, 200, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
+	}
+	aliens4.x = 450;
+	aliens4.y = 100;
+	tween4 = game.add.tween(aliens4).to( { x: 200 }, 1300*localStorage.getItem('alienSpeed'), Phaser.Easing.Linear.None, true, 100, 2000, true);
+	tween4.onLoop.add(function () {aliens4.x += 10;},this);
+	aliens5 = game.add.group();
+	aliens5.enableBody = true;
+	aliens5.physicsBodyType = Phaser.Physics.ARCADE;
+	for(var i = 0; i < 8; i++) {
+		var alien = aliens5.create(i*48, 250, 'ufo');
+		alien.anchor.setTo(0.5, 0.5);
+		alien.body.moves = false;
+		alien.width = 40;
+		alien.height = 40;
+	}
+	aliens5.x = 450;
+	aliens5.y = 100;
+	tween5 = game.add.tween(aliens5).to( { x: 200 }, 1000*localStorage.getItem('alienSpeed'), Phaser.Easing.Linear.None, true, 50, 2000, true);
+	tween5.onLoop.add(function () {aliens5.x += 10;},this);
+	tweenAll1 = game.add.tween(aliens1).to({y:1000}, 90000, Phaser.Easing.Linear.None, true, 1000, 1000, false )
+	tweenAll2 = game.add.tween(aliens2).to({y:1000}, 90000, Phaser.Easing.Linear.None, true, 1000, 1000, false )
+	tweenAll3 = game.add.tween(aliens3).to({y:1000}, 90000, Phaser.Easing.Linear.None, true, 1000, 1000, false )
+	tweenAll4 = game.add.tween(aliens4).to({y:1000}, 90000, Phaser.Easing.Linear.None, true, 1000, 1000, false )
+	tweenAll5 = game.add.tween(aliens5).to({y:1000}, 90000, Phaser.Easing.Linear.None, true, 1000, 1000, false )
+	tweenAll1.onLoop.add(function () {aliens1.y+=10}, this);
+	tweenAll2.onLoop.add(function () {aliens2.y+=10}, this);
+	tweenAll3.onLoop.add(function () {aliens3.y+=10}, this);
+	tweenAll4.onLoop.add(function () {aliens4.y+=10}, this);
+	tweenAll5.onLoop.add(function () {aliens5.y+=10}, this);
 	/*
 		Create a ship using the sprite factory
 		game.add is an instance of Phaser.GameObjectFactory, and helps us to quickly create common game objects.
@@ -102,7 +193,8 @@ function create() {
 	game.physics.enable(ship, Phaser.Physics.ARCADE);
 	// Set the anchorpoint to the middle
 	ship.anchor.setTo(0.5, 0.5);
-
+	// lasers.x = ship.x;
+	// lasers.y = ship.y;
 	/*
 
 		Behind the scenes, this will call the following function on all lasers:
@@ -126,7 +218,28 @@ function resetLaser(laser) {
 
 // Update
 function update() {
-
+	aliens1.scale.set(localStorage.getItem('alienSize'))
+	aliens2.scale.set(localStorage.getItem('alienSize'))
+	aliens3.scale.set(localStorage.getItem('alienSize'))
+	aliens4.scale.set(localStorage.getItem('alienSize'))
+	aliens5.scale.set(localStorage.getItem('alienSize'))
+	ship.scale.set(localStorage.getItem('shipSize'))
+	// console.log(ship.x);
+	tween1.updateTweenData('duration', 2000/localStorage.getItem('alienSpeed'))
+	tween2.updateTweenData('duration', 1500/localStorage.getItem('alienSpeed'))
+	tween3.updateTweenData('duration', 1800/localStorage.getItem('alienSpeed'))
+	tween4.updateTweenData('duration', 1300/localStorage.getItem('alienSpeed'))
+	tween5.updateTweenData('duration', 1000/localStorage.getItem('alienSpeed'))
+	tween2 = tween2;
+	tween3 = tween3;
+	tween4 = tween4;
+	tween5 = tween5;
+	lasers.scale.set(localStorage.getItem('laserSize'))
+	// lasers.x = lasers.x/localStorage.getItem('laserSize');
+	// lasers.y = 650;
+	// lasers.x = ship.x;
+	// aliens1.height = 40 * localStorage.getItem('alienSize');
+	// aliens1.width = 40 * localStorage.getItem('alienSize');
 	ship.body.velocity.setTo(0, 0);
 
 	if (cursors.left.isDown && ship.body.right-100 >= game.world.bounds.left) {
@@ -157,9 +270,27 @@ function update() {
 			touchUp();
 		}
 	}
+	game.physics.arcade.collide(lasers, aliens1, killAliens)
+	game.physics.arcade.collide(lasers, aliens2, killAliens)
+	game.physics.arcade.collide(lasers, aliens3, killAliens)
+	game.physics.arcade.collide(lasers, aliens4, killAliens)
+	game.physics.arcade.collide(lasers, aliens5, killAliens)
+	game.physics.arcade.collide(aliens1, ship, youLose)
+	game.physics.arcade.collide(aliens2, ship, youLose)
+	game.physics.arcade.collide(aliens3, ship, youLose)
+	game.physics.arcade.collide(aliens4, ship, youLose)
+	game.physics.arcade.collide(aliens5, ship, youLose)
+
 
 }
-
+function youLose(alien, ship) {
+	alert('you Lose');
+	setTimeout(function(){location.reload();}, 1000);
+}
+function killAliens(laser,alien) {
+	laser.kill();
+	alien.kill();
+}
 function touchDown() {
 	// Set touchDown to true, so we only trigger this once
 	mouseTouchDown = true;
@@ -176,9 +307,9 @@ function fireLaser() {
 	var laser = lasers.getFirstExists(false);
 	if (laser) {
 		// If we have a laser, set it to the starting position
-		laser.reset(ship.x, ship.y - 20);
+		laser.reset(ship.x/localStorage.getItem('laserSize'), (ship.y - 20)/localStorage.getItem('laserSize'));
 		// Give it a velocity of -500 so it starts shooting
-		laser.body.velocity.y = -500;
+		laser.body.velocity.y = -500/localStorage.getItem('laserSpeed');
 	}
 
 }
@@ -199,7 +330,11 @@ function drawPic() {
 
 
 setInterval(drawPic, 250); //need to figure out a better way to screen cast
-
+socket.on('changeGame', (e) => {
+  console.log('changedGame');
+  localStorage.setItem('gameName', e)
+  location.reload();
+})
 // Render some debug text on screen
 function render() {
 	game.debug.text('CodeCaptain Shooting Demo', 10, 30);

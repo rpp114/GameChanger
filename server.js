@@ -92,8 +92,8 @@ function startSocket(nameSpace) {
       nsp.emit('chartData', data);
     });
 
-    socket.on('changeGame', () => {
-      nsp.emit('changeGame');
+    socket.on('changeGame', (e) => {
+      nsp.emit('changeGame', e);
     });
 
     socket.on('disconnect', () => {
