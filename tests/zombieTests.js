@@ -2,14 +2,11 @@ const Browser = require('zombie');
 
 // You may use whatever assertion library you would like.
 const expect = require('expect');
-// const expect = require('chai').expect;
-// const assert = require('chai').assert;
 
 const PORT = process.env.PORT || 3000;
 var server = require('../server');
 
 
-// Browser.localhost('http://localhost:3000/login', 3000);
 describe('User visits Home Page', function() {
 
   const browser = new Browser();

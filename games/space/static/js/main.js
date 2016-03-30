@@ -1,9 +1,8 @@
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 700;
-//Game Variables
+
 var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
 var socket = io(qs);
-// localStorage.setItem('alienSize', 1.0);
 var ctrlObj = {
 	gameName:'space',
 	controllers: {
@@ -46,6 +45,8 @@ var ctrlObj = {
 }
 
 socket.emit('obj', ctrlObj);
+
+//Game Variables
 var ship;
 var tween1, tween2, tween3, tween4, tween5, tweenAll1, tweenAll2, tweenAll3, tweenAll4, tweenAll5;
 var lasers;
@@ -63,7 +64,6 @@ var game = new Phaser.Game(
 socket.on('changeVariable', function(e) {
 	localStorage.setItem(e[0], e[1]);
 })
-// game.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
 // Preload assets
 function preload() {
@@ -101,9 +101,7 @@ function create() {
 
 	*/
 	lasers.createMultiple(40, 'laser');
-	// for(var i = 0; i < 20; i++) {
-	// 	var laser = lasers.create(500, 650, 'laser', null, false)
-	// }
+
 	aliens1 = game.add.group();
 	aliens1.enableBody = true;
 	aliens1.physicsBodyType = Phaser.Physics.ARCADE;
@@ -193,8 +191,6 @@ function create() {
 	game.physics.enable(ship, Phaser.Physics.ARCADE);
 	// Set the anchorpoint to the middle
 	ship.anchor.setTo(0.5, 0.5);
-	// lasers.x = ship.x;
-	// lasers.y = ship.y;
 	/*
 
 		Behind the scenes, this will call the following function on all lasers:
@@ -223,23 +219,17 @@ function update() {
 	aliens3.scale.set(localStorage.getItem('alienSize'))
 	aliens4.scale.set(localStorage.getItem('alienSize'))
 	aliens5.scale.set(localStorage.getItem('alienSize'))
+
 	ship.scale.set(localStorage.getItem('shipSize'))
-	// console.log(ship.x);
+
 	tween1.updateTweenData('duration', 2000/localStorage.getItem('alienSpeed'))
 	tween2.updateTweenData('duration', 1500/localStorage.getItem('alienSpeed'))
 	tween3.updateTweenData('duration', 1800/localStorage.getItem('alienSpeed'))
 	tween4.updateTweenData('duration', 1300/localStorage.getItem('alienSpeed'))
 	tween5.updateTweenData('duration', 1000/localStorage.getItem('alienSpeed'))
-	tween2 = tween2;
-	tween3 = tween3;
-	tween4 = tween4;
-	tween5 = tween5;
+
 	lasers.scale.set(localStorage.getItem('laserSize'))
-	// lasers.x = lasers.x/localStorage.getItem('laserSize');
-	// lasers.y = 650;
-	// lasers.x = ship.x;
-	// aliens1.height = 40 * localStorage.getItem('alienSize');
-	// aliens1.width = 40 * localStorage.getItem('alienSize');
+
 	ship.body.velocity.setTo(0, 0);
 
 	if (cursors.left.isDown && ship.body.right-100 >= game.world.bounds.left) {
@@ -316,20 +306,14 @@ function fireLaser() {
 function drawPic() {
   var board = document.getElementById('canvas');
 	var ctx = board.getContext('webgl', {preserveDrawingBuffer: true});
-	// console.log(board.getContext, board.getContext('webgl'));
-// 	ctx.fillStyle = "rgb(200,0,0)";
-// ctx.fillRect(40,60,20,20);
 
 	var obj = board.toDataURL("image/png");
-
-	// window.open(obj)
-	// console.log(obj)
   socket.emit('image', obj);
 
 }
 
 
-setInterval(drawPic, 250); //need to figure out a better way to screen cast
+setInterval(drawPic, 250); 
 socket.on('changeGame', (e) => {
   console.log('changedGame');
   localStorage.setItem('gameName', e)
