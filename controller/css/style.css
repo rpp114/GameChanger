@@ -17,7 +17,7 @@ body {
     padding: 0px !important;
     margin: 0px !important;
     font-size:13px;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 ul li {
@@ -2060,7 +2060,7 @@ label {
 /*LOGIN CONFIGURATION PAGE*/
 .form-login {
 	max-width: 330px;
-	margin: 100px auto 0;
+	margin: 0 auto 0;
 	background: #fff;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
