@@ -52,7 +52,7 @@ var socketClients = {};
 function startSocket(nameSpace) {
 
   var nsp = io.of(nameSpace);
-  nsp.max_connections = 3;
+  nsp.max_connections = 2;
   nsp.connections = 0;
 
   nsp.on('connection', function(socket) {
