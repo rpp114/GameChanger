@@ -5,10 +5,8 @@ var sessionController = {};
 
 
 sessionController.isLoggedIn = function(req, res) {
-  // console.log(req.cookies.SSID)
   if(req.cookies.SSID) {
     return Session.findOne({cookieId: req.cookies.SSID}, function(err, doc) {
-      // console.log(doc)
       if(doc) return true;
       else return false;
     });
