@@ -4,8 +4,6 @@
 <head>
   <meta charset="utf-8">
   <title>Game Controller</title>
-  <!-- <script src='/socket.io/socket.io.js'></script>
-  <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script> -->
   <link href="controller/css/bootstrap.css" rel="stylesheet">
   <!--external css-->
   <!-- <link rel="stylesheet" type="text/css" href="assets/css/zabuto_calendar.css"> -->
@@ -59,13 +57,6 @@
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
               </div>
-              <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js">
-              $('#change').submit(function(e) {
-                e.preventDefault();
-                localStorage.setItem('gameChoice', $('#gameChoice').val());
-                window.location = '/controller'
-              })
-            </script> -->
             </form>
           </div>
         </div>
@@ -79,7 +70,9 @@
           <p class="centered">
             <a href="#"><img src="logo.jpg" class="img" width="60"></a>
           </p>
-          <h5 class="centered">Admin</h5>
+          <% if (username) { %>
+          <h5 class="centered"><%= username %></h5>
+          <% } %>
 
           <li class="mt">
             <a href="javascript:;" data-toggle="modal" data-target="#myModal">
@@ -109,9 +102,6 @@
               <div class="white-header">
                 <h5>Performance</h5>
               </div>
-              <!-- <span><img src='logo.jpg'style='width:80%; height:80%; margin: 0 auto'/></span> -->
-
-
 
               <center>
                 <div id="graph"></div>
@@ -132,7 +122,6 @@
 
             </div>
           </div>
-          <!-- /col-md-4 -->
 
           <div class="col-md-12 mb">
             <div id='sheup' class="white-panel pn">
@@ -142,11 +131,6 @@
 
               <div class='module' id='controls'>
 
-                <!-- <h1 id='greeting'>Hello UserName</h1>
-                  <p id='instructions'>Copy client URL below; then give it to your client.</p>
-                  <p id="player"> <strong>Client URL:</strong></p>
-                  <p id='url'></p>
-                  <button id='button'>Copy URL</button> -->
 
                   <table id='controllers'>
 
@@ -223,16 +207,6 @@
         document.execCommand('copy');
         selection.removeAllRanges()
       })
-      //
-      // $('#button').click(function(event) {
-      //     var range = document.createRange();
-      //     var selection = window.getSelection();
-      //     range.selectNodeContents(document.getElementById('url'));
-      //     selection.removeAllRanges();
-      //     selection.addRange(range);
-      //     document.execCommand('copy');
-      //     selection.removeAllRanges();
-      //   });
 
     var ctrlObj = {};
     var graphCounter = 0;
@@ -268,7 +242,7 @@
             $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>' + properSpacing(key) + '</h3><center><input type="text" value="' + ctrlObj[key].value + '" class="dial" id="' + key +
               '" oninput="function(){console.log("hi")}" data-step="' + ctrlObj[
                 key].step + '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max + '" data-width="100" data-thickness="0.4" padding="20px"/></center></td>');
-          } // if (ctrlObj[key].type==='button' ) $( '#controls').append( '<button id="' + key + '"></button>');
+          }
         }
         $(document).ready(function($) {
           $(".dial").knob({
@@ -304,9 +278,6 @@
       })
       socket.emit('changeGame')
     })
-<<<<<<< HEAD
-
-=======
     $('#marble').click(function() {
       $.ajax({
         url: '/index',
@@ -343,7 +314,6 @@
       })
       socket.emit('changeGame', $('#gameChoice').val())
     })
->>>>>>> 86d381d6a7f0fce6c78e3aecb61a3690d89422c0
     $('.logout').click(function() {
       $.get('/logout')
     })
