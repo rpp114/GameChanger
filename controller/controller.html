@@ -255,6 +255,7 @@
         });
       }
     })
+    
     socket.on('image', url => {
       $('#screenCast').empty();
       var img = new Image();
@@ -276,9 +277,7 @@
       })
       socket.emit('changeGame')
     })
-<<<<<<< HEAD
 
-=======
     $('#marble').click(function() {
       $.ajax({
         url: '/index',
@@ -291,6 +290,7 @@
       })
       socket.emit('changeGame')
     })
+
     $('#shapes').click(function() {
       $.ajax({
         url: '/index',
@@ -303,6 +303,7 @@
       })
       socket.emit('changeGame')
     })
+
     $('#space').click(function() {
       $.ajax({
         url: '/index',
@@ -315,7 +316,7 @@
       })
       socket.emit('changeGame', $('#gameChoice').val())
     })
->>>>>>> 86d381d6a7f0fce6c78e3aecb61a3690d89422c0
+
     $('.logout').click(function() {
       $.get('/logout')
     })

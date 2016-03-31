@@ -41,11 +41,11 @@ function startSocket(nameSpace) {
   nsp.connections = 0;
 
   nsp.on('connection', function(socket) {
-    if( this.connections >= this.max_connections) {
+    if (this.connections >= this.max_connections) {
       nsp.emit('disconnect', 'Sorry Sucka');
       console.log('Too Many Connections');
-      socket.disconnect()
-    }else {
+      socket.disconnect();
+    } else {
       this.connections++;
       socketClients[socket.id] = socket;
     }
@@ -95,7 +95,7 @@ app.get('/logout', function(req, res) {
   Session.remove({cookieId: req.cookies.SSID});
   res.clearCookie('SSID');
   return res.redirect('/');
-})
+});
 
 app.get('/controller', function(req, res) {
   if (SessionCtrl.isLoggedIn(req, res)) {
@@ -112,6 +112,8 @@ app.post('/index', function(req, res) {
   res.send('yes');
 });
 
+
+//nameOfGame = objOfClients[id].game
 app.get('/game', function(req, res) {
   res.sendFile(path.join(__dirname, '/games/' + nameOfGame + '/index.html'));
 });
