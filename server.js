@@ -52,13 +52,9 @@ function startSocket(nameSpace) {
       socketClients[socket.id] = socket;
     }
 
-    socket.on('obj', val => {
-      // console.log('received Initial Object');
-      nsp.emit('obj', val);
-    });
-
 
     socket.on('changeVariable', val => {
+      console.log(val);
       nsp.emit('changeVariable', val);
     });
 
@@ -77,6 +73,7 @@ function startSocket(nameSpace) {
     });
 
     socket.on('changeGame', (e) => {
+      console.log(e);
       nsp.emit('changeGame', e);
     });
 

@@ -3,48 +3,6 @@ const GAME_HEIGHT = 700;
 
 const qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4); // eslint-disable-line
 const socket = io(qs); // eslint-disable-line
-const ctrlObj = {
-  gameName: 'space',
-  controllers: {
-    alienSize: {
-      type: 'range',
-      min: 0.2,
-      max: 3.0,
-      step: 0.2,
-      value: 1.0,
-    },
-    shipSize: {
-      type: 'range',
-      min: 0.2,
-      max: 3.0,
-      step: 0.2,
-      value: 1.0,
-    },
-    laserSize: {
-      type: 'range',
-      min: 0.1,
-      max: 1.5,
-      step: 0.1,
-      value: 1.0,
-    },
-    laserSpeed: {
-      type: 'range',
-      min: 0.1,
-      max: 5,
-      step: 0.25,
-      value: 1.0,
-    },
-    alienSpeed: {
-      type: 'range',
-      min: 0.1,
-      max: 5,
-      step: 0.25,
-      value: 1.0,
-    },
-  },
-};
-
-socket.emit('obj', ctrlObj);
 
 // Game Variables
 let ship;

@@ -34,34 +34,6 @@ socket.on('changeGame', (e) => {
 })
 
 function init() {
-  var ctrlObj = {
-    gameName: 'marble',
-    controllers: {
-      ballSize: {
-        type: 'range',
-        min: 30,
-        max: 250,
-        step: 10,
-        value: 100
-      },
-      holeSize: {
-        type: 'range',
-        min: 30,
-        max: 500,
-        step: 10,
-        value: 150
-      },
-      sensitivity: {
-        type: 'range',
-        min: 0.05,
-        max: 5,
-        step: 0.10,
-        value: 1
-      }
-    }
-  }
-
-  socket.emit('obj', ctrlObj);
 
   $('#board').append('<div id="ball"></div>');
   $('#board').append('<div id="hole"></div>');
