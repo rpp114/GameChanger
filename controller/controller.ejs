@@ -14,16 +14,17 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <!-- <link href="controller/font-awesome/css/font-awesome.css" rel="stylesheet" /> -->
 </head>
+
 <body>
   <section id="container">
     <header class="header black-bg">
 
-            <div class="sidebar-toggle-box">
-                <div class="fa fa-bars"></div>
-            </div>
-          <a href="#" class="logo"><b>VICISSITUTOR</b></a>
-          <div class="top-menu">
-            <ul class="nav pull-right top-menu">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars"></div>
+      </div>
+      <a href="#" class="logo"><b>VICISSITUTOR</b></a>
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu">
 
           <li><a class="logout" href="/">Logout</a></li>
         </ul>
@@ -45,14 +46,8 @@
             <form>
 
               <h2>Game Descriptions</h2>
-              <p><a href='#' id='snake' data-dismiss='modal'><strong>Snake Game: </strong></a>
-                <br>Snake is a game where the player maneuvers a line which grows in length, with the line itself being a primary obstacle.</p>
-              <p><a href='#' id='marble' data-dismiss='modal'><strong>Marble Game: </strong></a>
-                <br>The objective of the marble game is to get the ball into the hole.</p>
-              <p><a href='#' id='shapes' data-dismiss='modal'><strong>Shapes: </strong></a>
-                <br>Shapes</p>
-              <p><a href='#' id='space' data-dismiss='modal'><strong>Space Invaders: </strong></a>
-                <br>Shoot aliens down.</p>
+              <div id="gameDescriptions">
+              </div>
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -71,23 +66,23 @@
             <a href="#"><img src="logo.jpg" class="img" width="60"></a>
           </p>
           <% if (username) { %>
-          <h5 class="centered"><%= username %></h5>
-          <% } %>
+            <h5 class="centered"><%= username %></h5>
+            <% } %>
 
-          <li class="mt">
-            <a href="javascript:;" data-toggle="modal" data-target="#myModal">
-              <i class="fa fa-desktop"></i>
-              <span>Change Game</span>
-            </a>
-          </li>
+              <li class="mt">
+                <a href="javascript:;" data-toggle="modal" data-target="#myModal">
+                  <i class="fa fa-desktop"></i>
+                  <span>Change Game</span>
+                </a>
+              </li>
 
-          <li class="sub-menu">
-            <a href='javascript:;' id='copyurl'>
-              <div class='zero-clipboard'>
-              <i class="fa fa-copy"></i>
-              <span class='btn-clipboard'>Copy Client URL</span></div>
-            </a>
-          </li>
+              <li class="sub-menu">
+                <a href='javascript:;' id='copyurl'>
+                  <div class='zero-clipboard'>
+                    <i class="fa fa-copy"></i>
+                    <span class='btn-clipboard'>Copy Client URL</span></div>
+                </a>
+              </li>
 
         </ul>
       </div>
@@ -106,7 +101,9 @@
               <center>
                 <div id="graph"></div>
               </center>
-              <center><div id='graphOptions'></div></center>
+              <center>
+                <div id='graphOptions'></div>
+              </center>
 
             </div>
           </div>
@@ -132,13 +129,13 @@
               <div class='module' id='controls'>
 
 
-                  <table id='controllers'>
+                <table id='controllers'>
 
-                    <center>
+                  <center>
                     <tr width='100%'>
                     </tr>
                   </center>
-                  </table>
+                </table>
               </div>
 
             </div>
@@ -200,14 +197,16 @@
     $('#urltocopy').text(url);
 
     $('#copyurl').click(function() {
-        var range = document.createRange();
-        var selection = window.getSelection();
-        range.selectNodeContents(document.getElementById('urltocopy'));
-        selection.removeAllRanges();
-        selection.addRange(range);
-        document.execCommand('copy');
-        selection.removeAllRanges()
-      })
+      var range = document.createRange();
+      var selection = window.getSelection();
+      range.selectNodeContents(document.getElementById('urltocopy'));
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand('copy');
+      selection.removeAllRanges()
+    })
+
+
 
     var ctrlObj = {};
     var graphCounter = 0;
@@ -226,14 +225,27 @@
 
     }
 
+    //Get the game descriptions from the folder names
+    var gameDescriptions;
+    $.get('/gameDescriptions', (data) => {
+      gameDescriptions = data;
+      for (var i in data) {
+
+        $('#gameDescriptions').append('<h3></h3><a href="#" class="gameSelector" id="' + i + '" data-dismiss="modal">' + data[i].name + '</a></h3><p>' + data[i].description + '</p>')
+      }
+
+    });
+
+
+
     var currentGame;
-    socket.on('obj', function(val) {
-      if (currentGame !== val.gameName) {
+    function buildControls(game) {
+      if (currentGame !== game) {
         $('.graphButtons').remove();
         graphButtonsOnPage = false;
         $('td').remove();
-        ctrlObj = val.controllers;
-        currentGame = val.gameName;
+        ctrlObj = gameDescriptions[game].controlObject;
+        currentGame = game;
         var numOfVars = Object.keys(ctrlObj).length;
         for (var key in ctrlObj) {
           if (ctrlObj[key].value || ctrlObj[key].value === 0) {
@@ -257,7 +269,7 @@
           });
         });
       }
-    })
+    }
     socket.on('image', url => {
       $('#screenCast').empty();
       var img = new Image();
@@ -266,6 +278,7 @@
       img.height = 300;
       $('#screenCast').get(0).appendChild(img);
     })
+
 
     $('#snake').click(function() {
       // $.ajax({
@@ -317,11 +330,18 @@
       //   dataType: 'json'
       // })
       socket.emit('changeGame', ['space', userId])
+    });
+    $('#gameDescriptions').click(e => {
+      buildControls(e.target.id);
+      socket.emit('changeGame',[e.target.id, userId]);
     })
+
     $('.logout').click(function() {
       $.get('/logout')
     })
-    $('.zero-clipboard').tooltip({ content: 'Copied!' });
+    $('.zero-clipboard').tooltip({
+      content: 'Copied!'
+    });
   </script>
 
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>

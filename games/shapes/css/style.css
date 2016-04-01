@@ -10,3 +10,8 @@ body {
 .square {
   position: relative;
 }
+
+.shape {
+  draggable: true;
+  z-index: 1;
+}
