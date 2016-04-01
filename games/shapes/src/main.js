@@ -7,9 +7,9 @@ var holesOnBoard = {};
 
 function init() {
 
-  let control_obj
+  let control_obj;
 
-  socket.emit('obj', )
+  // socket.emit('obj', )
 
   var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;

@@ -40,7 +40,7 @@ io.sockets.setMaxListeners(100);
 
 // initializes socket on Get request to Controller page
 
-function startSocket(nameSpace){
+function startSocket(nameSpace) {
 
   const socketClients = {};
   const nsp = io.of(nameSpace);
@@ -99,6 +99,56 @@ app.get('/logout', (req, res) => {
   res.clearCookie('SSID');
   return res.redirect('/');
 });
+
+
+// get the description.json from all the game folders
+
+function getDescriptions(games) {
+  let gameDescs = {};
+  let descs = [];
+
+  games.forEach((game) => {
+    var gameDesc = new Promise((resolve, reject) => {
+
+      fs.readFile(path.join('./games/' + game + '/description.json'), 'utf8', (err, data) => {
+        if (err) return reject(err);
+
+        resolve(data);
+      })
+    }).then((data) => {
+      return data;
+    })
+
+    descs.push(gameDesc);
+
+  })
+
+  return Promise.all(descs).then(values => {
+     values.forEach((value, index) => {
+       gameDescs[games[index]] = JSON.parse(value)
+     })
+     return gameDescs;
+  })
+
+}
+
+
+// find all games that exist and return array of folder names
+function getDirectories(srcPath) {
+  return fs.readdirSync(srcPath).filter(function(file) {
+    return fs.statSync(path.join(srcPath, file)).isDirectory();
+  })
+}
+
+let gameDirs = getDirectories('./games');
+
+let gameDescs = getDescriptions(gameDirs).then(descriptions => {
+  return descriptions;
+}).then(data => {console.log('data is: ', data);});
+
+console.log(gameDescs);
+
+
 
 app.get('/controller', (req, res) => {
   const q = '/ ${req.query.id}';
