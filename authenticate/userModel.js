@@ -11,6 +11,10 @@ var userschema = new Schema({
     type: String,
     required: true
   },
+  game: {
+    type: String,
+    default: 'snake'
+  }
 
 });
 module.exports = mongoose.model('User', userschema);

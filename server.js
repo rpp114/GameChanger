@@ -1,6 +1,7 @@
+'use strict'; // eslint-disable-line
 const express = require('express');
 const app = express();
-const http = require('http').server(app);
+const http = require('http').Server(app); // eslint-disable-line
 const io = require('socket.io')(http);
 const fs = require('fs');
 const path = require('path');
@@ -16,7 +17,7 @@ const User = require('./authenticate/userModel');
 const SessionCtrl = require('./authenticate/sessionController');
 const Session = require('./authenticate/sessionModel');
 const mongoose = require('mongoose');
-let nameOfGame = 'snake';
+// let nameOfGame = 'snake';
 
 mongoose.connect(mongoURI);
 // app.set('views', __dirname + '\\views');
@@ -41,17 +42,16 @@ function startSocket(nameSpace) {
   const nsp = io.of(nameSpace);
   nsp.max_connections = 3;
   nsp.connections = 0;
-
   nsp.on('connection', socket => {
-    if (this.connections >= this.max_connections) {
+    if (nsp.connections >= nsp.max_connections) {
       nsp.emit('disconnect', 'Sorry Sucka');
       socket.disconnect();
     } else {
-      this.connections++;
+      nsp.connections++;
       socketClients[socket.id] = socket;
     }
     // console.log(Object.keys(socketClients));
-    // console.log(this.connections);
+    // console.log(nsp.connections);
     // console.log('users connected: ', socketCount);
 
     socket.on('obj', val => {
@@ -83,7 +83,7 @@ function startSocket(nameSpace) {
     });
 
     socket.on('disconnect', () => {
-      this.connections--;
+      nsp.connections--;
       delete socketClients[socket.id];
       socket.disconnect();
     });
@@ -97,8 +97,8 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/controller', (req, res) => {
-  const q = '/ ${req.query.id}';
-  let prof;
+  const q = `/${req.query.id}`;
+  let prof = '';
   startSocket(q);
   User.findOne({ _id: req.query.id }, (err, doc) => {
     prof = doc.username;
@@ -112,17 +112,25 @@ app.get('/controller', (req, res) => {
 
 
 app.post('/index', (req, res) => {
-  nameOfGame = req.body.gameName.toLowerCase();
-  res.send('yes');
+  // nameOfGame = req.body.gameName.toLowerCase();
+
+  User.findOne({ _id: req.body.userId }, (err,doc) => {
+    doc.game = req.body.gameName;
+  }).then(() => res.send('it worked'))
 });
 
 app.get('/game', (req, res) => {
-  res.sendFile(path.join(__dirname, '/games/${nameOfGame}/index.html'));
+  let nameOfGame;
+  User.findOne({ _id: req.query.id }, (err, doc) => {
+    nameOfGame = doc.game;
+  }).then(() => {
+    res.sendFile(path.join(__dirname, `/games/${nameOfGame}/index.html`));
+  })
 });
 
 app.get('/shapes', (req, res) => {
   res.sendFile(path.join(__dirname, '/games/shapes/index.html'));
-  client = 'shapes';
+  client = 'shapes'; // eslint-disable-line
 });
 
 app.get('*.js', (req, res) => {
