@@ -192,10 +192,11 @@
     });
   </script>
   <script>
-    var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+    var userId = window.location.search.slice(window.location.search.indexOf('?') + 4);
+    var qs = '/' + userId
 
     var socket = io(qs);
-    var url = window.location.origin + '/game?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+    var url = window.location.origin + '/game?id=' + userId;
     $('#urltocopy').text(url);
 
     $('#copyurl').click(function() {
@@ -270,7 +271,8 @@
       $.ajax({
         url: '/index',
         data: JSON.stringify({
-          gameName: 'snake'
+          gameName: 'snake',
+          userId: userId
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
@@ -282,7 +284,8 @@
       $.ajax({
         url: '/index',
         data: JSON.stringify({
-          gameName: 'marble'
+          gameName: 'marble',
+          userId: userId
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
@@ -294,7 +297,8 @@
       $.ajax({
         url: '/index',
         data: JSON.stringify({
-          gameName: 'shapes'
+          gameName: 'shapes',
+          userId: userId
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
