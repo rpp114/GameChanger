@@ -1,29 +1,33 @@
-var express = require('express'),
-    app = express(),
-    http = require('http').Server(app),
-    io = require('socket.io')(http),
-    fs = require('fs'),
-    path = require('path'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
-    buildPic = require('./buildPic'),
-    qs = require('qs'),
-    mongoURI = 'mongodb://localhost/GameUsers', //ip-172-31-43-60.us-west-2.compute.internal', //localhost/GameUsers'
-    cors = require('cors'),
-    mongoURI = 'mongodb://localhost/GameUsers',
-    UserCtrl = require('./authenticate/userController'),
-    SessionCtrl = require('./authenticate/sessionController'),
-    Session = require('./authenticate/sessionModel'),
-    mongoose = require('mongoose'),
-    nameOfGame = 'snake';
+'use strict';
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const fs = require('fs');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const buildPic = require('./buildPic');
+// const // qs = require('qs')
+const mongoURI = 'mongodb://localhost/GameUsers'; // ip-172-31-43-60.us-west-2.compute.internal'
+const cors = require('cors');
+// const // mongoURI = 'mongodb://localhost/GameUsers',
+const UserCtrl = require('./authenticate/userController');
+const User = require('./authenticate/userModel');
+const SessionCtrl = require('./authenticate/sessionController');
+const Session = require('./authenticate/sessionModel');
+const mongoose = require('mongoose');
+let nameOfGame = 'snake';
 
 mongoose.connect(mongoURI);
+// app.set('views', __dirname + '\\views');
+app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
   // q = '/' + req.query.id;
   res.sendFile(path.join(__dirname, '/home.html'));
 });
@@ -32,43 +36,45 @@ app.get('/', function(req, res) {
 app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
+let roomsObj = {}; //eslint-disable-line
 // initializes socket on Get request to Controller page
+const socketClients = {};
 function startSocket(nameSpace) {
-
-  var socketClients = {};
-  var nsp = io.of(nameSpace);
-  nsp.max_connections = 3;
+  const nsp = io.of(nameSpace);
+  nsp.max_connections = 2;
   nsp.connections = 0;
+  // console.log(nameSpace);
 
-  nsp.on('connection', function(socket) {
-    if (this.connections >= this.max_connections) {
+  nsp.on('connection', socket => {
+    if (nsp.connections >= nsp.max_connections) {
       nsp.emit('disconnect', 'Sorry Sucka');
-      console.log('Too Many Connections');
       socket.disconnect();
     } else {
-      this.connections++;
-      socketClients[socket.id] = socket;
+      nsp.connections++;
+      socketClients[socket.nsp.name] = {socket: socket, gameName: 'snake'};
+      // console.log(socketClients);
     }
-    console.log(Object.keys(socketClients));
-    console.log(this.connections);
+    // console.log(Object.keys(socketClients));
+    // console.log(nsp.connections);
+    // console.log(socketClients[Object.keys(socketClients)[0]]);
     // console.log('users connected: ', socketCount);
 
-    socket.on('obj', function(val) {
+    socket.on('obj', val => {
       // console.log('received Initial Object');
       nsp.emit('obj', val);
     });
 
 
-    socket.on('changeVariable', function(val) {
+    socket.on('changeVariable', val => {
       nsp.emit('changeVariable', val);
     });
 
-    //captures img from game and emits to controller
+    // captures img from game and emits to controller
     socket.on('image', imgObj => {
-      if(imgObj.h)
+      if (imgObj.h) {
         buildPic(imgObj, nsp);
-      else{
-        nsp.emit('image', imgObj)
+      } else {
+        nsp.emit('image', imgObj);
       }
     });
 
@@ -78,79 +84,94 @@ function startSocket(nameSpace) {
     });
 
     socket.on('changeGame', (e) => {
+      console.log('changedgame', e);
       nsp.emit('changeGame', e);
     });
 
     socket.on('disconnect', () => {
-      console.log('disconnect and remove');
-      this.connections--;
+      nsp.connections--;
       delete socketClients[socket.id];
       socket.disconnect();
-      console.log(this.connections);
     });
   });
 }
 
-app.get('/logout', function(req, res) {
-  Session.remove({cookieId: req.cookies.SSID});
+app.get('/logout', (req, res) => {
+  Session.remove({ cookieId: req.cookies.SSID });
   res.clearCookie('SSID');
   return res.redirect('/');
 });
 
-app.get('/controller', function(req, res) {
-  if (SessionCtrl.isLoggedIn(req, res)) {
-    q = '/' + req.query.id;
-    startSocket(q);
-    return res.sendFile(path.join(__dirname, '/controller/controller.html'));
-  }
-  return res.send('Please login');
+app.get('/controller', (req, res) => {
+  const q = `/${req.query.id}`;
+  let prof;
+  startSocket(q);
+  User.findOne({ _id: req.query.id }, (err, doc) => {
+    prof = doc.username;
+  }).then(() => {
+    if (SessionCtrl.isLoggedIn(req, res)) {
+      return res.render('./../controller/controller', { username: prof });
+    }
+    return res.send('Please login');
+  });
 });
 
 
-app.post('/index', function(req, res) {
-  nameOfGame = req.body.gameName.toLowerCase();
-  res.send('yes');
+app.post('/index', (req, res) => {
+  // nameOfGame = req.body.gameName.toLowerCase();
+  // console.log(req.body.gameName);
+  // console.log(req.body.userID);
+
+  User.findOne({ _id: req.body.userID}, (err, doc) => {
+    if (doc) doc.game = req.body.gameName;
+    console.log(doc.game);
+  }).then(() => {
+    // console.log(req);
+    console.log(req.body.userID);
+    console.log(req.body.gameName);
+    res.send('yes');
+  });
+  // socketClients[req.body.userID].gameName = req.body.gameName;
+  // nameOfGame = req.body.gameName;
+
 });
 
+//nameOfGame = roomObj[id].gameName
 
-//nameOfGame = objOfClients[id].game
-app.get('/game', function(req, res) {
-  res.sendFile(path.join(__dirname, '/games/' + nameOfGame + '/index.html'));
+app.get('/game', (req, res) => {
+  let nameOfGame;
+  console.log('game: ' + req.query.id);
+  User.findOne({ _id:req.query.id }, (err, doc) => {
+    nameOfGame = doc.game;
+  }).then(() => {
+    console.log('game: ' + nameOfGame);
+    res.sendFile(path.join(__dirname, '/games/' + nameOfGame + '/index.html'));
+  })
 });
 
-app.get('/shapes', function(req, res) {
+app.get('/shapes', (req, res) => {
   res.sendFile(path.join(__dirname, '/games/shapes/index.html'));
   client = 'shapes';
 });
 
-app.get('*.js', function(req, res) {
-  res.writeHead(200, {
-    'content-type': 'text/javascript; charset=UTF-8'
-  });
+app.get('*.js', (req, res) => {
+  res.writeHead(200, { 'content-type': 'text/javascript; charset=UTF-8' });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
-app.get('*.css', function(req, res) {
-  res.writeHead(200, {
-    'content-type': 'text/css; charset=UTF-8'
-  });
+app.get('*.css', (req, res) => {
+  res.writeHead(200, { 'content-type': 'text/css; charset=UTF-8' });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
-app.get('*.jpg', function(req, res) {
-  res.writeHead(200, {
-    'content-type': 'image/jpg'
-  });
+app.get('*.jpg', (req, res) => {
+  res.writeHead(200, { 'content-type': 'image/jpg' });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
-app.get('*.png', function(req, res) {
-  res.writeHead(200, {
-    'content-type': 'image/png'
-  });
+app.get('*.png', (req, res) => {
+  res.writeHead(200, { 'content-type': 'image/png' });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
-var port = process.env.PORT || 3000;
-http.listen(port, function() {
-  console.log('I\'m listening!!');
-});
+const port = process.env.PORT || 3000;
+http.listen(port);

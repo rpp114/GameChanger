@@ -70,7 +70,9 @@
           <p class="centered">
             <a href="#"><img src="logo.jpg" class="img" width="60"></a>
           </p>
-          <h5 class="centered">Admin</h5>
+          <% if (username) { %>
+          <h5 class="centered"><%= username %></h5>
+          <% } %>
 
           <li class="mt">
             <a href="javascript:;" data-toggle="modal" data-target="#myModal">
@@ -190,10 +192,10 @@
     });
   </script>
   <script>
-    var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
-
+   var userID = window.location.search.slice(window.location.search.indexOf('?') + 4);
+    var qs = '/' + userID;
     var socket = io(qs);
-    var url = window.location.origin + '/game?id=' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+    var url = window.location.origin + '/game?id=' + userID;
     $('#urltocopy').text(url);
 
     $('#copyurl').click(function() {
@@ -255,7 +257,7 @@
         });
       }
     })
-    
+
     socket.on('image', url => {
       $('#screenCast').empty();
       var img = new Image();
@@ -266,23 +268,25 @@
     })
 
     $('#snake').click(function() {
+      socket.emit('changeGame')
       $.ajax({
         url: '/index',
         data: JSON.stringify({
-          gameName: 'snake'
+          gameName: 'snake',
+          userID: userID
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
         dataType: 'json'
       })
-      socket.emit('changeGame')
     })
 
     $('#marble').click(function() {
       $.ajax({
         url: '/index',
         data: JSON.stringify({
-          gameName: 'marble'
+          gameName: 'marble',
+          userID: userID
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
@@ -295,7 +299,8 @@
       $.ajax({
         url: '/index',
         data: JSON.stringify({
-          gameName: 'shapes'
+          gameName: 'shapes',
+          userID: userID
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
@@ -308,7 +313,8 @@
       $.ajax({
         url: '/index',
         data: JSON.stringify({
-          gameName: 'space'
+          gameName: 'space',
+          userID: userID
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
@@ -320,7 +326,7 @@
     $('.logout').click(function() {
       $.get('/logout')
     })
-    $('.zero-clipboard').tooltip({ content: 'Copied!' });
+    // $('.zero-clipboard').tooltip({ content: 'Copied!' });
   </script>
 
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
