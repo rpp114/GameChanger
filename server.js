@@ -1,4 +1,3 @@
-
 'use strict'; // eslint-disable-line
 const express = require('express');
 const app = express();
@@ -98,6 +97,18 @@ app.get('/logout', (req, res) => {
 });
 
 
+
+app.get('/gameDescriptions', (req, res) => {
+
+getDirectories('./games').then(files => {
+    var descriptions = getDescriptions(files)
+    return descriptions
+  }).then(data => {
+    res.json(data);
+  });
+})
+
+
 // get the description.json from all the game folders
 
 function getDescriptions(games) {
@@ -112,8 +123,6 @@ function getDescriptions(games) {
 
         resolve(data);
       })
-    }).then((data) => {
-      return data;
     })
 
     descs.push(gameDesc);
@@ -121,10 +130,10 @@ function getDescriptions(games) {
   })
 
   return Promise.all(descs).then(values => {
-     values.forEach((value, index) => {
-       gameDescs[games[index]] = JSON.parse(value)
-     })
-     return gameDescs;
+    values.forEach((value, index) => {
+      gameDescs[games[index]] = JSON.parse(value)
+    })
+    return gameDescs;
   })
 
 }
@@ -132,18 +141,14 @@ function getDescriptions(games) {
 
 // find all games that exist and return array of folder names
 function getDirectories(srcPath) {
-  return fs.readdirSync(srcPath).filter(function(file) {
-    return fs.statSync(path.join(srcPath, file)).isDirectory();
+  return new Promise((resolve, reject) => {
+    var files = fs.readdirSync(srcPath).filter(function(file) {
+      return fs.statSync(path.join(srcPath, file)).isDirectory();
+    })
+    resolve(files);
   })
 }
 
-let gameDirs = getDirectories('./games');
-
-let gameDescs = getDescriptions(gameDirs).then(descriptions => {
-  return descriptions;
-}).then(data => {console.log('data is: ', data);});
-
-console.log(gameDescs);
 
 
 
@@ -169,7 +174,9 @@ app.get('/controller', (req, res) => {
 app.post('/index', (req, res) => {
   // nameOfGame = req.body.gameName.toLowerCase();
 
-  User.findOne({ _id: req.body.userId }, (err,doc) => {
+  User.findOne({
+    _id: req.body.userId
+  }, (err, doc) => {
     doc.game = req.body.gameName;
   }).then(() => res.send('it worked'))
 });
@@ -177,7 +184,9 @@ app.post('/index', (req, res) => {
 app.get('/game', (req, res) => {
 
   let nameOfGame;
-  User.findOne({ _id: req.query.id }, (err, doc) => {
+  User.findOne({
+    _id: req.query.id
+  }, (err, doc) => {
     nameOfGame = doc.game;
   }).then(() => {
     res.sendFile(path.join(__dirname, `/games/${nameOfGame}/index.html`));
