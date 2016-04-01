@@ -1,7 +1,15 @@
+"use strict";
+var qs = '/' + window.location.search.slice(window.location.search.indexOf('?') + 4);
+var socket = io(qs);
+
 var shapesOnBoard = {};
 var holesOnBoard = {};
 
 function init() {
+
+  let control_obj
+
+  socket.emit('obj', )
 
   var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;
@@ -30,7 +38,7 @@ function buildShape(shape, h, w) {
   shapesOnBoard[shape].push(newShape);
   $('#board').append(newShape.node);
 
-  $('#' + newShape.id).on('drag',dragging);
+  $('#' + newShape.id).on('drag', dragging);
 
   // var y = $('#' + newShape.id).position()
 
@@ -38,51 +46,79 @@ function buildShape(shape, h, w) {
 
   $('#' + newShape.id).fadeIn(1000);
 
-  setTimeout(() => {
-    $('#board').append(newHole.node)
-    var shapeTop = $('#' + newShape.id).offset().top;
-    var shapeLeft = $('#' + newShape.id).offset().left;
+  $('#board').append(newHole.node)
+  var shapeTop = $('#' + newShape.id).offset().top;
+  var shapeLeft = $('#' + newShape.id).offset().left;
 
-    $('#' + newHole.id).css({
-      'top': shapeTop,
-      'left': shapeLeft
-    });
+  newHole.xPosition = shapeLeft;
+  newHole.yPosition = shapeTop;
 
-    $('#' + newHole.id).fadeIn(200);
+  $('#' + newHole.id).css({
+    'top': shapeTop,
+    'left': shapeLeft
+  });
 
-    holesOnBoard[shape].push(newHole);
+  $('#' + newHole.id).fadeIn(1200);
 
-    var angle = Math.random() * (2 * Math.PI)
-    var boardWidth = $('#board').width() - w;
-    var boardHeight = $('#board').height() - h;
-    var distance = Math.random() * 300
+  holesOnBoard[shape].push(newHole);
 
-    var newTop  = shapeTop + (Math.sin(angle) * distance);
-    var newLeft = shapeLeft + (Math.cos(angle) * distance);
-    console.log(newTop, newLeft);
-
-    if (newTop >= boardHeight || newTop <= 0) {
-      newTop = shapeTop - (Math.sin(angle) * distance);
-    }
-    if (newLeft >= boardWidth || newLeft <= 0) {
-      newLeft = shapeLeft - (Math.cos(angle) * distance);
-    }
+  var angle = Math.random() * (2 * Math.PI)
+  var boardWidth = $('#board').width() - w;
+  var boardHeight = $('#board').height() - h;
+  var distance = Math.random() * 300
 
 
-    console.log(newTop, newLeft);
+  var newTop = shapeTop + (Math.sin(angle) * distance);
+  var newLeft = shapeLeft + (Math.cos(angle) * distance);
 
-    $('#' + newShape.id).draggable()
-    $('#' + newShape.id).animate({
-      top: newTop + 'px',
-      left: newLeft + 'px'
-    });
-  }, 1100);
+
+  if (newTop >= boardHeight || newTop <= 0) {
+    newTop = shapeTop - (Math.sin(angle) * distance);
+  }
+  if (newLeft >= boardWidth || newLeft <= 0) {
+    newLeft = shapeLeft - (Math.cos(angle) * distance);
+  }
+
+  $('#' + newShape.id).draggable()
+  $('#' + newShape.id).animate({
+    top: newTop + 'px',
+    left: newLeft + 'px'
+  });
+
+  console.log('holes: ', holesOnBoard);
+  console.log('shapes: ', shapesOnBoard);
 
 
 }
 
-function dragging(e)  {
-  console.log('x: ', e.clientX, 'y: ', e.clientY);
+
+function dragging(e) {
+  let holeList = holesOnBoard[e.target.classList[0]];
+  let accuracy = 0.5
+    // console.log(holesOnBoard[e.target.classList[0]]);
+  for (var i in holeList) {
+    if (e.clientX >= holeList[i].xPosition - (holeList[i].width * accuracy)
+    && e.clientX <= holeList[i].xPosition + (holeList[i].width * accuracy)
+    && e.clientY <= holeList[i].yPosition + (holeList[i].height * accuracy)
+    && e.clientY >= holeList[i].yPosition - (holeList[i].height * accuracy)) {
+      $(document).trigger("mouseup");
+      $('#' + e.target.id).draggable('disable');
+      $('#' + e.target.id).position({
+        top: holeList[i].yPosition,
+        left: holeList[i].xPosition
+      })
+
+      $('#' + e.target.id).fadeOut(500);
+      $('#' + holeList[i].id).fadeOut(500);
+      holesOnBoard[e.target.classList[0]].splice(i, 1)
+      break;
+      // $('#' + e.target.id).remove();
+      // $('#' + holeList[i].id).remove();
+
+    }
+  }
+
+  // console.log(e.target.classList[0], 's', holesOnBoard[e.target.classList[0]].length);
 }
 
 

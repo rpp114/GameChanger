@@ -1,6 +1,8 @@
+"use strict";
+
 const express = require('express');
 const app = express();
-const http = require('http').server(app);
+const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const fs = require('fs');
 const path = require('path');
@@ -16,6 +18,7 @@ const User = require('./authenticate/userModel');
 const SessionCtrl = require('./authenticate/sessionController');
 const Session = require('./authenticate/sessionModel');
 const mongoose = require('mongoose');
+
 let nameOfGame = 'snake';
 
 mongoose.connect(mongoURI);
@@ -36,7 +39,8 @@ app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
 
 // initializes socket on Get request to Controller page
-function startSocket(nameSpace) {
+
+function startSocket(nameSpace){
 
   const socketClients = {};
   const nsp = io.of(nameSpace);
@@ -51,9 +55,6 @@ function startSocket(nameSpace) {
       this.connections++;
       socketClients[socket.id] = socket;
     }
-    // console.log(Object.keys(socketClients));
-    // console.log(this.connections);
-    // console.log('users connected: ', socketCount);
 
     socket.on('obj', val => {
       // console.log('received Initial Object');
@@ -92,7 +93,9 @@ function startSocket(nameSpace) {
 }
 
 app.get('/logout', (req, res) => {
-  Session.remove({ cookieId: req.cookies.SSID });
+  Session.remove({
+    cookieId: req.cookies.SSID,
+  });
   res.clearCookie('SSID');
   return res.redirect('/');
 });
@@ -101,11 +104,15 @@ app.get('/controller', (req, res) => {
   const q = '/ ${req.query.id}';
   let prof;
   startSocket(q);
-  User.findOne({ _id: req.query.id }, (err, doc) => {
+  User.findOne({
+    _id: req.query.id,
+  }, (err, doc) => {
     prof = doc.username;
   }).then(() => {
     if (SessionCtrl.isLoggedIn(req, res)) {
-      return res.render('./../controller/controller', { username: prof });
+      return res.render('./../controller/controller', {
+        username: prof,
+      });
     }
     return res.send('Please login');
   });
@@ -118,30 +125,38 @@ app.post('/index', (req, res) => {
 });
 
 app.get('/game', (req, res) => {
-  res.sendFile(path.join(__dirname, '/games/${nameOfGame}/index.html'));
+  res.sendFile(path.join(__dirname, `/games/${nameOfGame}/index.html`));
 });
 
 app.get('/shapes', (req, res) => {
   res.sendFile(path.join(__dirname, '/games/shapes/index.html'));
-  client = 'shapes';
+  // client = 'shapes';
 });
 
 app.get('*.js', (req, res) => {
-  res.writeHead(200, { 'content-type': 'text/javascript; charset=UTF-8' });
+  res.writeHead(200, {
+    'content-type': 'text/javascript; charset=UTF-8',
+  });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
 app.get('*.css', (req, res) => {
-  res.writeHead(200, { 'content-type': 'text/css; charset=UTF-8' });
+  res.writeHead(200, {
+    'content-type': 'text/css; charset=UTF-8',
+  });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
 app.get('*.jpg', (req, res) => {
-  res.writeHead(200, { 'content-type': 'image/jpg' });
+  res.writeHead(200, {
+    'content-type': 'image/jpg',
+  });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 app.get('*.png', (req, res) => {
-  res.writeHead(200, { 'content-type': 'image/png' });
+  res.writeHead(200, {
+    'content-type': 'image/png'
+  });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
 
