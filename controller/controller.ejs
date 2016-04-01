@@ -279,10 +279,61 @@
       $('#screenCast').get(0).appendChild(img);
     })
 
+
+    $('#snake').click(function() {
+      // $.ajax({
+      //   url: '/index',
+      //   data: JSON.stringify({
+      //     gameName: 'snake',
+      //     userId: userId
+      //   }),
+      //   type: 'POST',
+      //   contentType: 'application/json; charset=UTF-8',
+      //   dataType: 'json'
+      // })
+      socket.emit('changeGame', ['snake', userId])
+    })
+    $('#marble').click(function() {
+      // $.ajax({
+      //   url: '/index',
+      //   data: JSON.stringify({
+      //     gameName: 'marble',
+      //     userId: userId
+      //   }),
+      //   type: 'POST',
+      //   contentType: 'application/json; charset=UTF-8',
+      //   dataType: 'json'
+      // })
+      socket.emit('changeGame', ['marble', userId])
+    })
+    $('#shapes').click(function() {
+      // $.ajax({
+      //   url: '/index',
+      //   data: JSON.stringify({
+      //     gameName: 'shapes',
+      //     userId: userId
+      //   }),
+      //   type: 'POST',
+      //   contentType: 'application/json; charset=UTF-8',
+      //   dataType: 'json'
+      // })
+      socket.emit('changeGame', ['shapes', userId])
+    })
+    $('#space').click(function() {
+      // $.ajax({
+      //   url: '/index',
+      //   data: JSON.stringify({
+      //     gameName: 'space'
+      //   }),
+      //   type: 'POST',
+      //   contentType: 'application/json; charset=UTF-8',
+      //   dataType: 'json'
+      // })
+      socket.emit('changeGame', ['space', userId])
+    });
     $('#gameDescriptions').click(e => {
       buildControls(e.target.id);
       socket.emit('changeGame',[e.target.id, userId]);
-
     })
 
     $('.logout').click(function() {
