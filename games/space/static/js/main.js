@@ -275,7 +275,8 @@ function update() {
   lasers.scale.set(localStorage.getItem('laserSize'));
   lasers.children.forEach((laser) => {
     // laser.updateBounds(laser.scale.x, laser.scale.y)
-    laser.body.updateBounds(laser.scale.x, laser.scale.y);
+    laser.body.width = 13 * localStorage.getItem('laserSize');
+    laser.body.height = 37 * localStorage.getItem('laserSize');
   });
   // lasers.scale.x = localStorage.getItem('laserSize');
   // lasers.scale.y = localStorage.getItem('laserSize');
