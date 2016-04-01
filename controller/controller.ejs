@@ -192,10 +192,11 @@
     });
   </script>
   <script>
-   var userID = window.location.search.slice(window.location.search.indexOf('?') + 4);
-    var qs = '/' + userID;
+    var userId = window.location.search.slice(window.location.search.indexOf('?') + 4);
+    var qs = '/' + userId
+
     var socket = io(qs);
-    var url = window.location.origin + '/game?id=' + userID;
+    var url = window.location.origin + '/game?id=' + userId;
     $('#urltocopy').text(url);
 
     $('#copyurl').click(function() {
@@ -273,7 +274,7 @@
         url: '/index',
         data: JSON.stringify({
           gameName: 'snake',
-          userID: userID
+          userId: userId
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
@@ -286,7 +287,7 @@
         url: '/index',
         data: JSON.stringify({
           gameName: 'marble',
-          userID: userID
+          userId: userId
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
@@ -300,7 +301,7 @@
         url: '/index',
         data: JSON.stringify({
           gameName: 'shapes',
-          userID: userID
+          userId: userId
         }),
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
