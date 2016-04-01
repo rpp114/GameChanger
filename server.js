@@ -79,7 +79,13 @@ function startSocket(nameSpace) {
     });
 
     socket.on('changeGame', (e) => {
-      nsp.emit('changeGame', e);
+      User.findOne({ _id: e[1] }, (err, doc) => {
+        doc.game = e[0];
+        console.log(doc);
+        doc.save();
+      }).then(() => {
+        nsp.emit('changeGame', e[0]);
+      });
     });
 
     socket.on('disconnect', () => {
@@ -111,18 +117,19 @@ app.get('/controller', (req, res) => {
 });
 
 
-app.post('/index', (req, res) => {
-  // nameOfGame = req.body.gameName.toLowerCase();
-
-  User.findOne({ _id: req.body.userId }, (err,doc) => {
-    doc.game = req.body.gameName;
-  }).then(() => res.send('it worked'))
-});
+// app.post('/index', (req, res) => {
+//   // nameOfGame = req.body.gameName.toLowerCase();
+//
+//   User.findOne({ _id: req.body.userId }, (err,doc) => {
+//     doc.game = req.body.gameName;
+//   }).then(() => res.send('it worked'))
+// });
 
 app.get('/game', (req, res) => {
   let nameOfGame;
   User.findOne({ _id: req.query.id }, (err, doc) => {
     nameOfGame = doc.game;
+    console.log(doc);
   }).then(() => {
     res.sendFile(path.join(__dirname, `/games/${nameOfGame}/index.html`));
   })
