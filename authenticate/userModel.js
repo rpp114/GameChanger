@@ -13,7 +13,7 @@ var userschema = new Schema({
   },
   game: {
     type: String,
-    default: 'snake'
+    // default: 'snake'
   }
 
 });

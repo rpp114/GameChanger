@@ -40,9 +40,9 @@ function init() {
   ball = $('#ball').get()[0];
   hole = $('#hole').get()[0];
 
-  ball.sensitivity = ctrlObj.controllers.sensitivity.value;
-  ball.ballSize = ctrlObj.controllers.ballSize.value;
-  ball.holeSize = ctrlObj.controllers.holeSize.value;
+  ball.sensitivity = 1;
+  ball.ballSize = 100;
+  ball.holeSize = 125;
   ball.currentDirection = '';
 
   ball.counter = 0;
