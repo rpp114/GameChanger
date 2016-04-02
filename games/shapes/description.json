@@ -22,30 +22,6 @@
       "max": 250,
       "step": 10,
       "value": 100
-    },
-    "createSqduare": {
-      "type": "button"
-    },
-    "createSqussare": {
-      "type": "button"
-    },
-    "createSquadsre": {
-      "type": "button"
-    },
-    "createSquasdre": {
-      "type": "button"
-    },
-    "sdfscreateSquare": {
-      "type": "button"
-    },
-    "creasdfsdateSquare": {
-      "type": "button"
-    },
-    "createSquare": {
-      "type": "button"
-    },
-    "createCircle": {
-      "type": "button"
     }
   }
 }

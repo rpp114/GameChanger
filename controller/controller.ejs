@@ -312,7 +312,6 @@
       socket.emit('changeVariable', [button.id])
     }
 
-
     socket.on('image', url => {
       $('#screenCast').empty();
       var img = new Image();
@@ -322,14 +321,14 @@
       $('#screenCast').get(0).appendChild(img);
     })
 
-
-
     $('.logout').click(function() {
       $.get('/logout')
     })
+
     $('.zero-clipboard').tooltip({
       content: 'Copied!'
     });
+
   </script>
 
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
