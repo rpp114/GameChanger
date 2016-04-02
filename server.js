@@ -7,16 +7,16 @@ const fs = require('fs');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const buildPic = require('./buildPic');
 // const // qs = require('qs')
-const mongoURI = 'mongodb://localhost/GameUsers'; // ip-172-31-43-60.us-west-2.compute.internal'
+const mongoURI = 'mongodb://localhost/GameUsers'; //ip-172-31-43-60.us-west-2.compute.internal';
 const cors = require('cors');
-// const // mongoURI = 'mongodb://localhost/GameUsers',
 const UserCtrl = require('./authenticate/userController');
 const User = require('./authenticate/userModel');
 const SessionCtrl = require('./authenticate/sessionController');
 const Session = require('./authenticate/sessionModel');
 const mongoose = require('mongoose');
+const Sockets = require('./sockets');
+
 
 mongoose.connect(mongoURI);
 // app.set('views', __dirname + '\\views');
@@ -27,72 +27,11 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  // q = '/' + req.query.id;
   res.sendFile(path.join(__dirname, '/home.html'));
 });
 
-// app.post('/signup', UserCtrl.createUser);
 app.post('/login', UserCtrl.verify);
 io.sockets.setMaxListeners(100);
-
-// initializes socket on Get request to Controller page
-
-function startSocket(nameSpace) {
-
-  const socketClients = {};
-  const nsp = io.of(nameSpace);
-  nsp.max_connections = 2;
-  nsp.connections = 0;
-  nsp.on('connection', socket => {
-    if (nsp.connections >= nsp.max_connections) {
-      nsp.emit('disconnect', 'Sorry Sucka');
-      socket.disconnect();
-    } else {
-      nsp.connections++;
-      socketClients[socket.id] = socket;
-    }
-
-    socket.on('obj', val => {
-      // console.log('received Initial Object');
-      nsp.emit('obj', val);
-    });
-
-
-    socket.on('changeVariable', val => {
-      nsp.emit('changeVariable', val);
-    });
-
-    // captures img from game and emits to controller
-    socket.on('image', imgObj => {
-      if (imgObj.h) {
-        buildPic(imgObj, nsp);
-      } else {
-        nsp.emit('image', imgObj);
-      }
-    });
-
-    socket.on('chartData', data => {
-      // need to figure out how to get controller to join room to listen from emits
-      nsp.emit('chartData', data);
-    });
-
-    socket.on('changeGame', (e) => {
-      User.findOne({ _id: e[1] }, (err, doc) => {
-        doc.game = e[0];
-        console.log(doc);
-        doc.save();
-      }).then(() => {
-        nsp.emit('changeGame', e[0]);
-      });
-    });
-
-    socket.on('disconnect', () => {
-      nsp.connections--;
-      delete socketClients[socket.id];
-      socket.disconnect();
-    });
-  });
-}
 
 app.get('/logout', (req, res) => {
   Session.remove({
@@ -101,8 +40,6 @@ app.get('/logout', (req, res) => {
   res.clearCookie('SSID');
   return res.redirect('/');
 });
-
-
 
 app.get('/gameDescriptions', (req, res) => {
 
@@ -161,11 +98,12 @@ function getDirectories(srcPath) {
 app.get('/controller', (req, res) => {
   const q = `/${req.query.id}`;
   let prof = '';
-  startSocket(q);
-  User.findOne({
-    _id: req.query.id,
-  }, (err, doc) => {
-    prof = doc.username;
+  Sockets.startSocket(q, io);
+  Sockets.roomsObj[q] = {gameName: "snake"};
+  User.findOne({ _id: req.query.id }, (err, doc) => {
+    if (doc) {
+      prof = doc.username;
+    }
   }).then(() => {
     if (SessionCtrl.isLoggedIn(req, res)) {
       return res.render('./../controller/controller', {
@@ -177,16 +115,8 @@ app.get('/controller', (req, res) => {
 });
 
 app.get('/game', (req, res) => {
-
-  let nameOfGame;
-  User.findOne({
-    _id: req.query.id
-  }, (err, doc) => {
-    nameOfGame = doc.game;
-    console.log(doc);
-  }).then(() => {
-    res.sendFile(path.join(__dirname, `/games/${nameOfGame}/index.html`));
-  })
+  let nameOfGame = Sockets.roomsObj['/' + req.query.id].gameName;
+  res.sendFile(path.join(__dirname, `/games/${nameOfGame}/index.html`));
 });
 
 app.get('/shapes', (req, res) => {
@@ -214,6 +144,7 @@ app.get('*.jpg', (req, res) => {
   });
   res.end(fs.readFileSync(path.join(__dirname, req.url)));
 });
+
 app.get('*.png', (req, res) => {
   res.writeHead(200, {
     'content-type': 'image/png'

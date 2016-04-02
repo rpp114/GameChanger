@@ -72,6 +72,10 @@ h1 {
   color: white;
 }
 
+.controllerButton {
+  margin: 20 auto;
+}
+
 #screenCast {
   /*position: absolute;*/
   /*top: 50px;*/

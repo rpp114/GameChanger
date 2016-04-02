@@ -5,44 +5,7 @@ $(document).ready(function() {
       localStorage.setItem('gameName', e)
       location.reload();
     })
-    var ctrlObj = {
-      gameName: 'snake',
-      controllers: {
-        speed: {
-          type: 'range',
-          min: 50,
-          max: 500,
-          step: 10,
-          value: 250
-        },
-        scale: {
-          type: 'range',
-          min: 0.5,
-          max: 2,
-          step: 0.1,
-          value: 0.8
-        },
-        snakeSize: {
-          type: 'range',
-          min: 0.2,
-          max: 1,
-          step: 0.05,
-          value: 0.5
-        },
-        gridSize: {
-          type: 'range',
-          min: 100,
-          max: 1000,
-          step: 100,
-          value: 500
-        },
-        addApple: {
-          type: 'button'
-        }
-      }
-    };
-
-    socket.emit('obj', ctrlObj);
+    
 
     function startGame() {
       var scale = localStorage.getItem('scale') || 1;
