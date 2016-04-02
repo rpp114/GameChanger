@@ -22,14 +22,6 @@
       "max": 250,
       "step": 10,
       "value": 100
-    },
-    "createSquare": {
-      "type": "button",
-      "function": "buildShape"
-    },
-    "createCircle": {
-      "type": "button",
-      "function": "buildShape"
     }
   }
 }

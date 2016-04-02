@@ -14,16 +14,17 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <!-- <link href="controller/font-awesome/css/font-awesome.css" rel="stylesheet" /> -->
 </head>
+
 <body>
   <section id="container">
     <header class="header black-bg">
 
-            <div class="sidebar-toggle-box">
-                <div class="fa fa-bars"></div>
-            </div>
-          <a href="#" class="logo"><b>VICISSITUTOR</b></a>
-          <div class="top-menu">
-            <ul class="nav pull-right top-menu">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars"></div>
+      </div>
+      <a href="#" class="logo"><b>VICISSITUTOR</b></a>
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu">
 
           <li><a class="logout" href="/">Logout</a></li>
         </ul>
@@ -45,14 +46,8 @@
             <form>
 
               <h2>Game Descriptions</h2>
-              <p><a href='#' id='snake' data-dismiss='modal'><strong>Snake Game: </strong></a>
-                <br>Snake is a game where the player maneuvers a line which grows in length, with the line itself being a primary obstacle.</p>
-              <p><a href='#' id='marble' data-dismiss='modal'><strong>Marble Game: </strong></a>
-                <br>The objective of the marble game is to get the ball into the hole.</p>
-              <p><a href='#' id='shapes' data-dismiss='modal'><strong>Shapes: </strong></a>
-                <br>Shapes</p>
-              <p><a href='#' id='space' data-dismiss='modal'><strong>Space Invaders: </strong></a>
-                <br>Shoot aliens down.</p>
+              <div id="gameDescriptions">
+              </div>
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -71,23 +66,23 @@
             <a href="#"><img src="logo.jpg" class="img" width="60"></a>
           </p>
           <% if (username) { %>
-          <h5 class="centered"><%= username %></h5>
-          <% } %>
+            <h5 class="centered"><%= username %></h5>
+            <% } %>
 
-          <li class="mt">
-            <a href="javascript:;" data-toggle="modal" data-target="#myModal">
-              <i class="fa fa-desktop"></i>
-              <span>Change Game</span>
-            </a>
-          </li>
+              <li class="mt">
+                <a href="javascript:;" data-toggle="modal" data-target="#myModal">
+                  <i class="fa fa-desktop"></i>
+                  <span>Change Game</span>
+                </a>
+              </li>
 
-          <li class="sub-menu">
-            <a href='javascript:;' id='copyurl'>
-              <div class='zero-clipboard'>
-              <i class="fa fa-copy"></i>
-              <span class='btn-clipboard'>Copy Client URL</span></div>
-            </a>
-          </li>
+              <li class="sub-menu">
+                <a href='javascript:;' id='copyurl'>
+                  <div class='zero-clipboard'>
+                    <i class="fa fa-copy"></i>
+                    <span class='btn-clipboard'>Copy Client URL</span></div>
+                </a>
+              </li>
 
         </ul>
       </div>
@@ -106,7 +101,9 @@
               <center>
                 <div id="graph"></div>
               </center>
-              <center><div id='graphOptions'></div></center>
+              <center>
+                <div id='graphOptions'></div>
+              </center>
 
             </div>
           </div>
@@ -132,13 +129,13 @@
               <div class='module' id='controls'>
 
 
-                  <table id='controllers'>
+                <table id='controllers'>
 
-                    <center>
+                  <center>
                     <tr width='100%'>
                     </tr>
                   </center>
-                  </table>
+                </table>
               </div>
 
             </div>
@@ -200,14 +197,16 @@
     $('#urltocopy').text(url);
 
     $('#copyurl').click(function() {
-        var range = document.createRange();
-        var selection = window.getSelection();
-        range.selectNodeContents(document.getElementById('urltocopy'));
-        selection.removeAllRanges();
-        selection.addRange(range);
-        document.execCommand('copy');
-        selection.removeAllRanges()
-      })
+      var range = document.createRange();
+      var selection = window.getSelection();
+      range.selectNodeContents(document.getElementById('urltocopy'));
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand('copy');
+      selection.removeAllRanges()
+    })
+
+
 
     var ctrlObj = {};
     var graphCounter = 0;
@@ -226,25 +225,74 @@
 
     }
 
-    var currentGame;
-    socket.on('obj', function(val) {
-      if (currentGame !== val.gameName) {
+    //Get the game descriptions from the folder names
+    var gameDescriptions;
+    $.get('/gameDescriptions', (data) => {
+      gameDescriptions = data;
+      for (var i in data) {
+
+        $('#gameDescriptions').append('<h3></h3><a href="#"  onclick="selectGame(this)" class="gameSelector" id="' + i + '" data-dismiss="modal">' + data[i].name + '</a></h3><p>' + data[i].description + '</p>')
+      }
+
+    });
+
+
+    // builds controls and changes game
+    function selectGame(game) {
+      buildControls(game.id);
+      socket.emit('changeGame', [game.id, userId]);
+    }
+
+
+    var currentGame, buttonsPerCell = 3;
+
+    function buildControls(game) {
+      if (currentGame !== game) {
         $('.graphButtons').remove();
         graphButtonsOnPage = false;
-        $('td').remove();
-        ctrlObj = val.controllers;
-        currentGame = val.gameName;
-        var numOfVars = Object.keys(ctrlObj).length;
+        $('#controllers tr td').remove();
+        ctrlObj = gameDescriptions[game].controlObject;
+        currentGame = game;
+        let ctrlCount = {};
+        for(let j in ctrlObj) {
+          ctrlCount[ctrlObj[j].type] = ctrlCount[ctrlObj[j].type] + 1 || 1
+        }
+
+        let numOfVars = ctrlCount.range + Math.floor(ctrlCount.button/buttonsPerCell) + 1
+
+        console.log(ctrlCount);
+        let buttons = [];
         for (var key in ctrlObj) {
           if (ctrlObj[key].value || ctrlObj[key].value === 0) {
             localStorage.setItem(ctrlObj[key], ctrlObj[key].value)
           }
           if (ctrlObj[key].type === 'range') {
             $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>' + properSpacing(key) + '</h3><center><input type="text" value="' + ctrlObj[key].value + '" class="dial" id="' + key +
-              '" oninput="function(){console.log("hi")}" data-step="' + ctrlObj[
-                key].step + '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max + '" data-width="100" data-thickness="0.4" padding="20px"/></center></td>');
+              '" data-step="' + ctrlObj[key].step + '" data-min="' + ctrlObj[key].min + '" data-max="' + ctrlObj[key].max + '" data-width="100" data-thickness="0.4" padding="20px"/></center></td>');
           }
+
+          // if (ctrlObj[key].type === 'button') {
+          //   buttons.push('<center><button class="controllerButton" id="' + key + '" onclick="emitButtonPush(this)">' + properSpacing(key) + '</button></center>')
+          // }
         }
+        // var buttonCell = '';
+        // var buttonCount = 0;
+        // buttons.forEach(button => {
+        //   if (buttonCount < buttonsPerCell) {
+        //     buttonCell += button;
+        //     buttonCount++;
+        //   } else {
+        //     $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>Buttons</h3>' + buttonCell + '</td>');
+        //     buttonCell = '';
+        //     buttonCount = 0;
+        //   }
+        //   console.log(buttonCell);
+        // })
+        // console.log('button count: ', buttonCount);
+        // if (buttonCount > 0) {
+        //   $('#controllers tr').append('<td width="' + 100 / numOfVars + '%"><h3>Buttons</h3>' + buttonCell + '</td>');
+        // }
+
         $(document).ready(function($) {
           $(".dial").knob({
             draw: function() {
@@ -257,7 +305,12 @@
           });
         });
       }
-    })
+    }
+
+    function emitButtonPush(button) {
+      console.log('button Pushed');
+      socket.emit('changeVariable', [button.id])
+    }
 
     socket.on('image', url => {
       $('#screenCast').empty();
@@ -268,66 +321,14 @@
       $('#screenCast').get(0).appendChild(img);
     })
 
-    $('#snake').click(function() {
-      // $.ajax({
-      //   url: '/index',
-      //   data: JSON.stringify({
-      //     gameName: 'snake',
-      //     userId: userId
-      //   }),
-      //   type: 'POST',
-      //   contentType: 'application/json; charset=UTF-8',
-      //   dataType: 'json'
-      // })
-      socket.emit('changeGame', ['snake', userId])
-    })
-
-    $('#marble').click(function() {
-      // $.ajax({
-      //   url: '/index',
-      //   data: JSON.stringify({
-      //     gameName: 'marble',
-      //     userId: userId
-      //   }),
-      //   type: 'POST',
-      //   contentType: 'application/json; charset=UTF-8',
-      //   dataType: 'json'
-      // })
-      socket.emit('changeGame', ['marble', userId])
-    })
-
-    $('#shapes').click(function() {
-      // $.ajax({
-      //   url: '/index',
-      //   data: JSON.stringify({
-      //     gameName: 'shapes',
-      //     userId: userId
-      //   }),
-      //   type: 'POST',
-      //   contentType: 'application/json; charset=UTF-8',
-      //   dataType: 'json'
-      // })
-      socket.emit('changeGame', ['shapes', userId])
-    })
-
-    $('#space').click(function() {
-      // $.ajax({
-      //   url: '/index',
-      //   data: JSON.stringify({
-      //     gameName: 'space',
-      //     userID: userID
-      //   }),
-      //   type: 'POST',
-      //   contentType: 'application/json; charset=UTF-8',
-      //   dataType: 'json'
-      // })
-      socket.emit('changeGame', ['space', userId])
-    })
-
     $('.logout').click(function() {
       $.get('/logout')
     })
-    // $('.zero-clipboard').tooltip({ content: 'Copied!' });
+
+    $('.zero-clipboard').tooltip({
+      content: 'Copied!'
+    });
+
   </script>
 
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
