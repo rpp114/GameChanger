@@ -9,9 +9,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const buildPic = require('./buildPic');
 // const // qs = require('qs')
-const mongoURI = 'mongodb://localhost/GameUsers'; // ip-172-31-43-60.us-west-2.compute.internal'
+const mongoURI = 'mongodb://localhost/GameUsers'; //ip-172-31-43-60.us-west-2.compute.internal';
 const cors = require('cors');
-// const // mongoURI = 'mongodb://localhost/GameUsers',
 const UserCtrl = require('./authenticate/userController');
 const User = require('./authenticate/userModel');
 const SessionCtrl = require('./authenticate/sessionController');
@@ -52,13 +51,9 @@ function startSocket(nameSpace) {
       socketClients[socket.id] = socket;
     }
 
-    socket.on('obj', val => {
-      // console.log('received Initial Object');
-      nsp.emit('obj', val);
-    });
-
 
     socket.on('changeVariable', val => {
+      console.log(val);
       nsp.emit('changeVariable', val);
     });
 
@@ -77,9 +72,9 @@ function startSocket(nameSpace) {
     });
 
     socket.on('changeGame', (e) => {
+
       User.findOne({ _id: e[1] }, (err, doc) => {
         doc.game = e[0];
-        console.log(doc);
         doc.save();
       }).then(() => {
         nsp.emit('changeGame', e[0]);
