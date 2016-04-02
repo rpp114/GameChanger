@@ -44,7 +44,9 @@ app.get('/controller', (req, res) => {
   Sockets.startSocket(q, io);
   Sockets.roomsObj[q] = {gameName: "snake"};
   User.findOne({ _id: req.query.id }, (err, doc) => {
-    prof = doc.username;
+    if (doc) {
+      prof = doc.username;
+    }
   }).then(() => {
     if (SessionCtrl.isLoggedIn(req, res)) {
       return res.render('./../controller/controller', { username: prof });

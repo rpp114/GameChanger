@@ -269,24 +269,65 @@
     })
 
     $('#snake').click(function() {
+      // $.ajax({
+      //   url: '/index',
+      //   data: JSON.stringify({
+      //     gameName: 'snake',
+      //     userId: userId
+      //   }),
+      //   type: 'POST',
+      //   contentType: 'application/json; charset=UTF-8',
+      //   dataType: 'json'
+      // })
       socket.emit('changeGame', ['snake', userId])
     })
 
     $('#marble').click(function() {
+      // $.ajax({
+      //   url: '/index',
+      //   data: JSON.stringify({
+      //     gameName: 'marble',
+      //     userId: userId
+      //   }),
+      //   type: 'POST',
+      //   contentType: 'application/json; charset=UTF-8',
+      //   dataType: 'json'
+      // })
       socket.emit('changeGame', ['marble', userId])
     })
 
     $('#shapes').click(function() {
+      // $.ajax({
+      //   url: '/index',
+      //   data: JSON.stringify({
+      //     gameName: 'shapes',
+      //     userId: userId
+      //   }),
+      //   type: 'POST',
+      //   contentType: 'application/json; charset=UTF-8',
+      //   dataType: 'json'
+      // })
       socket.emit('changeGame', ['shapes', userId])
     })
 
     $('#space').click(function() {
+      // $.ajax({
+      //   url: '/index',
+      //   data: JSON.stringify({
+      //     gameName: 'space',
+      //     userID: userID
+      //   }),
+      //   type: 'POST',
+      //   contentType: 'application/json; charset=UTF-8',
+      //   dataType: 'json'
+      // })
       socket.emit('changeGame', ['space', userId])
     })
 
     $('.logout').click(function() {
       $.get('/logout')
     })
+    // $('.zero-clipboard').tooltip({ content: 'Copied!' });
   </script>
 
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
