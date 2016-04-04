@@ -14,7 +14,7 @@ function startSocket(nameSpace, io) {
       socket.disconnect();
     } else {
       nsp.connections++;
-      console.log('user connected', nsp.connections);
+      console.log(nsp.connections, 'users connected to', nameSpace);
     }
 
     socket.on('obj', val => {
