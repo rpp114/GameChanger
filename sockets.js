@@ -1,7 +1,7 @@
 'use strict';
 const buildPic = require('./buildPic');
 
-const roomsObj = {};
+let roomsObj = {};
 
 function startSocket(nameSpace, io) {
   const nsp = io.of(nameSpace);
@@ -14,7 +14,6 @@ function startSocket(nameSpace, io) {
       socket.disconnect();
     } else {
       nsp.connections++;
-      console.log('user connected', nsp.connections);
     }
 
     socket.on('obj', val => {
