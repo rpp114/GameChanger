@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const mongoURI = 'mongodb://localhost/GameUsers';//ip-172-31-43-60.us-west-2.compute.internal';
+const mongoURI = 'mongodb://localhost/GameUsers'; //ip-172-31-43-60.us-west-2.compute.internal';
 const cors = require('cors');
 const UserCtrl = require('./authenticate/userController');
 const User = require('./authenticate/userModel');
@@ -41,13 +41,14 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/gameDescriptions', (req, res) => {
-  getDirectories('./games').then(files => {
-    const descriptions = getDescriptions(files);
-    return descriptions;
+
+getDirectories('./games').then(files => {
+    var descriptions = getDescriptions(files)
+    return descriptions
   }).then(data => {
     res.json(data);
   });
-});
+})
 
 
 // get the description.json from all the game folders
