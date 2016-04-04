@@ -86,31 +86,33 @@ function getDirectories(srcPath) {
   return new Promise((resolve, reject) => {
     var files = fs.readdirSync(srcPath).filter(function(file) {
       return fs.statSync(path.join(srcPath, file)).isDirectory();
-    })
+    });
     resolve(files);
-  })
+  });
 }
 
-
-
-
 app.get('/controller', (req, res) => {
-  const q = `/${req.query.id}`;
-  let prof = '';
-  Sockets.startSocket(q, io);
-  Sockets.roomsObj[q] = {gameName: "snake"};
-  User.findOne({ _id: req.query.id }, (err, doc) => {
-    if (doc) {
-      prof = doc.username;
-    }
-  }).then(() => {
-    if (SessionCtrl.isLoggedIn(req, res)) {
-      return res.render('./../controller/controller', {
-        username: prof,
-      });
-    }
-    return res.send('Please login');
-  });
+  console.log(Object.keys(Sockets.roomsObj).length);
+  if(Object.keys(Sockets.roomsObj).length === 0) {
+    const q = `/${req.query.id}`;
+    let prof = '';
+    Sockets.startSocket(q, io);
+    Sockets.roomsObj[q] = { gameName: 'snake' };
+    User.findOne({ _id: req.query.id }, (err, doc) => {
+      if (doc) {
+        prof = doc.username;
+      }
+    }).then(() => {
+      if (SessionCtrl.isLoggedIn(req, res)) {
+        return res.render('./../controller/controller', {
+          username: prof,
+        });
+      }
+      return res.send('Please login');
+    });
+  } else {
+    return res.redirect(`/game?id=${req.query.id}`)
+  }
 });
 
 app.get('/game', (req, res) => {
