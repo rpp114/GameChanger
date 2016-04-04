@@ -27,7 +27,6 @@ function startSocket(nameSpace, io) {
 
     // captures img from game and emits to controller
     socket.on('image', imgObj => {
-
       nsp.emit('image', imgObj);
       // if (imgObj.h) {
       //   buildPic(imgObj, nsp);
