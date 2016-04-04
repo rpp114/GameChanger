@@ -7,8 +7,8 @@ function startSocket(nameSpace, io) {
   const nsp = io.of(nameSpace);
   nsp.max_connections = 2;
   nsp.connections = 0;
-  roomsObj[nameSpace] = {};
-  roomsObj[nameSpace].connections = 0;
+  roomsObj[nameSpace] = { gameName: 'snake', connections: 0 };
+
 
   nsp.on('connection', socket => {
     if (nsp.connections >= nsp.max_connections) {
