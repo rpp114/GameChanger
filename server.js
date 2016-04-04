@@ -41,14 +41,13 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/gameDescriptions', (req, res) => {
-
-getDirectories('./games').then(files => {
-    var descriptions = getDescriptions(files)
-    return descriptions
+  getDirectories('./games').then(files => {
+    const descriptions = getDescriptions(files);
+    return descriptions;
   }).then(data => {
     res.json(data);
   });
-})
+});
 
 
 // get the description.json from all the game folders
