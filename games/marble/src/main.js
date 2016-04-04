@@ -53,7 +53,7 @@ function init() {
   $('#board').height(h);
   $('#board').width(w);
   $('#board').css({
-    "background-color": "#32c9d6"
+    "background-color": "white"
   });
 
 
@@ -64,7 +64,7 @@ function init() {
     "width": "100px",
     "height": "100px",
     "border-radius": "50%",
-    "background": "white",
+    "background": "#32c9d6",
     "box-shadow": "3px 3px 5px 6px #6E6E6E",
     "z-index": "1"
   })
