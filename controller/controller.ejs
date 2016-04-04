@@ -262,13 +262,12 @@
         ctrlObj = gameDescriptions[game].controlObject;
         currentGame = game;
         let ctrlCount = {};
-        for(let j in ctrlObj) {
+        for (let j in ctrlObj) {
           ctrlCount[ctrlObj[j].type] = ctrlCount[ctrlObj[j].type] + 1 || 1
         }
 
-        let numOfVars = ctrlCount.range + Math.floor(ctrlCount.button/buttonsPerCell) + 1
+        let numOfVars = ctrlCount.range + Math.floor(ctrlCount.button / buttonsPerCell) + 1
 
-        console.log(ctrlCount);
         let buttons = [];
         for (var key in ctrlObj) {
           if (ctrlObj[key].value || ctrlObj[key].value === 0) {
@@ -320,23 +319,57 @@
       socket.emit('changeVariable', [button.id])
     }
 
+    //renders the image on the controller side.
+
     socket.on('image', url => {
+      var imgSVG = buildImg(url);
+
       $('#screenCast').empty();
+      var svg = new Image();
+      svg.src = imgSVG;
+
+      var canvas = document.createElement('canvas');
+      canvas.width = url.w;
+      canvas.height = url.h;
+
+      var context = canvas.getContext('2d');
+
+      context.drawImage(svg, 0, 0)
       var img = new Image();
+
       img.id = 'screenShare';
-      img.src = url;
-      img.height = 300;
+
+
+      img.src = canvas.toDataURL('image/png')
+
       $('#screenCast').get(0).appendChild(img);
     })
+
+    //builds image SVG url to convert.
+
+    var buildImg = function(imgObj) {
+      imgData = imgObj.html;
+
+      if (imgObj.html.indexOf('<img') >= 0) {
+        var re = /<img\s+[^>]*src="([^"]*)"[^>]*>/;
+
+        var len = imgObj.html.match(re).index + imgObj.html.match(re)[0].length
+        imgData = imgObj.html.slice(0, len) + '</img>' + imgObj.html.slice(len);
+      }
+
+      var xml = '<foreignObject x="0" y="0" width="100%" height="100%">' + imgData + '</foreignObject>';
+      var foreignObject = '<svg xmlns="http://www.w3.org/2000/svg" width="' + imgObj.w + '" height="' + imgObj.h + '">' + xml + '</svg>';
+      return 'data:image/svg+xml;charset=utf-8,' + foreignObject;
+    }
+
+
 
     $('.logout').click(function() {
       $.get('/logout')
     })
-
     $('.zero-clipboard').tooltip({
       content: 'Copied!'
     });
-
   </script>
 
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>

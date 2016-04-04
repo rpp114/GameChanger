@@ -28,11 +28,11 @@ function startSocket(nameSpace, io) {
 
     // captures img from game and emits to controller
     socket.on('image', imgObj => {
-      if (imgObj.h) {
-        buildPic(imgObj, nsp);
-      } else {
-        nsp.emit('image', imgObj);
-      }
+      nsp.emit('image', imgObj);
+      // if (imgObj.h) {
+      //   buildPic(imgObj, nsp);
+      // } else {
+      // }
     });
 
     socket.on('chartData', data => {
