@@ -7,6 +7,8 @@ function startSocket(nameSpace, io) {
   const nsp = io.of(nameSpace);
   nsp.max_connections = 2;
   nsp.connections = 0;
+  roomsObj[nameSpace] = {};
+  roomsObj[nameSpace].connections = 0;
 
   nsp.on('connection', socket => {
     if (nsp.connections >= nsp.max_connections) {
@@ -14,6 +16,7 @@ function startSocket(nameSpace, io) {
       socket.disconnect();
     } else {
       nsp.connections++;
+      roomsObj[nameSpace].connections++;
       console.log('user connected', nsp.connections);
     }
 
@@ -40,14 +43,13 @@ function startSocket(nameSpace, io) {
     });
 
     socket.on('changeGame', (e) => {
-      console.log(e[1]);
-      console.log(roomsObj);
       roomsObj['/' + e[1]].gameName = e[0];
       nsp.emit('changeGame', e[0]);
     });
 
     socket.on('disconnect', () => {
       nsp.connections--;
+      roomsObj[nameSpace].connections--;
       socket.disconnect();
     });
   });
