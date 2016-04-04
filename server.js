@@ -91,12 +91,11 @@ function getDirectories(srcPath) {
 }
 
 app.get('/controller', (req, res) => {
-  console.log(Object.keys(Sockets.roomsObj).length);
-  if(Object.keys(Sockets.roomsObj).length === 0) {
+  console.log(Sockets.roomsObj);
+  if(!Sockets.roomsObj[`/${req.query.id}`] || Sockets.roomsObj[`/${req.query.id}`].connections <= 0) {
     const q = `/${req.query.id}`;
     let prof = '';
     Sockets.startSocket(q, io);
-    Sockets.roomsObj[q] = { gameName: 'snake' };
     User.findOne({ _id: req.query.id }, (err, doc) => {
       if (doc) {
         prof = doc.username;
