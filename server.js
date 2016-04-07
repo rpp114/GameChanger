@@ -41,7 +41,7 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/gameDescriptions', (req, res) => {
-getDirectories('./games').then(files => {
+  getDirectories('./games').then(files => {
     var descriptions = getDescriptions(files)
     return descriptions
   }).then(data => {
@@ -89,13 +89,28 @@ function getDirectories(srcPath) {
   });
 }
 
+app.get('/splash', (req, res) => {
+  const q = `/${req.query.id}`;
+  if (!Sockets.roomsObj[q]) {
+    Sockets.startSocket(q, io);
+  }
+  res.sendFile(path.join(__dirname, '/splash.html'));
+})
+
+app.get('/splashInfo', (req, res) => {
+  const q = `/${req.query.id}`;
+  console.log('Socket id from splash: ', q);
+  res.json(Sockets.roomsObj[q]);
+})
+
+
 app.get('/controller', (req, res) => {
-  console.log(Sockets.roomsObj);
-  if(!Sockets.roomsObj[`/${req.query.id}`] || Sockets.roomsObj[`/${req.query.id}`].connections <= 0) {
+
     const q = `/${req.query.id}`;
     let prof = '';
-    Sockets.startSocket(q, io);
-    User.findOne({ _id: req.query.id }, (err, doc) => {
+    User.findOne({
+      _id: req.query.id
+    }, (err, doc) => {
       if (doc) {
         prof = doc.username;
       }
@@ -107,9 +122,6 @@ app.get('/controller', (req, res) => {
       }
       return res.send('Please login');
     });
-  } else {
-    return res.redirect(`/game?id=${req.query.id}`)
-  }
 });
 
 app.get('/game', (req, res) => {
