@@ -1,28 +1,24 @@
-var mongoose = require('mongoose');
-var User   = require('./userModel');
-var Session = require('./sessionModel')
-var sessionController = {};
+const User = require('./userModel');
+const Session = require('./sessionModel');
+const sessionController = {};
 
 
-sessionController.isLoggedIn = function(req, res) {
-  if(req.cookies.SSID) {
-    return Session.findOne({cookieId: req.cookies.SSID}, function(err, doc) {
-      if(doc) return true;
-      else return false;
+sessionController.isLoggedIn = (req) => {
+  if (req.cookies.SSID) {
+    return Session.findOne({ cookieId: req.cookies.SSID }, (err, doc) => {
+      if (doc) return true;
+      return false;
     });
   }
+  return false;
 };
 
-sessionController.startSession = function(req, res, next) {
-  // create session
-  var obj = {};
-
-  User.findOne({userName: req.body.userName}, function (err, doc) {
+sessionController.startSession = (req) => {
+  const obj = {};
+  User.findOne({ userName: req.body.userName }, (err, doc) => {
     obj.cookieId = doc.id;
-
     Session.create(obj);
   });
-
 };
 
 module.exports = sessionController;

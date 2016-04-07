@@ -1,47 +1,42 @@
-var userController = {};
-var bcrypt = require('bcryptjs');
-var path = require('path');
-var User = require('./userModel');
-var SessionCtrl = require('./sessionController')
-var mongoose = require('mongoose');
+const userController = {};
+const bcrypt = require('bcryptjs');
+const User = require('./userModel');
+const SessionCtrl = require('./sessionController');
 
 
-userController.createUser = function(req, res) {
-    User.create(req.body, function(err, data) {
-      if (err) {
-        // throw err
-        console.log(err)
-        return res.status(500).send('showAlert');
-      }
-      var salt = bcrypt.genSaltSync(10);
-      var hash = bcrypt.hashSync(data.password, salt);
-      data.password = hash;
-      res.cookie('SSID', data.id);
-      console.log('id: ', data.id)
-      SessionCtrl.startSession(req, res, data._id);
-      data.save();
-      res.redirect('/controller?id=' + data.id);
-    });
+userController.createUser = (req, res) => {
+  User.create(req.body, (err, data) => {
+    if (err) {
+      // throw err
+      return res.status(500).send('showAlert');
+    }
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(data.password, salt);
+    data.password = hash; //eslint-disable-line
+    res.cookie('SSID', data.id);
+    // console.log('id: ', data.id);
+    SessionCtrl.startSession(req, res, data._id);
+    data.save();
+    return res.redirect(`/controller?id=' + ${data.id}`);
+  });
 };
 
-userController.verify = function(req, res) {
+userController.verify = (req, res) => {
   User.findOne({
-    username: req.body.username
-  }, function(err, doc) {
+    username: req.body.username,
+  }, (err, doc) => {
     if (doc) {
       if (bcrypt.compareSync(req.body.password, doc.password)) {
         res.cookie('SSID', doc.id);
         SessionCtrl.startSession(req, res, doc._id);
-        return res.redirect('/controller?id=' + doc.id)
+        return res.redirect(`/controller?id= + ${doc.id}`);
       }
       // console.log('bye')
       return res.send('error: ', err);
     }
-    userController.createUser(req,res);
-
+    return userController.createUser(req, res);
   });
-
 };
 
 
-module.exports = userController
+module.exports = userController;
