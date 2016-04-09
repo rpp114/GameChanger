@@ -17,23 +17,20 @@ function startSocket(nameSpace, io) {
     };
   }
 
-
   nsp.on('connection', socket => {
     if (nsp.connections > nsp.max_connections) {
-      console.log('My holes are full.');
       nsp.emit('disconnect', 'Sorry Sucka');
       socket.disconnect();
     } else {
       nsp.connections++;
+
       if (roomsObj[nameSpace].connections.controller === '') {
-        roomsObj[nameSpace].connections.controller = socket.id
+        roomsObj[nameSpace].connections.controller = socket.id;
+
       } else if (roomsObj[nameSpace].connections.player === '') {
-        roomsObj[nameSpace].connections.player = socket.id
+        roomsObj[nameSpace].connections.player = socket.id;
       }
     }
-
-    // console.log('socket_id: ', socket.id);
-    console.log('connecting: ', roomsObj[nameSpace].connections);
 
     socket.on('obj', val => {
       nsp.emit('obj', val);
@@ -47,10 +44,6 @@ function startSocket(nameSpace, io) {
     // captures img from game and emits to controller
     socket.on('image', imgObj => {
       nsp.emit('image', imgObj);
-      // if (imgObj.h) {
-      //   buildPic(imgObj, nsp);
-      // } else {
-      // }
     });
 
     socket.on('chartData', data => {
@@ -63,19 +56,22 @@ function startSocket(nameSpace, io) {
     });
 
     socket.on('disconnect', () => {
-      var deletedSocketCount = 0;
-      for (var key in roomsObj[nameSpace].connections) {
+      let deletedSocketCount = 0;
+      for (let key in roomsObj[nameSpace].connections) {
+
         if(roomsObj[nameSpace].connections[key] === '') {
           deletedSocketCount++;
         }
+
         if (roomsObj[nameSpace].connections[key] === socket.id) {
           roomsObj[nameSpace].connections[key] = '';
         };
       }
-      console.log('disconnecting: ', socket.id, roomsObj[nameSpace].connections);
+
       if (deletedSocketCount === 2) {
         delete roomsObj[nameSpace];
       }
+      
       nsp.connections--;
       socket.disconnect();
     });

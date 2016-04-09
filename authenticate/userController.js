@@ -17,11 +17,6 @@ userController.createUser = function(req, res) {
     console.log('id: ', data.id);
     SessionCtrl.startSession(req, res, data._id);
     data.save();
-    // $('#myModal').modal({
-    //    show: true
-    // });
-    // res.json();
-    // res.redirect('/splash?id=' + data.id);
     return res.json({userId: data.id});
   });
 };
@@ -34,14 +29,9 @@ userController.verify = (req, res) => {
       if (bcrypt.compareSync(req.body.password, doc.password)) {
         res.cookie('SSID', doc.id);
         SessionCtrl.startSession(req, res, doc._id);
-        // $('#myModal').modal({
-        //   show: true
-        // });
-        // return res.redirect('/splash?id=' + doc.id);
         console.log('verified');
         return res.json({userId: doc.id});
       }
-      // console.log('bye')
       return res.send('error: ', err);
     }
     return userController.createUser(req, res);
