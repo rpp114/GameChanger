@@ -19,20 +19,20 @@
 <script>
   $(document).ready(() => {
     var userId = window.location.search.slice(window.location.search.indexOf('?') + 4);
-    var qs = '/' + userId
+    var qs = '/' + userId;
     $.get('/splashInfo?id=' + userId, data => {
       var buttons = 0;
-      for (var i in data.connections) {
-        var linkName = i;
-        if (i === 'player') {
+      for (var users in data.connections) {
+        var linkName = users;
+        if (users === 'player') {
           linkName = 'game';
         }
-        if (data.connections[i] === '') {
+        if (data.connections[users] === '') {
           buttons++;
-          $('#directions').append('<h2><a href="/' + linkName + '?id=' + userId + '"> ' + i + '</a></h2>')
+          $('#directions').append('<h2><a href="/' + linkName + '?id=' + userId + '"> ' + users + '</a></h2>')
         }
       }
-      if(buttons === 0) {
+      if (buttons === 0) {
 
         $('#directions').append('<h2>This room is full.  Go HOME!!!!</h2>')
       }
