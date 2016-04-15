@@ -1,5 +1,6 @@
 'use strict';
 const buildPic = require('./buildPic');
+const user = require('./authenticate/userModel');
 
 let roomsObj = {};
 
@@ -54,6 +55,7 @@ function startSocket(nameSpace, io) {
     });
 
     socket.on('chartData', data => {
+
       nsp.emit('chartData', data);
     });
 
