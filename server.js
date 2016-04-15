@@ -49,7 +49,6 @@ app.get('/gameDescriptions', (req, res) => {
   });
 })
 
-
 // get the description.json from all the game folders
 
 function getDescriptions(games) {
@@ -62,9 +61,8 @@ function getDescriptions(games) {
       fs.readFile(path.join('./games/' + game + '/description.json'), 'utf8', (err, data) => {
         if (err) return reject(err);
         resolve(data);
-      })
-    })
-
+      });
+    });
     descs.push(gameDesc);
 
   })
@@ -75,9 +73,7 @@ function getDescriptions(games) {
     })
     return gameDescs;
   })
-
 }
-
 
 // find all games that exist and return array of folder names
 function getDirectories(srcPath) {
@@ -89,23 +85,17 @@ function getDirectories(srcPath) {
   });
 }
 
-app.get('/splash', (req, res) => {
-  const q = `/${req.query.id}`;
-  if (!Sockets.roomsObj[q]) {
-    Sockets.startSocket(q, io);
-  }
-  res.sendFile(path.join(__dirname, '/splash.html'));
-})
-
 app.get('/splashInfo', (req, res) => {
   const q = `/${req.query.id}`;
   console.log('Socket id from splash: ', q);
+  if (!Sockets.roomsObj[q]) {
+    Sockets.startSocket(q, io);
+  }
   res.json(Sockets.roomsObj[q]);
 })
 
 
 app.get('/controller', (req, res) => {
-
     const q = `/${req.query.id}`;
     let prof = '';
     User.findOne({
@@ -131,7 +121,6 @@ app.get('/game', (req, res) => {
 
 app.get('/shapes', (req, res) => {
   res.sendFile(path.join(__dirname, '/games/shapes/index.html'));
-
 });
 
 app.get('*.js', (req, res) => {

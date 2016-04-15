@@ -5,14 +5,9 @@
   <meta charset="utf-8">
   <title>Game Controller</title>
   <link href="controller/css/bootstrap.css" rel="stylesheet">
-  <!--external css-->
-  <!-- <link rel="stylesheet" type="text/css" href="assets/css/zabuto_calendar.css"> -->
-  <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.gritter/1.7.4/js/jquery.gritter.min.js" />
-  <link rel="stylesheet" type="text/css" href="controller/js/gritter/css/jquery.gritter.css" /> -->
   <link rel="stylesheet" href="controller/css/style.css">
   <link href="controller/css/graph.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- <link href="controller/font-awesome/css/font-awesome.css" rel="stylesheet" /> -->
 </head>
 
 <body>
@@ -30,33 +25,32 @@
         </ul>
       </div>
     </header>
-    <!--header end-->
 
-
-    <!-- modal info when Game Change clicked -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
+
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">Vicissitutor</h4>
           </div>
+
           <div class="modal-body">
             <h2>Instructions</h2>
             <h4 style='margin-left: 35px; color: #428bca'>1. Select a game to control by clicking on the game name. <br>
               2. Click on "Copy Client URL" button. <br>
               3. Give url to client to connect.
             </h4>
-            <form>
 
+            <form>
               <h2>Game Descriptions</h2>
               <div id="gameDescriptions">
               </div>
-
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
               </div>
             </form>
+
           </div>
         </div>
       </div>
@@ -65,10 +59,7 @@
     <aside>
       <div id="sidebar" class="nav-collapse ">
         <ul class="sidebar-menu" id="nav-accordion">
-
-          <p class="centered">
-            <a href="#"><img src="logo.jpg" class="img" width="60"></a>
-          </p>
+          <p class="centered"><a href="#"><img src="logo.jpg" class="img" width="60"></a></p>
           <% if (username) { %>
             <h5 class="centered"><%= username %></h5>
             <% } %>
@@ -131,10 +122,7 @@
               </div>
 
               <div class='module' id='controls'>
-
-
                 <table id='controllers'>
-
                   <center>
                     <tr width='100%'>
                     </tr>
@@ -145,12 +133,11 @@
             </div>
           </div>
         </div>
-        <!-- /row -->
 
         <footer class="site-footer">
           <div class="text-center">
             Vicissitutor
-            <a href="index.html#" class="go-top">
+            <a href="#" class="go-top">
               <i class="fa fa-angle-up"></i>
             </a>
           </div>
@@ -161,19 +148,12 @@
   </section>
   <p id='urltocopy' style='font-size:1px;'></p>
   <script src='/socket.io/socket.io.js'></script>
-  <!-- <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script> -->
   <script src="controller/js/jquery.js"></script>
-  <!-- <script src="controller/js/jquery-1.8.3.min.js"></script> -->
   <script src="controller/js/bootstrap.min.js"></script>
-  <script class="include" type="text/javascript" src="controller/js/jquery.dcjqaccordion.2.7.js"></script>
-  <!-- <script src="controller/js/jquery.scrollTo.min.js"></script>
-  <script src="controller/js/jquery.nicescroll.js" type="text/javascript"></script> -->
+  <!-- <script class="include" type="text/javascript" src="controller/js/jquery.dcjqaccordion.2.7.js"></script> -->
   <script src="controller/js/jquery.sparkline.js"></script>
-  <!-- <script src="controller/js/common-scripts.js"></script>
-  <script type="text/javascript" src="controller/js/gritter/js/jquery.gritter.js"></script>
-  <script type="text/javascript" src="controller/js/gritter-conf.js"></script>
 
-  <script type="text/javascript">
+  <!-- <script type="text/javascript">
     $(document).ready(function() {
       var unique_id = $.gritter.add({
         // (string | mandatory) the heading of the notification
@@ -199,11 +179,10 @@
 
     var userId = window.location.search.slice(window.location.search.indexOf('?') + 4);
     var qs = '/' + userId
-
     var socket = io(qs);
     var url = window.location.origin + '/game?id=' + userId;
-    $('#urltocopy').text(url);
 
+    $('#urltocopy').text(url);
     $('#copyurl').click(function() {
       var range = document.createRange();
       var selection = window.getSelection();
@@ -238,12 +217,9 @@
     $.get('/gameDescriptions', (data) => {
       gameDescriptions = data;
       for (var i in data) {
-
         $('#gameDescriptions').append('<h3></h3><a href="#"  onclick="selectGame(this)" class="gameSelector" id="' + i + '" data-dismiss="modal">' + data[i].name + '</a></h3><p>' + data[i].description + '</p>')
       }
-
     });
-
 
     // builds controls and changes game
     function selectGame(game) {
@@ -251,13 +227,10 @@
       socket.emit('changeGame', [game.id, userId]);
     }
 
-
     var currentGame, buttonsPerCell = 3;
 
     function buildControls(game) {
       if (currentGame !== game) {
-        // $('.graphButtons').remove();
-        // graphButtonsOnPage = false;
         $('#controllers tr td').remove();
         buildGraphButtons(gameDescriptions[game].dataControlObject);
         ctrlObj = gameDescriptions[game].controlObject;
@@ -342,16 +315,11 @@
       return 'data:image/svg+xml;charset=utf-8,' + foreignObject;
     }
 
-
-
     $('.logout').click(function() {
       $.get('/logout')
     })
-    $('.zero-clipboard').tooltip({
-      content: 'Copied!'
-    });
-  </script>
 
+  </script>
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="controller/src/graph.js" charset="utf-8"></script>
   <script src='controller/src/jquery.knob.js' charset="utf-8"></script>
